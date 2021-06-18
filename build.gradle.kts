@@ -1,9 +1,10 @@
 plugins {
     kotlin("multiplatform") version "1.5.10"
+    id("maven-publish")
 }
 
-group = "com.drjcoding"
-version = "1.0-SNAPSHOT"
+group = "com.drjcoding.plow"
+version = "0.0.0"
 
 repositories {
     mavenCentral()
