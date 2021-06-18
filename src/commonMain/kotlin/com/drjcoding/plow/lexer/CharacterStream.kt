@@ -13,11 +13,13 @@ class CharacterStream(private val text: String) {
      * [currentColumnNumber].
      */
     private fun advanceStream() {
-        currentCharPosition++
         if (safePeek() == '\n') {
             currentLineNumber++
             currentColumnNumber = 1
+        } else {
+            currentColumnNumber++
         }
+        currentCharPosition++
     }
 
     /**
