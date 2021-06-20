@@ -108,4 +108,3 @@ class CharacterStream(private val text: String) {
  * after the stream has been exhausted ([CharacterStream.isEOF] is true).
  */
 class CharacterStreamAccessedAfterExhaustedException : Exception()
-
