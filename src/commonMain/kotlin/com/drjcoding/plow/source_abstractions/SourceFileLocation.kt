@@ -1,4 +1,4 @@
-package com.drjcoding.plow.lexer
+package com.drjcoding.plow.source_abstractions
 
 /**
  * Represents the location within a source file where a piece of text was found.

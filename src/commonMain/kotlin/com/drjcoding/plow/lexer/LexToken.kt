@@ -1,5 +1,7 @@
 package com.drjcoding.plow.lexer
 
+import com.drjcoding.plow.source_abstractions.SourceFileLocation
+
 /**
  * Represents a lexical token of text in a source file.
  *

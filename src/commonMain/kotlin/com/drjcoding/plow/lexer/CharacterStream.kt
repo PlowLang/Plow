@@ -1,5 +1,7 @@
 package com.drjcoding.plow.lexer
 
+import com.drjcoding.plow.source_abstractions.SourceFileLocation
+
 /**
  * A stream of characters that can be used for lexing.
  */

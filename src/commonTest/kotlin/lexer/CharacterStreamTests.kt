@@ -2,7 +2,7 @@ package lexer
 
 import com.drjcoding.plow.lexer.CharacterStream
 import com.drjcoding.plow.lexer.CharacterStreamAccessedAfterExhaustedException
-import com.drjcoding.plow.lexer.SourceFileLocation
+import com.drjcoding.plow.source_abstractions.SourceFileLocation
 import kotlin.test.*
 
 class CharacterStreamTests {
