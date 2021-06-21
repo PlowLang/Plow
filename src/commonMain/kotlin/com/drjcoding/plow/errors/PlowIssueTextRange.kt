@@ -10,5 +10,5 @@ sealed class PlowIssueTextRange {
     /**
      * A piece of text in the same file as where the [PlowIssue] occurred.
      */
-    data class SameFile(val sourceFileRange: SourceFileRange)
+    data class SameFile(val sourceFileRange: SourceFileRange): PlowIssueTextRange()
 }
