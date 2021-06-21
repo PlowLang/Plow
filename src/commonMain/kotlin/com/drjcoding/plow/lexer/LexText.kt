@@ -75,8 +75,8 @@ private val LONG_PUNCTUATION_TEXT = mapOf(
 )
 
 private const val commentStart = "//"
-private const val multilineCommentStart = "/*"
-private const val multilineCommentEnd = "*/"
+private const val blockCommentStart = "/*"
+private const val blockCommentEnd = "*/"
 
 private val Char.isWhitespaceChar: Boolean
     get() = this == ' ' || this == '\t' || this == '\n' || this == '\r'
@@ -119,7 +119,7 @@ private fun getNextToken(cs: CharacterStream) =
         // TODO in the future these should be ordered based on how common they are
         cs.peek().isWhitespaceChar -> lexWhitespace(cs)
         cs.textIsNext(commentStart) -> lexComment(cs)
-        cs.textIsNext(multilineCommentStart) -> lexMultilineComment(cs)
+        cs.textIsNext(blockCommentStart) -> lexBlockComment(cs)
         cs.peek().isIdentifierStartChar -> lexIdentifier(cs)
         cs.safePeek(2) in LONG_PUNCTUATION_TEXT.keys -> lexLongPunctuation(cs)
         cs.peek() in PUNCTUATION_TEXT.keys -> lexPunctuation(cs)
@@ -169,14 +169,14 @@ private fun lexPunctuation(cs: CharacterStream): LexToken {
     return LexToken(type, text.toString(), loc)
 }
 
-private fun lexMultilineComment(cs: CharacterStream): LexToken {
+private fun lexBlockComment(cs: CharacterStream): LexToken {
     val loc = cs.sourceFileLocation
     val startLocations: MutableList<SourceFileLocation> = mutableListOf(loc)
-    var text = cs.pop(multilineCommentStart.length)
+    var text = cs.pop(blockCommentStart.length)
     while (!cs.isEOF && startLocations.isNotEmpty()) {
         when {
-            cs.textIsNext(multilineCommentStart) -> startLocations.add(cs.sourceFileLocation)
-            cs.textIsNext(multilineCommentEnd) -> startLocations.removeLast()
+            cs.textIsNext(blockCommentStart) -> startLocations.add(cs.sourceFileLocation)
+            cs.textIsNext(blockCommentEnd) -> startLocations.removeLast()
         }
         if (startLocations.isNotEmpty()) {
             text += cs.pop()
@@ -185,7 +185,7 @@ private fun lexMultilineComment(cs: CharacterStream): LexToken {
     if (cs.isEOF) {
         TODO()
     } else {
-        text += cs.pop(multilineCommentEnd.length)
+        text += cs.pop(blockCommentEnd.length)
         return LexToken(LexTokenType.COMMENT, text, loc)
     }
 }
