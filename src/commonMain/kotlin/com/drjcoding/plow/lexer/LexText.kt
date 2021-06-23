@@ -44,7 +44,7 @@ private val KEYWORD_TEXT = mapOf(
     "export" to LexTokenType.EXPORT,
     // Nil, true, and false aren't keywords but behave in the same way in that they look like identifiers but really
     //   have their own microsyntactic class.
-    "nil" to LexTokenType.TRUE,
+    "nil" to LexTokenType.NIL,
     "true" to LexTokenType.TRUE,
     "false" to LexTokenType.FALSE,
 )
