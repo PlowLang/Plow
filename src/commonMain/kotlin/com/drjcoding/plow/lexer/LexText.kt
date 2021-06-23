@@ -1,5 +1,6 @@
 package com.drjcoding.plow.lexer
 
+import com.drjcoding.plow.issues.*
 import com.drjcoding.plow.source_abstractions.SourceFileLocation
 import com.drjcoding.plow.source_abstractions.SourceFileRange
 
@@ -101,10 +102,16 @@ private val Char.isNumberChar: Boolean
     get() = this in '0'..'9' || this == '_'
 
 /**
- * TODO
+ * Lexes [code] into a [LexTokenStream]. This function may return the [PlowIssue]s [UnterminatedBlockCommentError],
+ * [InvalidCharacterInNumberLiteralError], and [CharacterDoesNotStartTokenError].
  */
-fun lexText(text: String): LexTokenStream {
-    val cs = CharacterStream(text)
+fun lex(code: String): PlowResult<LexTokenStream> =
+    runCatchingExceptionsAsPlowResult {
+        val cs = CharacterStream(code)
+        lexCharStream(cs)
+    }
+
+private fun lexCharStream(cs: CharacterStream): LexTokenStream {
     val foundTokens: MutableList<LexToken> = mutableListOf()
 
     while (!cs.isEOF) {
@@ -115,7 +122,6 @@ fun lexText(text: String): LexTokenStream {
     return LexTokenStream(foundTokens)
 }
 
-// TODO assertion here that !cs.eof
 private fun getNextToken(cs: CharacterStream) =
     when {
         // FUTURE these should be ordered based on how common they are
