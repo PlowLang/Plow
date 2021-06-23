@@ -1,10 +1,12 @@
 package com.drjcoding.plow.issues
 
 /**
- * A [PlowWarning] indicates a non fatal [PlowIssue].
+ * A [PlowWarning] indicates any nonfatal problem with user inputted data: code, configuration, command line args.
+ *
+ * @see PlowError
  */
 open class PlowWarning(
     errorName: String,
     mainInfo: PlowIssueInfo,
     notes: Collection<PlowIssueInfo> = listOf()
-) : PlowIssue(errorName, mainInfo, notes)
+) : PlowNonfatalIssue(errorName, mainInfo, notes)
