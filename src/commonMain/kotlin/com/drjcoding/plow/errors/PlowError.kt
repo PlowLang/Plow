@@ -6,5 +6,5 @@ package com.drjcoding.plow.errors
 open class PlowError(
     errorName: String,
     mainInfo: PlowIssueInfo,
-    notes: Collection<PlowIssueInfo>
+    notes: Collection<PlowIssueInfo> = listOf()
 ) : PlowIssue(errorName, mainInfo, notes)
