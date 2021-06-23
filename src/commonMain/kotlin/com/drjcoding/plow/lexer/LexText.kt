@@ -1,6 +1,7 @@
 package com.drjcoding.plow.lexer
 
 import com.drjcoding.plow.source_abstractions.SourceFileLocation
+import com.drjcoding.plow.source_abstractions.SourceFileRange
 
 /**
  * The textual representations of all Plow keywords mapped to their [LexTokenType]s. This also includes `nil`, `true`
@@ -114,9 +115,10 @@ fun lexText(text: String): LexTokenStream {
     return LexTokenStream(foundTokens)
 }
 
+// TODO assertion here that !cs.eof
 private fun getNextToken(cs: CharacterStream) =
     when {
-        // TODO in the future these should be ordered based on how common they are
+        // FUTURE these should be ordered based on how common they are
         cs.peek().isWhitespaceChar -> lexWhitespace(cs)
         cs.textIsNext(commentStart) -> lexComment(cs)
         cs.textIsNext(blockCommentStart) -> lexBlockComment(cs)
@@ -125,9 +127,16 @@ private fun getNextToken(cs: CharacterStream) =
         cs.peek() in PUNCTUATION_TEXT.keys -> lexPunctuation(cs)
         cs.peek().isOperatorChar -> lexOperator(cs)
         cs.peek().isNumberStartChar -> lexNumber(cs)
-        //string
-        else -> TODO()
+        // TODO strings
+        else -> invalidCharacter(cs)
     }
+
+private fun invalidCharacter(cs: CharacterStream): Nothing {
+    throw CharacterDoesNotStartTokenError(
+        cs.peek(),
+        SourceFileRange(cs.sourceFileLocation, 1)
+    )
+}
 
 private fun lexNumber(cs: CharacterStream): LexToken {
     val loc = cs.sourceFileLocation
@@ -141,7 +150,10 @@ private fun lexNumber(cs: CharacterStream): LexToken {
     }
 
     if (cs.safePeek()?.isIdentifierStartChar == true) {
-        TODO()
+        throw InvalidCharacterInNumberLiteralError(
+            cs.safePeek()!!,
+            SourceFileRange(loc, text.length + 1)
+        )
     }
 
     return LexToken(type, text, loc)
@@ -182,8 +194,11 @@ private fun lexBlockComment(cs: CharacterStream): LexToken {
             text += cs.pop()
         }
     }
-    if (cs.isEOF) {
-        TODO()
+    if (startLocations.isNotEmpty()) {
+        throw UnterminatedBlockCommentError(
+            SourceFileRange(startLocations.last(), blockCommentStart.length),
+            startLocations.subList(0, startLocations.lastIndex - 1).map { SourceFileRange(it, blockCommentStart.length) }
+        )
     } else {
         text += cs.pop(blockCommentEnd.length)
         return LexToken(LexTokenType.COMMENT, text, loc)
