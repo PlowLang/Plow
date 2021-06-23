@@ -1,4 +1,4 @@
-package com.drjcoding.plow.errors
+package com.drjcoding.plow.issues
 
 /**
  * An [PlowIssueInfo] provides additional context or information to a [PlowIssue].

@@ -1,6 +1,6 @@
 package com.drjcoding.plow.source_abstractions
 
-import com.drjcoding.plow.errors.PlowIssueTextRange
+import com.drjcoding.plow.issues.PlowIssueTextRange
 
 /**
  * Represents a range of characters within a source file.

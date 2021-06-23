@@ -1,4 +1,4 @@
-package com.drjcoding.plow.errors
+package com.drjcoding.plow.issues
 
 import com.drjcoding.plow.source_abstractions.SourceFileRange
 

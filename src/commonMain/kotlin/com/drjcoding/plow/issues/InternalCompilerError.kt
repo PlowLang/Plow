@@ -1,4 +1,4 @@
-package com.drjcoding.plow.errors
+package com.drjcoding.plow.issues
 
 /**
  * An [InternalCompilerError] is the only type of [PlowIssue] not caused by the user. It occurs when the compiler throws

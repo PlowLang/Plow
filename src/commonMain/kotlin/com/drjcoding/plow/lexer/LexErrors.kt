@@ -1,7 +1,7 @@
 package com.drjcoding.plow.lexer
 
-import com.drjcoding.plow.errors.PlowError
-import com.drjcoding.plow.errors.PlowIssueInfo
+import com.drjcoding.plow.issues.PlowError
+import com.drjcoding.plow.issues.PlowIssueInfo
 import com.drjcoding.plow.source_abstractions.SourceFileRange
 import com.drjcoding.plow.source_abstractions.toPlowIssueTextRange
 

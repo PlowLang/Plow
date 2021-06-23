@@ -1,4 +1,4 @@
-package com.drjcoding.plow.errors
+package com.drjcoding.plow.issues
 
 /**
  * A [PlowIssue] indicates any problem with user inputted data: code, configuration, command line args. It is not

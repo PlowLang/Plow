@@ -1,9 +1,9 @@
-package com.drjcoding.plow.errors
+package com.drjcoding.plow.issues
 
 /**
- * A [PlowWarning] indicates a non fatal [PlowIssue].
+ * A [PlowError] indicates a fatal [PlowIssue].
  */
-open class PlowWarning(
+open class PlowError(
     errorName: String,
     mainInfo: PlowIssueInfo,
     notes: Collection<PlowIssueInfo> = listOf()
