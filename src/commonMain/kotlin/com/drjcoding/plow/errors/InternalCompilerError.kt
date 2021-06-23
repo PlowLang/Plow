@@ -7,10 +7,10 @@ package com.drjcoding.plow.errors
  * normal code problems.
  */
 class InternalCompilerError(causingException: Exception) : PlowError(
-    "internal compiler error:\n\n$causingException",
-    null,
+    "internal compiler error",
+    PlowIssueInfo(null, "The compiler threw the following exception:\n\n$causingException."),
     listOf(
-        PlowIssueNote(null, "The compiler unexpectedly threw an exception. This is a bug."),
-        PlowIssueNote(null, "Please report this bug at https://github.com/PlowLang/Plow/issues.")
+        PlowIssueInfo(null, "The compiler unexpectedly threw an exception. This is a bug."),
+        PlowIssueInfo(null, "Please report this bug at https://github.com/PlowLang/Plow/issues.")
     )
 )
