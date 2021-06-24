@@ -11,8 +11,8 @@ class CharacterStream(private val text: String) {
     private var currentColumnNumber = 1
 
     /**
-     * Advances the stream one character by incrementing [currentCharPosition] and updates [currentLineNumber] and
-     * [currentColumnNumber].
+     * Advances the stream one character [times] times by incrementing [currentCharPosition] and updates
+     * [currentLineNumber] and [currentColumnNumber].
      */
     private fun advanceStream(times: Int = 1) {
         repeat(times) {
