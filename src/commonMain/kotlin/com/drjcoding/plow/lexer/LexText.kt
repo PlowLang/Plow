@@ -152,6 +152,7 @@ private fun lexNumber(cs: CharacterStream): LexToken {
     var type = LexTokenType.INT_LITERAL
     if (cs.safePeek() == '.') {
         type = LexTokenType.FLOAT_LITERAL
+        text += cs.pop()
         while (cs.safePeek()?.isNumberChar == true) text += cs.pop()
     }
 
@@ -203,7 +204,7 @@ private fun lexBlockComment(cs: CharacterStream): LexToken {
     if (startLocations.isNotEmpty()) {
         throw UnterminatedBlockCommentError(
             SourceFileRange(startLocations.last(), blockCommentStart.length),
-            startLocations.subList(0, startLocations.lastIndex - 1).map { SourceFileRange(it, blockCommentStart.length) }
+            startLocations.subList(0, startLocations.lastIndex).map { SourceFileRange(it, blockCommentStart.length) }
         )
     } else {
         text += cs.pop(blockCommentEnd.length)

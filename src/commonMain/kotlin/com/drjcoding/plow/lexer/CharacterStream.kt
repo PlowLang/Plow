@@ -49,7 +49,7 @@ class CharacterStream(private val text: String) {
      * would extend beyond the length of the stream.
      */
     fun safePeek(n: Int): String? =
-        if (currentCharPosition + n - 1 in text.indices) null else
+        if (currentCharPosition + n - 1 >= text.length) null else
             text.substring(currentCharPosition, currentCharPosition + n)
 
     /**
@@ -65,7 +65,7 @@ class CharacterStream(private val text: String) {
     fun peek(n: Int): String = safePeek(n) ?: throw CharacterStreamAccessedAfterExhaustedException()
 
     /**
-     * Returns if true if [text] is the next text in the stream.
+     * Returns true if [text] is the next text in the stream.
      */
     fun textIsNext(text: String): Boolean = safePeek(text.length) == text
 
