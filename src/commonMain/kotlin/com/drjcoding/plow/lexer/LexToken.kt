@@ -12,6 +12,14 @@ import com.drjcoding.plow.source_abstractions.toSourceString
  * @property location The location in the source file that the token was found.
  */
 data class LexToken(val type: LexTokenType, val text: SourceString, val location: SourceFileLocation) {
+
     constructor(type: LexTokenType, text: String, location: SourceFileLocation) :
             this(type, text.toSourceString(), location)
+
+    /**
+     * True if this token can be safely ignored in between other tokens (ex. whitespace and comments).
+     */
+    val isSkipable: Boolean
+        get() = type.isSkipable
+
 }

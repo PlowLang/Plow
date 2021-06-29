@@ -65,5 +65,16 @@ enum class LexTokenType {
     OPERATOR,
 
     WHITESPACE,
-    COMMENT,
+    COMMENT;
+
+    /**
+     * True if this type can be safely ignored in between other tokens (ex. whitespace and comments).
+     */
+    val isSkipable: Boolean
+        get() = when (this) {
+            WHITESPACE -> true
+            COMMENT -> true
+            else -> false
+        }
+
 }
