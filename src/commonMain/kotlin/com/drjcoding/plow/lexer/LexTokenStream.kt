@@ -116,7 +116,6 @@ class LexTokenStream(private val tokens: List<LexToken>) {
     /**
      * Returns true if not [isExhausted] and the type of [peekNS] == [type].
      */
-    // TODO unit test
     fun peekNSIsType(type: LexTokenType): Boolean = safePeekNS()?.type == type
 
     /**
@@ -128,7 +127,6 @@ class LexTokenStream(private val tokens: List<LexToken>) {
      * Returns the next nonskipable token while advancing the stream ([popNS]) if [peekNSIsType] of [type] is true
      * otherwise returns null.
      */
-    // TODO unit test
     fun eatNS(type: LexTokenType): LexToken? = if (peekNSIsType(type)) popNS() else null
 
     fun toList() = tokens
