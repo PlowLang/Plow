@@ -21,8 +21,24 @@ sealed class PlowResult<T> {
     class Error<T>(val issues: Collection<PlowIssue>) : PlowResult<T>() {
         constructor(issue: PlowIssue) : this(listOf(issue))
     }
+
+    /**
+     * If this is [Ok] then this is returned otherwise a [UnexpectedlyFoundNullWhileUnwrappingException] is thrown.
+     */
+    fun unwrap(): T =
+        when (this) {
+            is Ok<T> -> this.result
+            is Error<T> -> throw UnexpectedlyFoundNullWhileUnwrappingException(this.issues)
+        }
+
 }
 
+/**
+ * Thrown when [PlowResult.unwrap] is called on a [PlowResult.Error].
+ *
+ * @property issues The issues of the found [PlowResult.Error]
+ */
+class UnexpectedlyFoundNullWhileUnwrappingException(val issues: Collection<PlowIssue>) : Exception()
 
 /**
  * Runs the given block and catches any exceptions that occur. Returns a [PlowResult] based on the exceptions that
