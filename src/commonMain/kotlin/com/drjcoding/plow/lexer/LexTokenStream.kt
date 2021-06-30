@@ -130,6 +130,8 @@ class LexTokenStream(private val tokens: List<LexToken>) {
      */
     // TODO unit test
     fun eatNS(type: LexTokenType): LexToken? = if (peekNSIsType(type)) popNS() else null
+
+    fun toList() = tokens
 }
 
 
