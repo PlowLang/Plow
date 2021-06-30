@@ -1,9 +1,6 @@
 package com.drjcoding.plow.lexer
 
-import com.drjcoding.plow.source_abstractions.SourceFileLocation
-import com.drjcoding.plow.source_abstractions.SourceString
-import com.drjcoding.plow.source_abstractions.toSourceString
-import com.drjcoding.plow.source_abstractions.toUnderlyingString
+import com.drjcoding.plow.source_abstractions.*
 
 /**
  * Represents a lexical token of text in a source file.
@@ -28,4 +25,10 @@ data class LexToken(val type: LexTokenType, val text: SourceString, val location
      */
     val textLength: Int
         get() = text.toUnderlyingString().length
+
+    /**
+     * The [SourceFileRange] that the token inhabits.
+     */
+    val sourceRange: SourceFileRange
+        get() = SourceFileRange(location, textLength)
 }
