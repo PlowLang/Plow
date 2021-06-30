@@ -57,3 +57,8 @@ inline fun <T> runCatchingExceptionsAsPlowResult(run: () -> T): PlowResult<T> =
         val ice = InternalCompilerError(e)
         PlowResult.Error(listOf(ice))
     }
+
+/**
+ * Converts this to a [PlowResult] by wrapping it in [PlowResult.Ok]
+ */
+fun <T> T.toPlowResult() = PlowResult.Ok(this)
