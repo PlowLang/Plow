@@ -31,4 +31,18 @@ data class LexToken(val type: LexTokenType, val text: SourceString, val location
      */
     val sourceRange: SourceFileRange
         get() = SourceFileRange(location, textLength)
+
+    override fun equals(other: Any?) =
+        other != null &&
+                other is LexToken &&
+                this.type == other.type &&
+                this.text == other.text &&
+                this.location == other.location
+
+    override fun hashCode(): Int {
+        var result = type.hashCode()
+        result = 31 * result + text
+        result = 31 * result + location.hashCode()
+        return result
+    }
 }
