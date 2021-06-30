@@ -18,7 +18,9 @@ sealed class PlowResult<T> {
      *
      * @property issues The [PlowIssue]s produced by the operations. (Non-empty).
      */
-    class Error<T>(val issues: Collection<PlowIssue>) : PlowResult<T>()
+    class Error<T>(val issues: Collection<PlowIssue>) : PlowResult<T>() {
+        constructor(issue: PlowIssue) : this(listOf(issue))
+    }
 }
 
 
