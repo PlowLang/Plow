@@ -3,6 +3,7 @@ package com.drjcoding.plow.lexer
 import com.drjcoding.plow.source_abstractions.SourceFileLocation
 import com.drjcoding.plow.source_abstractions.SourceString
 import com.drjcoding.plow.source_abstractions.toSourceString
+import com.drjcoding.plow.source_abstractions.toUnderlyingString
 
 /**
  * Represents a lexical token of text in a source file.
@@ -22,4 +23,9 @@ data class LexToken(val type: LexTokenType, val text: SourceString, val location
     val isSkipable: Boolean
         get() = type.isSkipable
 
+    /**
+     * The length of [text].
+     */
+    val textLength: Int
+        get() = text.toUnderlyingString().length
 }
