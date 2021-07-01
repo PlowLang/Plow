@@ -6,20 +6,15 @@ import com.drjcoding.plow.issues.PlowIssueTextRange
  * Represents a range of characters within a source file.
  *
  * @property start The first character of the range (inclusive).
- * @property length The number of characters in the range.
+ * @property end The final character of the range (exclusive).
  */
-data class SourceFileRange(val start: SourceFileLocation, val length: Int) {
+data class SourceFileRange(val start: SourceFileLocation, val end: SourceFileLocation) {
 
     /**
-     * Returns the two [SourceFileRange]s concatenated together by adding their lengths. This only works for two ranges
-     * that are adjacent with no gaps in between.
+     * Returns the two [SourceFileRange]s concatenated together (this.start to other.end)
      */
-    operator fun plus(other: SourceFileRange) = SourceFileRange(this.start, this.length + other.length)
+    operator fun plus(other: SourceFileRange) = SourceFileRange(this.start, other.end)
 
-    /**
-     * Returns a new [SourceFileRange] with the same start location but a length [additionalLength] longer.
-     */
-    fun plusLength(additionalLength: Int) = SourceFileRange(this.start, this.length + additionalLength)
 }
 
 /**

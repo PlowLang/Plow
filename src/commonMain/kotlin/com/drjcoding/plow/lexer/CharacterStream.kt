@@ -1,6 +1,7 @@
 package com.drjcoding.plow.lexer
 
 import com.drjcoding.plow.source_abstractions.SourceFileLocation
+import com.drjcoding.plow.source_abstractions.SourceFileRange
 
 /**
  * A stream of characters that can be used for lexing.
@@ -37,6 +38,11 @@ class CharacterStream(private val text: String) {
      */
     val sourceFileLocation: SourceFileLocation
         get() = SourceFileLocation(currentLineNumber, currentColumnNumber)
+
+    /**
+     * Returns a range from [from] to [sourceFileLocation].
+     */
+    fun rangeToCurrent(from: SourceFileLocation) = SourceFileRange(from, sourceFileLocation)
 
     /**
      * Returns the next character in the stream without advancing the stream or null if the stream has been exhausted

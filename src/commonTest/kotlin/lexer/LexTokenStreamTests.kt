@@ -1,10 +1,8 @@
 package lexer
 
-import com.drjcoding.plow.lexer.LexToken
-import com.drjcoding.plow.lexer.LexTokenStream
-import com.drjcoding.plow.lexer.LexTokenType
-import com.drjcoding.plow.lexer.TokenStreamAccessedAfterExhaustedException
+import com.drjcoding.plow.lexer.*
 import com.drjcoding.plow.source_abstractions.SourceFileLocation
+import com.drjcoding.plow.source_abstractions.SourceFileRange
 import com.drjcoding.plow.source_abstractions.toSourceString
 import kotlin.test.*
 
@@ -19,11 +17,25 @@ class LexTokenStreamTests {
         assertTrue(ts1.isExhausted)
         assertTrue(ts1.isExhaustedAhead(0))
 
-        val ts2 = LexTokenStream(listOf(
-            LexToken(LexTokenType.IDENTIFIER, "a", SourceFileLocation(1, 1)),
-            LexToken(LexTokenType.IDENTIFIER, "b", SourceFileLocation(1, 2)),
-            LexToken(LexTokenType.IDENTIFIER, "c", SourceFileLocation(1, 3)),
-        ))
+        val ts2 = LexTokenStream(
+            listOf(
+                LexToken(
+                    LexTokenType.IDENTIFIER,
+                    "a",
+                    SourceFileRange(SourceFileLocation(1, 1), SourceFileLocation(1, 2))
+                ),
+                LexToken(
+                    LexTokenType.IDENTIFIER,
+                    "b",
+                    SourceFileRange(SourceFileLocation(1, 2), SourceFileLocation(1, 3))
+                ),
+                LexToken(
+                    LexTokenType.IDENTIFIER,
+                    "c",
+                    SourceFileRange(SourceFileLocation(1, 3), SourceFileLocation(1, 4))
+                ),
+            )
+        )
         assertFalse(ts2.isExhausted)
         assertFalse(ts2.isExhaustedAhead(2))
         assertTrue(ts2.isExhaustedAhead(3))
@@ -50,11 +62,25 @@ class LexTokenStreamTests {
         val b = "b".toSourceString()
         val c = "c".toSourceString()
 
-        val ts = LexTokenStream(listOf(
-            LexToken(LexTokenType.IDENTIFIER, "a", SourceFileLocation(1, 1)),
-            LexToken(LexTokenType.IDENTIFIER, "b", SourceFileLocation(1, 2)),
-            LexToken(LexTokenType.IDENTIFIER, "c", SourceFileLocation(1, 3)),
-        ))
+        val ts = LexTokenStream(
+            listOf(
+                LexToken(
+                    LexTokenType.IDENTIFIER,
+                    "a",
+                    SourceFileRange(SourceFileLocation(1, 1), SourceFileLocation(1, 2))
+                ),
+                LexToken(
+                    LexTokenType.IDENTIFIER,
+                    "b",
+                    SourceFileRange(SourceFileLocation(1, 2), SourceFileLocation(1, 3))
+                ),
+                LexToken(
+                    LexTokenType.IDENTIFIER,
+                    "c",
+                    SourceFileRange(SourceFileLocation(1, 3), SourceFileLocation(1, 4))
+                ),
+            )
+        )
 
         assertEquals(ts.peek().text, a)
         assertEquals(ts.safePeek()?.text, a)
@@ -90,11 +116,7 @@ class LexTokenStreamTests {
         val a = "a".toSourceString()
         val b = "b".toSourceString()
 
-        val ts = LexTokenStream(listOf(
-            LexToken(LexTokenType.IDENTIFIER, "a", SourceFileLocation(1, 1)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 2)),
-            LexToken(LexTokenType.IDENTIFIER, "b", SourceFileLocation(1, 3)),
-        ))
+        val ts = lex("a b").unwrap()
 
         assertEquals(ts.safePeekNS()?.text, a)
         assertEquals(ts.peekNS().text, a)
@@ -115,11 +137,7 @@ class LexTokenStreamTests {
         val a = "a".toSourceString()
         val b = "b".toSourceString()
 
-        val ts = LexTokenStream(listOf(
-            LexToken(LexTokenType.IDENTIFIER, "a", SourceFileLocation(1, 1)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 2)),
-            LexToken(LexTokenType.IDENTIFIER, "b", SourceFileLocation(1, 3)),
-        ))
+        val ts = lex("a b").unwrap()
 
         assertFalse(ts.isExhaustedAhead(2))
         assertEquals(ts.eat(LexTokenType.OPERATOR), null)
@@ -138,11 +156,7 @@ class LexTokenStreamTests {
         val a = "a".toSourceString()
         val w = "while".toSourceString()
 
-        val ts = LexTokenStream(listOf(
-            LexToken(LexTokenType.IDENTIFIER, "a", SourceFileLocation(1, 1)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 2)),
-            LexToken(LexTokenType.WHILE, "while", SourceFileLocation(1, 3)),
-        ))
+        val ts = lex("a while").unwrap()
 
         assertTrue(ts.peekIsType(LexTokenType.IDENTIFIER))
         assertTrue(ts.peekNSIsType(LexTokenType.IDENTIFIER))

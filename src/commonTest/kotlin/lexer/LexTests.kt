@@ -4,6 +4,7 @@ import com.drjcoding.plow.issues.PlowError
 import com.drjcoding.plow.issues.PlowResult
 import com.drjcoding.plow.lexer.*
 import com.drjcoding.plow.source_abstractions.SourceFileLocation
+import com.drjcoding.plow.source_abstractions.SourceFileRange
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -183,47 +184,167 @@ class LexTests {
         val ts = result.result
 
         val expectedTokens = listOf(
-            LexToken(LexTokenType.EXPORT, "export", SourceFileLocation(1, 1)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 7)),
-            LexToken(LexTokenType.PRIVATE, "private", SourceFileLocation(1, 8)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 15)),
-            LexToken(LexTokenType.FUNC, "func", SourceFileLocation(1, 16)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 20)),
-            LexToken(LexTokenType.IDENTIFIER, "greater", SourceFileLocation(1, 21)),
-            LexToken(LexTokenType.L_PAREN, "(", SourceFileLocation(1, 28)),
-            LexToken(LexTokenType.IDENTIFIER, "a", SourceFileLocation(1, 29)),
-            LexToken(LexTokenType.COLON, ":", SourceFileLocation(1, 30)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 31)),
-            LexToken(LexTokenType.IDENTIFIER, "std", SourceFileLocation(1, 32)),
-            LexToken(LexTokenType.DOUBLE_COLON, "::", SourceFileLocation(1, 35)),
-            LexToken(LexTokenType.IDENTIFIER, "Int", SourceFileLocation(1, 37)),
-            LexToken(LexTokenType.COMMA, ",", SourceFileLocation(1, 40)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 41)),
-            LexToken(LexTokenType.IDENTIFIER, "b", SourceFileLocation(1, 42)),
-            LexToken(LexTokenType.COLON, ":", SourceFileLocation(1, 43)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 44)),
-            LexToken(LexTokenType.IDENTIFIER, "std", SourceFileLocation(1, 45)),
-            LexToken(LexTokenType.DOUBLE_COLON, "::", SourceFileLocation(1, 48)),
-            LexToken(LexTokenType.IDENTIFIER, "Int", SourceFileLocation(1, 50)),
-            LexToken(LexTokenType.R_PAREN, ")", SourceFileLocation(1, 53)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 54)),
-            LexToken(LexTokenType.ARROW, "->", SourceFileLocation(1, 55)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 57)),
-            LexToken(LexTokenType.IDENTIFIER, "Bool", SourceFileLocation(1, 58)),
-            LexToken(LexTokenType.QUESTION, "?", SourceFileLocation(1, 62)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 63)),
-            LexToken(LexTokenType.L_CURLY, "{", SourceFileLocation(1, 64)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 65)),
-            LexToken(LexTokenType.RETURN, "return", SourceFileLocation(1, 66)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 72)),
-            LexToken(LexTokenType.IDENTIFIER, "a", SourceFileLocation(1, 73)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 74)),
-            LexToken(LexTokenType.OPERATOR, "==", SourceFileLocation(1, 75)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 77)),
-            LexToken(LexTokenType.IDENTIFIER, "b", SourceFileLocation(1, 78)),
-            LexToken(LexTokenType.SEMICOLON, ";", SourceFileLocation(1, 79)),
-            LexToken(LexTokenType.WHITESPACE, " ", SourceFileLocation(1, 80)),
-            LexToken(LexTokenType.R_CURLY, "}", SourceFileLocation(1, 81)),
+            LexToken(
+                LexTokenType.EXPORT,
+                "export",
+                SourceFileRange(SourceFileLocation(1, 1), SourceFileLocation(1, 7))
+            ),
+            LexToken(LexTokenType.WHITESPACE, " ", SourceFileRange(SourceFileLocation(1, 7), SourceFileLocation(1, 8))),
+            LexToken(
+                LexTokenType.PRIVATE,
+                "private",
+                SourceFileRange(SourceFileLocation(1, 8), SourceFileLocation(1, 15))
+            ),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 15), SourceFileLocation(1, 16))
+            ),
+            LexToken(LexTokenType.FUNC, "func", SourceFileRange(SourceFileLocation(1, 16), SourceFileLocation(1, 20))),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 20), SourceFileLocation(1, 21))
+            ),
+            LexToken(
+                LexTokenType.IDENTIFIER,
+                "greater",
+                SourceFileRange(SourceFileLocation(1, 21), SourceFileLocation(1, 28))
+            ),
+            LexToken(LexTokenType.L_PAREN, "(", SourceFileRange(SourceFileLocation(1, 28), SourceFileLocation(1, 29))),
+            LexToken(
+                LexTokenType.IDENTIFIER,
+                "a",
+                SourceFileRange(SourceFileLocation(1, 29), SourceFileLocation(1, 30))
+            ),
+            LexToken(LexTokenType.COLON, ":", SourceFileRange(SourceFileLocation(1, 30), SourceFileLocation(1, 31))),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 31), SourceFileLocation(1, 32))
+            ),
+            LexToken(
+                LexTokenType.IDENTIFIER,
+                "std",
+                SourceFileRange(SourceFileLocation(1, 32), SourceFileLocation(1, 35))
+            ),
+            LexToken(
+                LexTokenType.DOUBLE_COLON,
+                "::",
+                SourceFileRange(SourceFileLocation(1, 35), SourceFileLocation(1, 37))
+            ),
+            LexToken(
+                LexTokenType.IDENTIFIER,
+                "Int",
+                SourceFileRange(SourceFileLocation(1, 37), SourceFileLocation(1, 40))
+            ),
+            LexToken(LexTokenType.COMMA, ",", SourceFileRange(SourceFileLocation(1, 40), SourceFileLocation(1, 41))),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 41), SourceFileLocation(1, 42))
+            ),
+            LexToken(
+                LexTokenType.IDENTIFIER,
+                "b",
+                SourceFileRange(SourceFileLocation(1, 42), SourceFileLocation(1, 43))
+            ),
+            LexToken(LexTokenType.COLON, ":", SourceFileRange(SourceFileLocation(1, 43), SourceFileLocation(1, 44))),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 44), SourceFileLocation(1, 45))
+            ),
+            LexToken(
+                LexTokenType.IDENTIFIER,
+                "std",
+                SourceFileRange(SourceFileLocation(1, 45), SourceFileLocation(1, 48))
+            ),
+            LexToken(
+                LexTokenType.DOUBLE_COLON,
+                "::",
+                SourceFileRange(SourceFileLocation(1, 48), SourceFileLocation(1, 50))
+            ),
+            LexToken(
+                LexTokenType.IDENTIFIER,
+                "Int",
+                SourceFileRange(SourceFileLocation(1, 50), SourceFileLocation(1, 53))
+            ),
+            LexToken(LexTokenType.R_PAREN, ")", SourceFileRange(SourceFileLocation(1, 53), SourceFileLocation(1, 54))),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 54), SourceFileLocation(1, 55))
+            ),
+            LexToken(LexTokenType.ARROW, "->", SourceFileRange(SourceFileLocation(1, 55), SourceFileLocation(1, 57))),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 57), SourceFileLocation(1, 58))
+            ),
+            LexToken(
+                LexTokenType.IDENTIFIER,
+                "Bool",
+                SourceFileRange(SourceFileLocation(1, 58), SourceFileLocation(1, 62))
+            ),
+            LexToken(LexTokenType.QUESTION, "?", SourceFileRange(SourceFileLocation(1, 62), SourceFileLocation(1, 63))),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 63), SourceFileLocation(1, 64))
+            ),
+            LexToken(LexTokenType.L_CURLY, "{", SourceFileRange(SourceFileLocation(1, 64), SourceFileLocation(1, 65))),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 65), SourceFileLocation(1, 66))
+            ),
+            LexToken(
+                LexTokenType.RETURN,
+                "return",
+                SourceFileRange(SourceFileLocation(1, 66), SourceFileLocation(1, 72))
+            ),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 72), SourceFileLocation(1, 73))
+            ),
+            LexToken(
+                LexTokenType.IDENTIFIER,
+                "a",
+                SourceFileRange(SourceFileLocation(1, 73), SourceFileLocation(1, 74))
+            ),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 74), SourceFileLocation(1, 75))
+            ),
+            LexToken(
+                LexTokenType.OPERATOR,
+                "==",
+                SourceFileRange(SourceFileLocation(1, 75), SourceFileLocation(1, 77))
+            ),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 77), SourceFileLocation(1, 78))
+            ),
+            LexToken(
+                LexTokenType.IDENTIFIER,
+                "b",
+                SourceFileRange(SourceFileLocation(1, 78), SourceFileLocation(1, 79))
+            ),
+            LexToken(
+                LexTokenType.SEMICOLON,
+                ";",
+                SourceFileRange(SourceFileLocation(1, 79), SourceFileLocation(1, 80))
+            ),
+            LexToken(
+                LexTokenType.WHITESPACE,
+                " ",
+                SourceFileRange(SourceFileLocation(1, 80), SourceFileLocation(1, 81))
+            ),
+            LexToken(LexTokenType.R_CURLY, "}", SourceFileRange(SourceFileLocation(1, 81), SourceFileLocation(1, 82))),
         )
 
         for (et in expectedTokens) {

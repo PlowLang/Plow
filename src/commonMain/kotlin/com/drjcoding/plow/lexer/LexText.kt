@@ -138,9 +138,10 @@ private fun getNextToken(cs: CharacterStream) =
     }
 
 private fun invalidCharacter(cs: CharacterStream): Nothing {
+    val loc = cs.sourceFileLocation
     throw CharacterDoesNotStartTokenError(
-        cs.peek(),
-        SourceFileRange(cs.sourceFileLocation, 1)
+        cs.pop(),
+        cs.rangeToCurrent(loc)
     )
 }
 
@@ -158,12 +159,12 @@ private fun lexNumber(cs: CharacterStream): LexToken {
 
     if (cs.safePeek()?.isIdentifierStartChar == true) {
         throw InvalidCharacterInNumberLiteralError(
-            cs.safePeek()!!,
-            SourceFileRange(loc, text.length + 1)
+            cs.pop(),
+            cs.rangeToCurrent(loc)
         )
     }
 
-    return LexToken(type, text, loc)
+    return LexToken(type, text, cs.rangeToCurrent(loc))
 }
 
 
@@ -171,30 +172,34 @@ private fun lexOperator(cs: CharacterStream): LexToken {
     val loc = cs.sourceFileLocation
     var text = cs.pop().toString()
     while (cs.safePeek()?.isOperatorChar == true) text += cs.pop()
-    return LexToken(LexTokenType.OPERATOR, text, loc)
+    return LexToken(LexTokenType.OPERATOR, text, cs.rangeToCurrent(loc))
 }
 
 private fun lexLongPunctuation(cs: CharacterStream): LexToken {
     val loc = cs.sourceFileLocation
     val text = cs.pop(2)
     val type = LONG_PUNCTUATION_TEXT[text]!!
-    return LexToken(type, text, loc)
+    return LexToken(type, text, cs.rangeToCurrent(loc))
 }
 
 private fun lexPunctuation(cs: CharacterStream): LexToken {
     val loc = cs.sourceFileLocation
     val text = cs.pop()
     val type = PUNCTUATION_TEXT[text]!!
-    return LexToken(type, text.toString(), loc)
+    return LexToken(type, text.toString(), cs.rangeToCurrent(loc))
 }
 
 private fun lexBlockComment(cs: CharacterStream): LexToken {
     val loc = cs.sourceFileLocation
-    val startLocations: MutableList<SourceFileLocation> = mutableListOf(loc)
     var text = cs.pop(blockCommentStart.length)
+    val startLocations: MutableList<SourceFileRange> = mutableListOf(cs.rangeToCurrent(loc))
     while (!cs.isEOF && startLocations.isNotEmpty()) {
         when {
-            cs.textIsNext(blockCommentStart) -> startLocations.add(cs.sourceFileLocation)
+            cs.textIsNext(blockCommentStart) -> {
+                val blockStart = cs.sourceFileLocation
+                cs.pop(blockCommentStart.length)
+                startLocations.add(cs.rangeToCurrent(blockStart))
+            }
             cs.textIsNext(blockCommentEnd) -> startLocations.removeLast()
         }
         if (startLocations.isNotEmpty()) {
@@ -203,12 +208,12 @@ private fun lexBlockComment(cs: CharacterStream): LexToken {
     }
     if (startLocations.isNotEmpty()) {
         throw UnterminatedBlockCommentError(
-            SourceFileRange(startLocations.last(), blockCommentStart.length),
-            startLocations.subList(0, startLocations.lastIndex).map { SourceFileRange(it, blockCommentStart.length) }
+            startLocations.last(),
+            startLocations.subList(0, startLocations.lastIndex)
         )
     } else {
         text += cs.pop(blockCommentEnd.length)
-        return LexToken(LexTokenType.COMMENT, text, loc)
+        return LexToken(LexTokenType.COMMENT, text, cs.rangeToCurrent(loc))
     }
 }
 
@@ -216,7 +221,7 @@ private fun lexComment(cs: CharacterStream): LexToken {
     val loc = cs.sourceFileLocation
     var text = cs.pop().toString()
     while (!cs.isEOF && cs.peek() != '\n') text += cs.pop()
-    return LexToken(LexTokenType.COMMENT, text, loc)
+    return LexToken(LexTokenType.COMMENT, text, cs.rangeToCurrent(loc))
 }
 
 private fun lexIdentifier(cs: CharacterStream): LexToken {
@@ -225,12 +230,12 @@ private fun lexIdentifier(cs: CharacterStream): LexToken {
     while (cs.safePeek()?.isIdentifierChar == true) text += cs.pop()
 
     val tokenType = KEYWORD_TEXT[text] ?: LexTokenType.IDENTIFIER
-    return LexToken(tokenType, text, loc)
+    return LexToken(tokenType, text, cs.rangeToCurrent(loc))
 }
 
 private fun lexWhitespace(cs: CharacterStream): LexToken {
     val loc = cs.sourceFileLocation
     var text = cs.pop().toString()
     while (cs.safePeek()?.isWhitespaceChar == true) text += cs.pop()
-    return LexToken(LexTokenType.WHITESPACE, text, loc)
+    return LexToken(LexTokenType.WHITESPACE, text, cs.rangeToCurrent(loc))
 }
