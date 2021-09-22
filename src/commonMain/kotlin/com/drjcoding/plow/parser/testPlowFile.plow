@@ -1,0 +1,19 @@
+import foo::bar
+
+//stuff
+
+func quad(a: Int, b: Int, c: Int): (Int, Int) {
+    return (
+        (-b + sqrt(b*b - 4*a*c) / (2*a)),
+        (-b - sqrt(b*b - 4*a*c) / (2*a))
+    )
+}
+
+enum STATES {
+    RUNNING,
+    NOT_RUNNING
+
+    func print() {
+        println(if this == RUNNING { "running!" } else { "not \"running\" " } )
+    }
+}
