@@ -1,12 +1,13 @@
 package com.drjcoding.plow.lexer
 
-import com.drjcoding.plow.issues.*
-import com.drjcoding.plow.source_abstractions.SourceFileLocation
+import com.drjcoding.plow.issues.PlowIssue
+import com.drjcoding.plow.issues.PlowResult
+import com.drjcoding.plow.issues.runCatchingExceptionsAsPlowResult
 import com.drjcoding.plow.source_abstractions.SourceFileRange
 
 /**
  * The textual representations of all Plow keywords mapped to their [LexTokenType]s. This also includes `nil`, `true`
- * and `false` even they they are not keywords, because they behave in the same way that they look like identifiers
+ * and `false` even though they are not keywords, because they behave in the same way that they look like identifiers
  * but are not.
  */
 private val KEYWORD_TEXT = mapOf(
@@ -81,7 +82,7 @@ private const val blockCommentStart = "/*"
 private const val blockCommentEnd = "*/"
 
 private val Char.isWhitespaceChar: Boolean
-    get() = this == ' ' || this == '\t' || this == '\n' || this == '\r'
+    get() = this == ' ' || this == '\t' || this == '\r'
 
 private val Char.isIdentifierStartChar: Boolean
     get() = this in 'a'..'z' || this in 'A'..'Z' || this == '_'
@@ -125,6 +126,7 @@ private fun lexCharStream(cs: CharacterStream): LexTokenStream {
 private fun getNextToken(cs: CharacterStream) =
     when {
         // FUTURE these should be ordered based on how common they are
+        cs.textIsNext("\n") -> lexNewline(cs)
         cs.peek().isWhitespaceChar -> lexWhitespace(cs)
         cs.textIsNext(commentStart) -> lexComment(cs)
         cs.textIsNext(blockCommentStart) -> lexBlockComment(cs)
@@ -143,6 +145,12 @@ private fun invalidCharacter(cs: CharacterStream): Nothing {
         cs.pop(),
         cs.rangeToCurrent(loc)
     )
+}
+
+private fun lexNewline(cs: CharacterStream): LexToken {
+    val loc = cs.sourceFileLocation
+    val text = cs.pop()
+    return LexToken(LexTokenType.NEWLINE, text.toString(), cs.rangeToCurrent(loc))
 }
 
 private fun lexNumber(cs: CharacterStream): LexToken {

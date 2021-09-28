@@ -108,9 +108,9 @@ class LexTests {
         listOf(
             " " to LexTokenType.WHITESPACE,
             "\t" to LexTokenType.WHITESPACE,
-            "\n" to LexTokenType.WHITESPACE,
+            "\n" to LexTokenType.NEWLINE,
             "\r" to LexTokenType.WHITESPACE,
-            "  \t  \r\n \t " to LexTokenType.WHITESPACE,
+            "  \t  \r \t " to LexTokenType.WHITESPACE,
         ).forEach { textIsLexedWithType(it.first, it.second) }
     }
 

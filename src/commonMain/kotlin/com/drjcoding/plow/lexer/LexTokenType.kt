@@ -65,6 +65,7 @@ enum class LexTokenType {
     OPERATOR,
 
     WHITESPACE,
+    NEWLINE,
     COMMENT;
 
     /**
@@ -73,6 +74,7 @@ enum class LexTokenType {
     val isSkipable: Boolean
         get() = when (this) {
             WHITESPACE -> true
+            NEWLINE -> true
             COMMENT -> true
             else -> false
         }
