@@ -19,11 +19,12 @@ import com.drjcoding.plow.parser.parse_functions.*
  */
 internal fun parseExpressionAtom(ts: LexTokenStream): ExpressionCSTNode? {
     //TODO
-    return when (ts.peekNS().type) {
+    return when (ts.safePeekNS()?.type) {
         LexTokenType.IDENTIFIER -> parseVarAccess(ts)
         LexTokenType.L_PAREN -> parseParenExpression(ts)
         LexTokenType.INT_LITERAL -> parseIntLiteral(ts)
         LexTokenType.FLOAT_LITERAL -> parseFloatLiteral(ts)
+        LexTokenType.RETURN -> parseReturnExpression(ts)
         else -> null
     }
 }
@@ -61,3 +62,13 @@ private fun parseParenExpression(ts: LexTokenStream): ParenthesizedExpressionCST
     return ParenthesizedExpressionCSTNode(lParen, expression, rParen)
 }
 
+/**
+ * Parses a return expression assuming we already know there is a return expression.
+ *
+ * `returnExpression ::= RETURN expression?`
+ */
+private fun parseReturnExpression(ts: LexTokenStream): ReturnExpressionCSTNode {
+    val returnToken = ts.popNSTokenCSTNode().assertType(LexTokenType.RETURN)
+    val expression = parseExpression(ts)
+    return ReturnExpressionCSTNode(returnToken, expression)
+}

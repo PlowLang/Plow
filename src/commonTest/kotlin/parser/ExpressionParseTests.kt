@@ -46,6 +46,11 @@ class ExpressionParseTests {
 
             "123.456" makes { FloatLiteralCSTNode(t(0)) }
 
+            "return" makes { ReturnExpressionCSTNode(t(0), null) }
+
+            "return a" makes { ReturnExpressionCSTNode(t(0), v(1))}
+
+            "return a + b" makes { ReturnExpressionCSTNode(t(0), BinaryOpCSTNode(v(1), t(2), v(3))) }
         }
     }
 
