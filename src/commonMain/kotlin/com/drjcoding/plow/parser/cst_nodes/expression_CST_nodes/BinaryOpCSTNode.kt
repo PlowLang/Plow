@@ -16,8 +16,6 @@ data class BinaryOpCSTNode(
     val right: ExpressionCSTNode
 ): ExpressionCSTNode() {
     override val range = left.range + right.range
-
-    override val bindingPower = BindingPower.fromOp(op.token.text.toUnderlyingString())
 }
 
 class InvalidBinaryOperatorError(op: String): Exception("Invalid binary operator $op")

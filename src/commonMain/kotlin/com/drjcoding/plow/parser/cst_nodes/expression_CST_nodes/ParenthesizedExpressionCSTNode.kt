@@ -15,6 +15,4 @@ data class ParenthesizedExpressionCSTNode(
     val rParen: TokenCSTNode
 ): ExpressionCSTNode() {
     override val range = lParen.range + rParen.range
-
-    override val bindingPower = BindingPower.ATOMIC
 }

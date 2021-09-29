@@ -10,6 +10,4 @@ import com.drjcoding.plow.parser.cst_nodes.QualifiedIdentifierCSTNode
  */
 data class VariableAccessCSTNode(val variable: QualifiedIdentifierCSTNode): ExpressionCSTNode() {
     override val range = variable.range
-
-    override val bindingPower = BindingPower.ATOMIC
 }

@@ -18,8 +18,6 @@ data class FunctionCallCSTNode(
     val rParen: TokenCSTNode
 ): ExpressionCSTNode() {
     override val range = function.range + rParen.range
-
-    override val bindingPower = BindingPower.FUNCTION_CALL
 }
 
 /**

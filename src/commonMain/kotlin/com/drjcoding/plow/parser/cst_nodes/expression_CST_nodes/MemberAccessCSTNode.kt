@@ -15,6 +15,4 @@ data class MemberAccessCSTNode(
     val member: TokenCSTNode
 ): ExpressionCSTNode() {
     override val range = accessedObject.range + member.range
-
-    override val bindingPower = BindingPower.MEMBER_ACCESS
 }
