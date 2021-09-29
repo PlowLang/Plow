@@ -6,7 +6,19 @@ import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.ExpressionCSTNod
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.VariableAccessCSTNode
 import com.drjcoding.plow.parser.parse_functions.parseQualifiedIdentifier
 
-fun parseExpressionAtom(ts: LexTokenStream): ExpressionCSTNode? {
+/**
+ * ```
+ * primaryExpression
+ * : L_PAREN expression R_PAREN //TODO
+ * | qualifiedIdentifier
+ * | literal                    //TODO
+ * | THIS                       //TODO
+ * | SUPER                      //TODO
+ * | ifExpression               //TODO
+ * | tuple                      //TODO
+ * ```
+ */
+internal fun parseExpressionAtom(ts: LexTokenStream): ExpressionCSTNode? {
     //TODO
     return if (ts.peekNSIsType(LexTokenType.IDENTIFIER)) {
         VariableAccessCSTNode(parseQualifiedIdentifier(ts)!!)

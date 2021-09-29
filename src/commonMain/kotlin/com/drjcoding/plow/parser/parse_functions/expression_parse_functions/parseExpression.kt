@@ -11,23 +11,24 @@ import com.drjcoding.plow.source_abstractions.toUnderlyingString
  * expression
  *   : primaryExpression
  *   | expression DOT IDENTIFIER                 // object access
- *  x| expression L_SQUARE expression R_SQUARE   // array access
+ *   | expression L_SQUARE expression R_SQUARE   // array access - TODO
  *   | expression L_PAREN functionArgs R_PAREN   // function call
- *  x| expression AS type                        // cast
- *  x| prefixOp expression                       // prefix operators
+ *   | expression AS type                        // cast - TODO
+ *   | prefixOp expression                       // prefix operators - TODO
  *   | expression multiplicationOp expression    // multiplication level binary op
  *   | expression additionOp expression          // addition level binary op
  *   | expression comparisonOp expression        // comparison level binary op
- *  X| expression IS type                        // typecheck
+ *   | expression IS type                        // typecheck - TODO
  *   | expression equalityOp expression          // equality level binary op
  *   | expression AND expression                 // and op
  *   | expression OR expression                  // or op
  *   | <assoc=right>
- *  x   expression assignmentOp expression      // assignment
+ *      expression assignmentOp expression      // assignment - TODO
  *   ;
  * ```
  */
-fun parseExpression(ts: LexTokenStream): ExpressionCSTNode? = parseSubExpression(ts, BindingPower.LOOSEST)
+fun parseExpression(ts: LexTokenStream): ExpressionCSTNode? =
+    parseSubExpression(ts, BindingPower.LOOSEST)
 
 /**
  * Parses only expressions that bind at least as tight as [tightestBindingPower].

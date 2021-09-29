@@ -5,6 +5,11 @@ import com.drjcoding.plow.issues.PlowIssueInfo
 import com.drjcoding.plow.source_abstractions.SourceFileRange
 import com.drjcoding.plow.source_abstractions.toPlowIssueTextRange
 
+/**
+ * Used when an expression is syntactically expected but none is found. (Ex. `foo + `)
+ *
+ * @param location the location after which the expression is expected.
+ */
 class ExpectedExpressionError(
     location: SourceFileRange
 ): PlowError(

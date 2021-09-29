@@ -14,7 +14,7 @@ import com.drjcoding.plow.source_abstractions.toUnderlyingString
  *
  * `binaryOp ::= expression OP expression`
  */
-fun parseBinaryOp(
+internal fun parseBinaryOp(
     ts: LexTokenStream,
     currentExp: ExpressionCSTNode,
     tightestBindingPower: BindingPower
