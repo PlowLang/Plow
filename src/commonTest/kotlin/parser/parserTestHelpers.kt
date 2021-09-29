@@ -5,6 +5,8 @@ import com.drjcoding.plow.issues.PlowResult
 import com.drjcoding.plow.lexer.LexTokenStream
 import com.drjcoding.plow.lexer.lex
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
+import com.drjcoding.plow.parser.cst_nodes.QualifiedIdentifierCSTNode
+import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.VariableAccessCSTNode
 import com.drjcoding.plow.parser.parse_functions.peekNSTokenCSTNode
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -47,4 +49,8 @@ class ParseTestsContext<T : CSTNode>(val parseFunction: (LexTokenStream) -> T?) 
 
 class SingleParseTestContext(private val ts: LexTokenStream) {
     fun t(i: Int) = ts.peekNSTokenCSTNode(i)
+
+    fun qi(i: Int) = QualifiedIdentifierCSTNode(listOf(), t(i))
+
+    fun v(i: Int) = VariableAccessCSTNode(qi(i))
 }
