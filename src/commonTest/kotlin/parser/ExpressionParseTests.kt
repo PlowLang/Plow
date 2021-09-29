@@ -41,6 +41,11 @@ class ExpressionParseTests {
             "(a + b)" makes { ParenthesizedExpressionCSTNode(t(0), BinaryOpCSTNode(v(1), t(2), v(3)), t(4)) }
 
             "(a".failsWith<UnexpectedTokenError>()
+
+            "123" makes { IntLiteralCSTNode(t(0)) }
+
+            "123.456" makes { FloatLiteralCSTNode(t(0)) }
+
         }
     }
 
@@ -121,4 +126,5 @@ class ExpressionParseTests {
             "a(b c".failsWith<UnexpectedTokenError>()
         }
     }
+
 }
