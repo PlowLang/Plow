@@ -1,9 +1,8 @@
 package parser
 
-import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.BinaryOpCSTNode
-import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.FunctionArgumentCSTNode
-import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.FunctionCallCSTNode
-import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.MemberAccessCSTNode
+import com.drjcoding.plow.parser.cst_nodes.QINamespaceCSTNode
+import com.drjcoding.plow.parser.cst_nodes.QualifiedIdentifierCSTNode
+import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.*
 import com.drjcoding.plow.parser.parse_functions.UnexpectedTokenError
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.ExpectedExpressionError
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.parseExpression
@@ -15,6 +14,33 @@ class ExpressionParseTests {
     fun generalTests() {
         testParse(::parseExpression) {
             "" makes { null }
+        }
+    }
+
+    @Test
+    fun atomicExpressionTests() {
+        testParse(::parseExpression) {
+            "a" makes {
+                VariableAccessCSTNode(QualifiedIdentifierCSTNode(listOf(), t(0)))
+            }
+
+            "a::b::c" makes {
+                VariableAccessCSTNode(
+                    QualifiedIdentifierCSTNode(
+                        listOf(
+                            QINamespaceCSTNode(t(0), t(1)),
+                            QINamespaceCSTNode(t(2), t(3)),
+                        ),
+                        t(4)
+                    )
+                )
+            }
+
+            "(a)" makes { ParenthesizedExpressionCSTNode(t(0), v(1), t(2)) }
+
+            "(a + b)" makes { ParenthesizedExpressionCSTNode(t(0), BinaryOpCSTNode(v(1), t(2), v(3)), t(4)) }
+
+            "(a".failsWith<UnexpectedTokenError>()
         }
     }
 

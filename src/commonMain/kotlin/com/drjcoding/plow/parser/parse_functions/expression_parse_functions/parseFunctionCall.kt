@@ -20,6 +20,9 @@ fun parseFunctionCall(ts: LexTokenStream, function: ExpressionCSTNode): Function
 
     val args: MutableList<FunctionArgumentCSTNode> = mutableListOf()
     while (true) {
+        // TODO - We should instead check for a closing ) first which lets us give a more helpful expected expression
+        //  error instead of an expected token ) error.
+
         val arg = parseExpression(ts) ?: break
         val isComma = ts.peekNSIsType(LexTokenType.COMMA)
         if (isComma) {
