@@ -5,7 +5,6 @@
 
 package com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes
 
-import com.drjcoding.plow.source_abstractions.toUnderlyingString
 import kotlin.math.min
 
 enum class BindingPower {
@@ -39,18 +38,18 @@ enum class BindingPower {
          */
         fun fromOp(op: String): BindingPower =
             when (op) {
-                "*" -> BindingPower.MULTIPLICATION
-                "/" -> BindingPower.MULTIPLICATION
-                "+" -> BindingPower.ADDITION
-                "-" -> BindingPower.ADDITION
-                "<" -> BindingPower.COMPARISON
-                "<=" -> BindingPower.COMPARISON
-                ">" -> BindingPower.COMPARISON
-                ">=" -> BindingPower.COMPARISON
-                "==" -> BindingPower.EQUALITY
-                "!=" -> BindingPower.EQUALITY
-                "&&" -> BindingPower.AND
-                "||" -> BindingPower.OR
+                "*" -> MULTIPLICATION
+                "/" -> MULTIPLICATION
+                "+" -> ADDITION
+                "-" -> ADDITION
+                "<" -> COMPARISON
+                "<=" -> COMPARISON
+                ">" -> COMPARISON
+                ">=" -> COMPARISON
+                "==" -> EQUALITY
+                "!=" -> EQUALITY
+                "&&" -> AND
+                "||" -> OR
                 else -> throw InvalidBinaryOperatorError(op)
             }
 
