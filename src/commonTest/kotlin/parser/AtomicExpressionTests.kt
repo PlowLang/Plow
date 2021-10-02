@@ -1,5 +1,6 @@
 package parser
 
+import com.drjcoding.plow.parser.cst_nodes.CodeBlockCSTNode
 import com.drjcoding.plow.parser.cst_nodes.QINamespaceCSTNode
 import com.drjcoding.plow.parser.cst_nodes.QualifiedIdentifierCSTNode
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.*
@@ -57,6 +58,13 @@ class AtomicExpressionTests {
             "return a" makes { ReturnExpressionCSTNode(t(0), v(1)) }
 
             "return a + b" makes { ReturnExpressionCSTNode(t(0), BinaryOpCSTNode(v(1), t(2), v(3))) }
+        }
+    }
+
+    @Test
+    fun ifTests() {
+        testParse(::parseExpression) {
+            "if foo {}" makes { IfExpressionCSTNode(t(0), v(1), CodeBlockCSTNode(t(2), listOf(), t(3)), null) }
         }
     }
 }

@@ -37,8 +37,6 @@ statements
 
 statement
     : variableDecleration
-    | whileStatement
-    | returnStatment
     | expression
     | itemDecleration
     ;
@@ -67,11 +65,11 @@ ifExpression
     : IF expression codeBlock (ELSE (IF expression)? codeBlock)*
     ;
 
-whileStatement
+whileExpression
     : WHILE expression codeBlock
     ;
 
-returnStatment
+returnExpression
     : RETURN expression?
     ;
 
@@ -116,6 +114,8 @@ primaryExpression
     | THIS
     | SUPER
     | ifExpression
+    | whileExpression
+    | returnExpression
     | tuple
     ;
 

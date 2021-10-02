@@ -12,7 +12,7 @@ import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.ExpressionCSTNod
  * | literal
  * | THIS                       //TODO
  * | SUPER                      //TODO
- * | ifExpression               //TODO
+ * | ifExpression
  * | tuple                      //TODO
  * ```
  */
@@ -24,6 +24,7 @@ internal fun parseExpressionAtom(ts: LexTokenStream): ExpressionCSTNode? {
         LexTokenType.INT_LITERAL -> parseIntLiteral(ts)
         LexTokenType.FLOAT_LITERAL -> parseFloatLiteral(ts)
         LexTokenType.RETURN -> parseReturnExpression(ts)
+        LexTokenType.IF -> parseIfExpression(ts)
         else -> null
     }
 }
