@@ -55,7 +55,7 @@ private fun parseExpressionContinuation(
         LexTokenType.L_PAREN -> parseFunctionCall(ts, currentExp)
         LexTokenType.OPERATOR -> {
             if (BindingPower.fromOp(next.text.toUnderlyingString()) looserThan tightestBindingPower) {
-                // Ex. we had 3 * 4 and now we have +
+                // Ex. we had 3 * 4, now we have +
                 null
             } else {
                 parseBinaryOp(ts, currentExp, tightestBindingPower)

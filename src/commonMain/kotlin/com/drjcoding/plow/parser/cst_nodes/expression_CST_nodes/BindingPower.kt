@@ -1,3 +1,8 @@
+@file:Suppress("SpellCheckingInspection", "SpellCheckingInspection", "SpellCheckingInspection",
+    "SpellCheckingInspection", "SpellCheckingInspection", "SpellCheckingInspection", "SpellCheckingInspection",
+    "SpellCheckingInspection", "SpellCheckingInspection", "SpellCheckingInspection"
+)
+
 package com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes
 
 import com.drjcoding.plow.source_abstractions.toUnderlyingString
