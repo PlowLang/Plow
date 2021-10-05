@@ -1,4 +1,4 @@
-package com.drjcoding.plow.parser.parse_functions
+package com.drjcoding.plow.parser.parse_functions.errors
 
 import com.drjcoding.plow.lexer.LexTokenType
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode

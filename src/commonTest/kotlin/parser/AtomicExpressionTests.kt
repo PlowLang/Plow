@@ -4,7 +4,7 @@ import com.drjcoding.plow.parser.cst_nodes.CodeBlockCSTNode
 import com.drjcoding.plow.parser.cst_nodes.QINamespaceCSTNode
 import com.drjcoding.plow.parser.cst_nodes.QualifiedIdentifierCSTNode
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.*
-import com.drjcoding.plow.parser.parse_functions.UnexpectedTokenError
+import com.drjcoding.plow.parser.parse_functions.errors.UnexpectedTokenError
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.parseExpression
 import kotlin.test.Test
 

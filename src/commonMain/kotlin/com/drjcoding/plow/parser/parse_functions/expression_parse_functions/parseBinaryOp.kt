@@ -5,7 +5,7 @@ import com.drjcoding.plow.lexer.LexTokenType
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.BinaryOpCSTNode
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.BindingPower
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.ExpressionCSTNode
-import com.drjcoding.plow.parser.parse_functions.assertType
+import com.drjcoding.plow.parser.parse_functions.errors.assertType
 import com.drjcoding.plow.parser.parse_functions.popNSTokenCSTNode
 import com.drjcoding.plow.source_abstractions.toUnderlyingString
 

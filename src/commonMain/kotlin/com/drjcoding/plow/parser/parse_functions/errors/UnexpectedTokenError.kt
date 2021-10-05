@@ -1,4 +1,4 @@
-package com.drjcoding.plow.parser.parse_functions
+package com.drjcoding.plow.parser.parse_functions.errors
 
 import com.drjcoding.plow.issues.PlowError
 import com.drjcoding.plow.issues.PlowIssueInfo

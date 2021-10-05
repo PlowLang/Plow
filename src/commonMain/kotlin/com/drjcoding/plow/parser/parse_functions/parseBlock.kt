@@ -3,6 +3,8 @@ package com.drjcoding.plow.parser.parse_functions
 import com.drjcoding.plow.lexer.LexTokenStream
 import com.drjcoding.plow.lexer.LexTokenType
 import com.drjcoding.plow.parser.cst_nodes.CodeBlockCSTNode
+import com.drjcoding.plow.parser.parse_functions.errors.assertType
+import com.drjcoding.plow.parser.parse_functions.errors.expectType
 
 /**
  * parses a [CodeBlockCSTNode] assuming we know one exists.

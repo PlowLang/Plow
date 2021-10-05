@@ -3,8 +3,8 @@ package com.drjcoding.plow.parser.parse_functions.expression_parse_functions.ato
 import com.drjcoding.plow.lexer.LexTokenStream
 import com.drjcoding.plow.lexer.LexTokenType
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.IfExpressionCSTNode
-import com.drjcoding.plow.parser.parse_functions.ExpectedCodeBlockError
-import com.drjcoding.plow.parser.parse_functions.assertType
+import com.drjcoding.plow.parser.parse_functions.errors.ExpectedCodeBlockError
+import com.drjcoding.plow.parser.parse_functions.errors.assertType
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.ExpectedExpressionError
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.parseExpression
 import com.drjcoding.plow.parser.parse_functions.parseCodeBlock
