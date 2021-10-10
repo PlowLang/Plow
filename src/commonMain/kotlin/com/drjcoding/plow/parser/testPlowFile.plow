@@ -3,6 +3,10 @@ import foo::bar
 //stuff
 
 func quad(a: Int, b: Int, c: Int): (Int, Int) {
+    val a = foo
+    ( a + b )
+
+
     return (
         (-b + sqrt(b*b - 4*a*c) / (2*a)),
         (-b - sqrt(b*b - 4*a*c) / (2*a))

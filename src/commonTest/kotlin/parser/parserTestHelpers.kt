@@ -2,15 +2,16 @@ package parser
 
 import com.drjcoding.plow.issues.PlowError
 import com.drjcoding.plow.issues.PlowResult
+import com.drjcoding.plow.lexer.LexToken
 import com.drjcoding.plow.lexer.LexTokenStream
 import com.drjcoding.plow.lexer.lex
-import com.drjcoding.plow.parser.cst_nodes.CSTNode
-import com.drjcoding.plow.parser.cst_nodes.QualifiedIdentifierCSTNode
+import com.drjcoding.plow.parser.cst_nodes.*
+import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.ExpressionCSTNode
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.VariableAccessCSTNode
+import com.drjcoding.plow.parser.cst_nodes.statement_CST_nodes.ExpressionStatementCSTNode
 import com.drjcoding.plow.parser.parse_functions.peekNSTokenCSTNode
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
 
 fun <T : CSTNode> testParse(parseFunction: (LexTokenStream) -> T?, tests: ParseTestsContext<T>.() -> Unit) {
     ParseTestsContext(parseFunction).tests()
@@ -50,9 +51,14 @@ class ParseTestsContext<T : CSTNode>(val parseFunction: (LexTokenStream) -> T?) 
 
 class SingleParseTestContext(private val ts: LexTokenStream) {
     /**
-     * Creates a [TokenCSTNode] from the token at the specified position (ignoring whitespace).
+     * Creates a [TokenCSTNode] from the token at the specified position (ignoring skippables).
      */
     fun t(i: Int) = ts.peekNSTokenCSTNode(i)
+
+    /**
+     * Gets the [LexToken] from the specified position not ignoring skippables.
+     */
+    fun at(i: Int) = ts.peek(i)
 
     /**
      * Creates a [QualifiedIdentifierCSTNode] from the token at the specified position (ignoring whitespace).
@@ -63,4 +69,14 @@ class SingleParseTestContext(private val ts: LexTokenStream) {
      * Creates a [VariableAccessCSTNode] using the [QualifiedIdentifierCSTNode] that would be created by calling [qi].
      */
     fun v(i: Int) = VariableAccessCSTNode(qi(i))
+
+    /**
+     * The same as [StatementWithTerminatorCSTNode].
+     */
+    val SWT = ::StatementWithTerminatorCSTNode
+
+    /**
+     * Converts this expression to a statement by wrapping it in an [ExpressionStatementCSTNode].
+     */
+    fun ExpressionCSTNode.toStat() = ExpressionStatementCSTNode(this)
 }
