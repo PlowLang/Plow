@@ -2,7 +2,7 @@ package com.drjcoding.plow.parser.parse_functions.parseDecleration
 
 import com.drjcoding.plow.lexer.LexTokenStream
 import com.drjcoding.plow.lexer.LexTokenType
-import com.drjcoding.plow.parser.cst_nodes.ImportCSTNode
+import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.ImportCSTNode
 import com.drjcoding.plow.parser.parse_functions.errors.ExpectedQualifiedIdentifier
 import com.drjcoding.plow.parser.parse_functions.errors.assertType
 import com.drjcoding.plow.parser.parse_functions.parseQualifiedIdentifier

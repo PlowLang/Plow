@@ -1,6 +1,8 @@
-package com.drjcoding.plow.parser.cst_nodes
+package com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes
 
-import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.DeclarationCSTNode
+import com.drjcoding.plow.parser.cst_nodes.CSTNode
+import com.drjcoding.plow.parser.cst_nodes.QualifiedIdentifierCSTNode
+import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
 
 /**
  * An import. [declarationToImport] is the class/function/variable being imported.

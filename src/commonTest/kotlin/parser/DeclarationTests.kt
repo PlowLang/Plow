@@ -1,6 +1,6 @@
 package parser
 
-import com.drjcoding.plow.parser.cst_nodes.ImportCSTNode
+import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.ImportCSTNode
 import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.*
 import com.drjcoding.plow.parser.parse_functions.errors.*
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.ExpectedExpressionError
