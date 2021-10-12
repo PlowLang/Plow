@@ -30,6 +30,7 @@ private val KEYWORD_TEXT = mapOf(
     "func" to LexTokenType.FUNC,
     "return" to LexTokenType.RETURN,
     "as" to LexTokenType.AS,
+    "is" to LexTokenType.IS,
     "public" to LexTokenType.PUBLIC,
     "private" to LexTokenType.PRIVATE,
     "protected" to LexTokenType.PROTECTED,

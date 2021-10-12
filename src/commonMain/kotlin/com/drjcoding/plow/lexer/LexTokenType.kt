@@ -24,6 +24,7 @@ enum class LexTokenType {
     INTERFACE,
     FUNC,
     RETURN,
+    IS,
     AS,
     PUBLIC,
     PRIVATE,

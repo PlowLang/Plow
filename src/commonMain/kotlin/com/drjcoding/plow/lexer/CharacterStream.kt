@@ -28,7 +28,7 @@ class CharacterStream(private val text: String) {
     }
 
     /**
-     * Whether or not the stream has been exhausted.
+     * Whether the stream has been exhausted.
      */
     val isEOF: Boolean
         get() = currentCharPosition >= text.length

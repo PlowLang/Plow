@@ -14,13 +14,13 @@ class LexTokenStream(private val tokens: List<LexToken>) {
     }
 
     /**
-     * Whether or not the stream has been exhausted.
+     * Whether the stream has been exhausted.
      */
     val isExhausted: Boolean
         get() = currentToken >= tokens.size
 
     /**
-     * Whether or not the stream would be exhausted after advancing the stream [ahead] times.
+     * Whether the stream would be exhausted after advancing the stream [ahead] times.
      */
     fun isExhaustedAhead(ahead: Int) = currentToken + ahead >= tokens.size
 
