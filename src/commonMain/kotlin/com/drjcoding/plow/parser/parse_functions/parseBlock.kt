@@ -23,7 +23,7 @@ internal fun parseCodeBlock(ts: LexTokenStream): CodeBlockCSTNode {
         statements.add(StatementWithTerminatorCSTNode(possibleStatement, possibleSeparator))
     }
 
-    val rCurly = ts.popNSTokenCSTNode().expectType(LexTokenType.R_CURLY)
+    val rCurly = ts.safePopNSTokenCSTNode().expectType(LexTokenType.R_CURLY)
     return CodeBlockCSTNode(lCurly, statements, rCurly)
 }
 
@@ -33,7 +33,7 @@ internal fun parseCodeBlock(ts: LexTokenStream): CodeBlockCSTNode {
 fun parseStatementSeparator(ts: LexTokenStream): TokenCSTNode? {
     var skipCount = 0
     while (true) {
-        val token = ts.peek(skipCount)
+        val token = ts.safePeek(skipCount) ?: return null
         when {
             ts.isExhaustedAhead(skipCount) -> return null
             token.type == LexTokenType.SEMICOLON -> break

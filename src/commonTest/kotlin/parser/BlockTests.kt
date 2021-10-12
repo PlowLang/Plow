@@ -4,6 +4,7 @@ import com.drjcoding.plow.parser.cst_nodes.CodeBlockCSTNode
 import com.drjcoding.plow.parser.cst_nodes.QualifiedIdentifierCSTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.VariableAccessCSTNode
+import com.drjcoding.plow.parser.parse_functions.errors.UnexpectedTokenError
 import com.drjcoding.plow.parser.parse_functions.parseCodeBlock
 import kotlin.test.Test
 
@@ -12,6 +13,8 @@ class BlockTests {
     fun blockTests() {
         testParse(::parseCodeBlock) {
             "{ }" makes { CodeBlockCSTNode(t(0), listOf(), t(1)) }
+
+            "{ ".failsWith<UnexpectedTokenError>()
 
             "{ a }" makes {
                 CodeBlockCSTNode(
