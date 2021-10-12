@@ -16,3 +16,4 @@ fun parseDeclaration(ts: LexTokenStream): DeclarationCSTNode? =
     parseVariableDeclaration(ts)
         ?: parseFunctionDeclaration(ts)
         ?: parseClassDeclaration(ts)
+        ?: parseEnumDeclaration(ts)
