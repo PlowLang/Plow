@@ -1,14 +1,12 @@
 package parser
 
-import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.FunctionDeclarationArgCSTNode
-import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.FunctionDeclarationCSTNode
-import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.TypeAnnotationCSTNode
-import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.VariableDeclarationCSTNode
+import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.*
 import com.drjcoding.plow.parser.parse_functions.errors.ExpectedCodeBlockError
 import com.drjcoding.plow.parser.parse_functions.errors.ExpectedTypeAnnotationError
 import com.drjcoding.plow.parser.parse_functions.errors.ExpectedTypeError
 import com.drjcoding.plow.parser.parse_functions.errors.UnexpectedTokenError
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.ExpectedExpressionError
+import com.drjcoding.plow.parser.parse_functions.parseDecleration.parseClassDeclaration
 import com.drjcoding.plow.parser.parse_functions.parseDecleration.parseFunctionDeclaration
 import com.drjcoding.plow.parser.parse_functions.parseDecleration.parseVariableDeclaration
 import kotlin.test.Test
@@ -76,6 +74,27 @@ class DeclarationTests {
                         FunctionDeclarationArgCSTNode(t(7), TypeAnnotationCSTNode(t(8), qi(9).asType()), t(10))
                     ), t(11), null, eb(12)
                 )
+            }
+        }
+    }
+
+    @Test
+    fun classDeclarationTests() {
+        testParse(::parseClassDeclaration) {
+            "" makes { null }
+
+            "class".failsWith<UnexpectedTokenError>()
+            "class Foo".failsWith<UnexpectedTokenError>()
+            "class Foo {".failsWith<UnexpectedTokenError>()
+
+            "class Foo { }" makes {
+                ClassDeclarationCSTNode(t(0), t(1), t(2), listOf(), t(3))
+            }
+
+            "class Foo { let a = b }" makes {
+                ClassDeclarationCSTNode(t(0), t(1), t(2), listOf(
+                    VariableDeclarationCSTNode(t(3), t(4), null, t(5), v(6))
+                ), t(7))
             }
         }
     }
