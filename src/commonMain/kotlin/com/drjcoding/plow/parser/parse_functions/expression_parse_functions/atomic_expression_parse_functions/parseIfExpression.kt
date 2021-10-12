@@ -2,6 +2,7 @@ package com.drjcoding.plow.parser.parse_functions.expression_parse_functions.ato
 
 import com.drjcoding.plow.lexer.LexTokenStream
 import com.drjcoding.plow.lexer.LexTokenType
+import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.IfContinuationCSTNode
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.IfExpressionCSTNode
 import com.drjcoding.plow.parser.parse_functions.errors.ExpectedCodeBlockError
 import com.drjcoding.plow.parser.parse_functions.errors.assertType
@@ -20,9 +21,18 @@ import com.drjcoding.plow.parser.parse_functions.popNSTokenCSTNode
 internal fun parseIfExpression(ts: LexTokenStream): IfExpressionCSTNode {
     val ifKw = ts.popNSTokenCSTNode().assertType(LexTokenType.IF)
     val condition = parseExpression(ts) ?: throw ExpectedExpressionError(ifKw.range)
-    val block = if (ts.peekNSIsType(LexTokenType.L_CURLY)) parseCodeBlock(ts) else throw ExpectedCodeBlockError(condition.range)
+    val block =
+        if (ts.peekNSIsType(LexTokenType.L_CURLY)) parseCodeBlock(ts) else throw ExpectedCodeBlockError(condition.range)
 
-    // TODO - parsing for else
+    var continuation: IfContinuationCSTNode? = null
+    if (ts.peekNSIsType(LexTokenType.ELSE)) {
+        val elseKw = ts.popNSTokenCSTNode().assertType(LexTokenType.ELSE)
+        continuation = when (ts.safePeekNS()?.type) {
+            LexTokenType.IF -> IfContinuationCSTNode.ElseIfContinuation(elseKw, parseIfExpression(ts))
+            LexTokenType.L_CURLY -> IfContinuationCSTNode.ElseContinuation(elseKw, parseCodeBlock(ts))
+            else -> throw ExpectedCodeBlockError(elseKw.range)
+        }
+    }
 
-    return IfExpressionCSTNode(ifKw, condition, block, null)
+    return IfExpressionCSTNode(ifKw, condition, block, continuation)
 }

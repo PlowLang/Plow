@@ -61,6 +61,11 @@ class SingleParseTestContext(private val ts: LexTokenStream) {
     fun at(i: Int) = ts.peek(i)
 
     /**
+     * Creates an empty [CodeBlockCSTNode] using `t(i)` and `t(i+1)` as the curly brackets.
+     */
+    fun eb(i: Int) = CodeBlockCSTNode(t(i), listOf(), t(i + 1))
+
+    /**
      * Creates a [QualifiedIdentifierCSTNode] from the token at the specified position (ignoring whitespace).
      */
     fun qi(i: Int) = QualifiedIdentifierCSTNode(listOf(), t(i))

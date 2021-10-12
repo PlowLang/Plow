@@ -1,10 +1,11 @@
 package parser
 
-import com.drjcoding.plow.parser.cst_nodes.CodeBlockCSTNode
 import com.drjcoding.plow.parser.cst_nodes.QINamespaceCSTNode
 import com.drjcoding.plow.parser.cst_nodes.QualifiedIdentifierCSTNode
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.*
+import com.drjcoding.plow.parser.parse_functions.errors.ExpectedCodeBlockError
 import com.drjcoding.plow.parser.parse_functions.errors.UnexpectedTokenError
+import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.ExpectedExpressionError
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.parseExpression
 import kotlin.test.Test
 
@@ -64,7 +65,28 @@ class AtomicExpressionTests {
     @Test
     fun ifTests() {
         testParse(::parseExpression) {
-            "if foo {}" makes { IfExpressionCSTNode(t(0), v(1), CodeBlockCSTNode(t(2), listOf(), t(3)), null) }
+            "if foo {}" makes { IfExpressionCSTNode(t(0), v(1), eb(2), null) }
+
+            "if".failsWith<ExpectedExpressionError>()
+
+            "if foo".failsWith<ExpectedCodeBlockError>()
+
+            "if foo {} else {}" makes {
+                IfExpressionCSTNode(t(0), v(1), eb(2), IfContinuationCSTNode.ElseContinuation(t(4), eb(5)))
+            }
+
+            "if foo {} else if bar {}" makes {
+                IfExpressionCSTNode(
+                    t(0), v(1), eb(2), IfContinuationCSTNode.ElseIfContinuation(
+                        t(4),
+                        IfExpressionCSTNode(t(5), v(6), eb(7), null)
+                    )
+                )
+            }
+
+            "if foo {} else".failsWith<ExpectedCodeBlockError>()
+
+            "if foo {} else if".failsWith<ExpectedExpressionError>()
         }
     }
 }
