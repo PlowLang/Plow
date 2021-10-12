@@ -16,7 +16,7 @@ class BlockTests {
             "{ a }" makes {
                 CodeBlockCSTNode(
                     t(0),
-                    listOf(SWT(v(1).toStat(), null)),
+                    listOf(SWT(v(1), null)),
                     t(2)
                 )
             }
@@ -24,7 +24,7 @@ class BlockTests {
             "{ a ; }" makes {
                 CodeBlockCSTNode(
                     t(0),
-                    listOf(SWT(v(1).toStat(), t(2))),
+                    listOf(SWT(v(1), t(2))),
                     t(3)
                 )
             }
@@ -33,9 +33,16 @@ class BlockTests {
                 CodeBlockCSTNode(
                     t(0),
                     listOf(
-                        SWT(v(1).toStat(), t(2)),
-                        SWT(v(3).toStat(), TokenCSTNode(at(7), listOf())),
-                        SWT(VariableAccessCSTNode(QualifiedIdentifierCSTNode(listOf(), TokenCSTNode(at(9), listOf(at(8))))).toStat(), t(5))
+                        SWT(v(1), t(2)),
+                        SWT(v(3), TokenCSTNode(at(7), listOf())),
+                        SWT(
+                            VariableAccessCSTNode(
+                                QualifiedIdentifierCSTNode(
+                                    listOf(),
+                                    TokenCSTNode(at(9), listOf(at(8)))
+                                )
+                            ), t(5)
+                        )
                     ),
                     t(6)
                 )

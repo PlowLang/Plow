@@ -6,9 +6,7 @@ import com.drjcoding.plow.lexer.LexToken
 import com.drjcoding.plow.lexer.LexTokenStream
 import com.drjcoding.plow.lexer.lex
 import com.drjcoding.plow.parser.cst_nodes.*
-import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.ExpressionCSTNode
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.VariableAccessCSTNode
-import com.drjcoding.plow.parser.cst_nodes.statement_CST_nodes.ExpressionStatementCSTNode
 import com.drjcoding.plow.parser.parse_functions.peekNSTokenCSTNode
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -79,9 +77,4 @@ class SingleParseTestContext(private val ts: LexTokenStream) {
      * The same as [StatementWithTerminatorCSTNode].
      */
     val SWT = ::StatementWithTerminatorCSTNode
-
-    /**
-     * Converts this expression to a statement by wrapping it in an [ExpressionStatementCSTNode].
-     */
-    fun ExpressionCSTNode.toStat() = ExpressionStatementCSTNode(this)
 }
