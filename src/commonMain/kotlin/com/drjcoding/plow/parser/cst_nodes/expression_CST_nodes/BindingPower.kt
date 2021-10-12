@@ -5,6 +5,8 @@
 
 package com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes
 
+import com.drjcoding.plow.lexer.LexToken
+import com.drjcoding.plow.source_abstractions.toUnderlyingString
 import kotlin.math.min
 
 enum class BindingPower {
@@ -36,8 +38,8 @@ enum class BindingPower {
         /**
          * Takes a valid binary operator and gets its binding power.
          */
-        fun fromOp(op: String): BindingPower =
-            when (op) {
+        fun fromOp(op: LexToken): BindingPower =
+            when (val opText = op.text.toUnderlyingString()) {
                 "*" -> MULTIPLICATION
                 "/" -> MULTIPLICATION
                 "+" -> ADDITION
@@ -50,7 +52,9 @@ enum class BindingPower {
                 "!=" -> EQUALITY
                 "&&" -> AND
                 "||" -> OR
-                else -> throw InvalidBinaryOperatorError(op)
+                "is" -> TYPECHECK
+                "as" -> CAST
+                else -> throw InvalidBinaryOperatorError(opText)
             }
 
         /**

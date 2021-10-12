@@ -7,7 +7,6 @@ import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.BindingPower
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.ExpressionCSTNode
 import com.drjcoding.plow.parser.parse_functions.errors.assertType
 import com.drjcoding.plow.parser.parse_functions.popNSTokenCSTNode
-import com.drjcoding.plow.source_abstractions.toUnderlyingString
 
 /**
  * Parses a binary operation assuming one has already been verified to exist.
@@ -22,7 +21,7 @@ internal fun parseBinaryOp(
     val op = ts.popNSTokenCSTNode().assertType(LexTokenType.OPERATOR)
     val right = parseSubExpression(
         ts,
-        tightestBindingPower tightestOf BindingPower.fromOp(op.token.text.toUnderlyingString())
+        tightestBindingPower tightestOf BindingPower.fromOp(op.token)
     ) ?: throw ExpectedExpressionError(op.range)
     return BinaryOpCSTNode(currentExp, op, right)
 }

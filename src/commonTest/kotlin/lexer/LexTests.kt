@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection", "SpellCheckingInspection")
+
 package lexer
 
 import com.drjcoding.plow.issues.PlowError

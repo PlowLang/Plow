@@ -1,9 +1,8 @@
 package parser
 
-import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.BinaryOpCSTNode
-import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.FunctionArgumentCSTNode
-import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.FunctionCallCSTNode
-import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.MemberAccessCSTNode
+import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.*
+import com.drjcoding.plow.parser.cst_nodes.type_CST_nodes.NamedTypeCSTNode
+import com.drjcoding.plow.parser.parse_functions.errors.ExpectedTypeError
 import com.drjcoding.plow.parser.parse_functions.errors.UnexpectedTokenError
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.ExpectedExpressionError
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.parseExpression
@@ -96,4 +95,20 @@ class ExpressionParseTests {
         }
     }
 
+    @Test
+    fun castAndCheckTests() {
+        testParse(::parseExpression) {
+            "foo as bar" makes {
+                CastCSTNode(v(0), t(1), NamedTypeCSTNode(qi(2)))
+            }
+
+            "foo is bar" makes {
+                TypecheckCSTNode(v(0), t(1), NamedTypeCSTNode(qi(2)))
+            }
+
+            "foo as".failsWith<ExpectedTypeError>()
+
+            "foo is".failsWith<ExpectedTypeError>()
+        }
+    }
 }

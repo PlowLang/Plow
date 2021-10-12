@@ -5,7 +5,6 @@ import com.drjcoding.plow.lexer.LexTokenType
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.BindingPower
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.ExpressionCSTNode
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.atomic_expression_parse_functions.parseExpressionAtom
-import com.drjcoding.plow.source_abstractions.toUnderlyingString
 
 /**
  * ```
@@ -14,12 +13,12 @@ import com.drjcoding.plow.source_abstractions.toUnderlyingString
  *   | expression DOT IDENTIFIER                 // object access
  *   | expression L_SQUARE expression R_SQUARE   // array access - TODO
  *   | expression L_PAREN functionArgs R_PAREN   // function call
- *   | expression AS type                        // cast - TODO
+ *   | expression AS type                        // cast
+ *   | expression IS type                        // typecheck
  *   | prefixOp expression                       // prefix operators - TODO
  *   | expression multiplicationOp expression    // multiplication level binary op
  *   | expression additionOp expression          // addition level binary op
  *   | expression comparisonOp expression        // comparison level binary op
- *   | expression IS type                        // typecheck - TODO
  *   | expression equalityOp expression          // equality level binary op
  *   | expression AND expression                 // and op
  *   | expression OR expression                  // or op
@@ -53,8 +52,9 @@ private fun parseExpressionContinuation(
     return when (next.type) {
         LexTokenType.PERIOD -> parseMemberAccess(ts, currentExp)
         LexTokenType.L_PAREN -> parseFunctionCall(ts, currentExp)
+        LexTokenType.AS, LexTokenType.IS -> parseCastOrTypecheck(ts, currentExp)
         LexTokenType.OPERATOR -> {
-            if (BindingPower.fromOp(next.text.toUnderlyingString()) looserThan tightestBindingPower) {
+            if (BindingPower.fromOp(next) looserThan tightestBindingPower) {
                 // Ex. we had 3 * 4, now we have +
                 null
             } else {

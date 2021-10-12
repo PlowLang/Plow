@@ -11,7 +11,7 @@ import com.drjcoding.plow.issues.PlowIssueTextRange
 data class SourceFileRange(val start: SourceFileLocation, val end: SourceFileLocation) {
 
     /**
-     * Returns the two [SourceFileRange]s concatenated together (this.start to other.end)
+     * Returns the two [SourceFileRange]s concatenated together (`this.start` to `other.end`)
      */
     operator fun plus(other: SourceFileRange) = SourceFileRange(this.start, other.end)
 
