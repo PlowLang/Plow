@@ -1,15 +1,10 @@
 package parser
 
+import com.drjcoding.plow.parser.cst_nodes.ImportCSTNode
 import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.*
-import com.drjcoding.plow.parser.parse_functions.errors.ExpectedCodeBlockError
-import com.drjcoding.plow.parser.parse_functions.errors.ExpectedTypeAnnotationError
-import com.drjcoding.plow.parser.parse_functions.errors.ExpectedTypeError
-import com.drjcoding.plow.parser.parse_functions.errors.UnexpectedTokenError
+import com.drjcoding.plow.parser.parse_functions.errors.*
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.ExpectedExpressionError
-import com.drjcoding.plow.parser.parse_functions.parseDecleration.parseClassDeclaration
-import com.drjcoding.plow.parser.parse_functions.parseDecleration.parseEnumDeclaration
-import com.drjcoding.plow.parser.parse_functions.parseDecleration.parseFunctionDeclaration
-import com.drjcoding.plow.parser.parse_functions.parseDecleration.parseVariableDeclaration
+import com.drjcoding.plow.parser.parse_functions.parseDecleration.*
 import kotlin.test.Test
 
 class DeclarationTests {
@@ -134,4 +129,16 @@ class DeclarationTests {
             }
         }
     }
+
+    @Test
+    fun importTests() {
+        testParse(::parseImport) {
+            "" makes { null }
+
+            "import foo" makes { ImportCSTNode(t(0), qi(1)) }
+
+            "import ".failsWith<ExpectedQualifiedIdentifier>()
+        }
+    }
+
 }
