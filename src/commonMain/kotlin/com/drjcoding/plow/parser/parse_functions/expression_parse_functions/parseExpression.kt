@@ -53,6 +53,7 @@ private fun parseExpressionContinuation(
         LexTokenType.PERIOD -> parseMemberAccess(ts, currentExp)
         LexTokenType.L_PAREN -> parseFunctionCall(ts, currentExp)
         LexTokenType.AS, LexTokenType.IS -> parseCastOrTypecheck(ts, currentExp)
+        LexTokenType.ASSIGN -> parseAssignment(ts, currentExp)
         LexTokenType.OPERATOR -> {
             if (BindingPower.fromOp(next) looserThan tightestBindingPower) {
                 // Ex. we had 3 * 4, now we have +

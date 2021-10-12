@@ -68,6 +68,7 @@ private val PUNCTUATION_TEXT = mapOf(
     ':' to LexTokenType.COLON,
     ';' to LexTokenType.SEMICOLON,
     '?' to LexTokenType.QUESTION,
+    '=' to LexTokenType.ASSIGN
 )
 
 /**

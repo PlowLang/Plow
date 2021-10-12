@@ -62,6 +62,7 @@ enum class LexTokenType {
     SEMICOLON,
     ARROW,
     QUESTION,
+    ASSIGN,
 
     OPERATOR,
 

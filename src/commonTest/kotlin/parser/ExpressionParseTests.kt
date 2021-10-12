@@ -111,4 +111,27 @@ class ExpressionParseTests {
             "foo is".failsWith<ExpectedTypeError>()
         }
     }
+
+    @Test
+    fun assignmentTests() {
+        testParse(::parseExpression) {
+            "a = b" makes {
+                AssignmentExpressionCSTNode(v(0), t(1), v(2))
+            }
+
+            "a = b + c" makes {
+                AssignmentExpressionCSTNode(v(0), t(1), BinaryOpCSTNode(v(2), t(3), v(4)))
+            }
+
+            "a.b = c" makes {
+                AssignmentExpressionCSTNode(MemberAccessCSTNode(v(0), t(1), t(2)), t(3), v(4))
+            }
+
+            "a = b = c" makes {
+                AssignmentExpressionCSTNode(v(0), t(1), AssignmentExpressionCSTNode(v(2), t(3), v(4)))
+            }
+
+            "a = ".failsWith<ExpectedExpressionError>()
+        }
+    }
 }
