@@ -1,5 +1,6 @@
 package com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes
 
+import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.EnumDeclarationASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
 
@@ -15,6 +16,13 @@ data class EnumDeclarationCSTNode(
     val rCurly: TokenCSTNode
 ): CSTNode(), DeclarationCSTNode {
     override val range = enumKw.range + rCurly.range
+
+    override fun toAST() = EnumDeclarationASTNode(
+        name.token.text,
+        cases.map { it.name.token.text },
+        declarations.map { it.toAST() },
+        this
+    )
 }
 
 /**
