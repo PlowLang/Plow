@@ -1,5 +1,6 @@
 package com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes
 
+import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.FunctionCallASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
 
@@ -18,6 +19,12 @@ data class FunctionCallCSTNode(
     val rParen: TokenCSTNode
 ): ExpressionCSTNode() {
     override val range = function.range + rParen.range
+
+    override fun toAST() = FunctionCallASTNode(
+        function.toAST(),
+        arguments.map { it.value.toAST() },
+        this
+    )
 }
 
 /**

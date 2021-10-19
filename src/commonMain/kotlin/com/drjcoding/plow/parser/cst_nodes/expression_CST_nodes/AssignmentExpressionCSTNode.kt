@@ -1,5 +1,6 @@
 package com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes
 
+import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.AssignmentExpressionASTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
 
 /**
@@ -12,4 +13,10 @@ data class AssignmentExpressionCSTNode(
     val value: ExpressionCSTNode
 ) : ExpressionCSTNode() {
     override val range = assignTo.range + value.range
+
+    override fun toAST() = AssignmentExpressionASTNode(
+        assignTo.toAST(),
+        value.toAST(),
+        this
+    )
 }

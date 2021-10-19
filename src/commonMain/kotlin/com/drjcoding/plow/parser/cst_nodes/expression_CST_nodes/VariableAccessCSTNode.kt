@@ -1,5 +1,6 @@
 package com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes
 
+import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.VariableAccessASTNode
 import com.drjcoding.plow.parser.cst_nodes.QualifiedIdentifierCSTNode
 
 /**
@@ -9,4 +10,9 @@ import com.drjcoding.plow.parser.cst_nodes.QualifiedIdentifierCSTNode
  */
 data class VariableAccessCSTNode(val variable: QualifiedIdentifierCSTNode): ExpressionCSTNode() {
     override val range = variable.range
+
+    override fun toAST() = VariableAccessASTNode(
+        variable.toAST(),
+        this
+    )
 }

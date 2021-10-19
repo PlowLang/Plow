@@ -1,5 +1,7 @@
 package com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes
 
+import com.drjcoding.plow.parser.ast_nodes.CodeBlockASTNode
+import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.IfExpressionASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.parser.cst_nodes.CodeBlockCSTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
@@ -12,8 +14,15 @@ data class IfExpressionCSTNode(
     val condition: ExpressionCSTNode,
     val block: CodeBlockCSTNode,
     val continuation: IfContinuationCSTNode?
-): ExpressionCSTNode() {
+) : ExpressionCSTNode() {
     override val range = ifKw.range + (continuation?.range ?: block.range)
+
+    override fun toAST() = IfExpressionASTNode(
+        condition.toAST(),
+        block.toAST(),
+        continuation?.toAST(),
+        this
+    )
 }
 
 /**
@@ -21,16 +30,20 @@ data class IfExpressionCSTNode(
  *
  * `if condition { } <something-here>`
  */
-sealed class IfContinuationCSTNode: CSTNode() {
+sealed class IfContinuationCSTNode : CSTNode() {
+
+    abstract fun toAST(): CodeBlockASTNode
 
     /**
      * An else with no condition.
      */
     data class ElseContinuation(
         val elseKw: TokenCSTNode,
-        val codeBlockCSTNode: CodeBlockCSTNode
-    ): IfContinuationCSTNode() {
-        override val range = elseKw.range + codeBlockCSTNode.range
+        val block: CodeBlockCSTNode
+    ) : IfContinuationCSTNode() {
+        override val range = elseKw.range + block.range
+
+        override fun toAST() = block.toAST()
     }
 
     /**
@@ -39,8 +52,13 @@ sealed class IfContinuationCSTNode: CSTNode() {
     data class ElseIfContinuation(
         val elseKw: TokenCSTNode,
         val ifExpression: IfExpressionCSTNode
-    ): IfContinuationCSTNode() {
+    ) : IfContinuationCSTNode() {
         override val range = elseKw.range + ifExpression.range
+
+        override fun toAST() = CodeBlockASTNode(
+            listOf(ifExpression.toAST()),
+            this
+        )
     }
 
 }

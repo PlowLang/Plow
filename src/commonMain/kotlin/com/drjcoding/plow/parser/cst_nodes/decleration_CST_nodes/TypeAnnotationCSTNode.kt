@@ -9,4 +9,6 @@ import com.drjcoding.plow.parser.cst_nodes.type_CST_nodes.TypeCSTNode
  */
 data class TypeAnnotationCSTNode(val colon: TokenCSTNode, val type: TypeCSTNode) : CSTNode() {
     override val range = colon.range + type.range
+
+    fun toAST() = type.toAST()
 }

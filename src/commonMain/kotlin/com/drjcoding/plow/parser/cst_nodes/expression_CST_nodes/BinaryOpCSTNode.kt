@@ -1,5 +1,6 @@
 package com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes
 
+import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.BinaryOpASTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
 
 /**
@@ -15,6 +16,13 @@ data class BinaryOpCSTNode(
     val right: ExpressionCSTNode
 ): ExpressionCSTNode() {
     override val range = left.range + right.range
+
+    override fun toAST() = BinaryOpASTNode(
+        left.toAST(),
+        op.token.text,
+        right.toAST(),
+        this
+    )
 }
 
 class InvalidBinaryOperatorError(op: String): Exception("Invalid binary operator $op")
