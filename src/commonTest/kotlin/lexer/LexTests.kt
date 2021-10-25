@@ -137,9 +137,17 @@ class LexTests {
     @Test
     fun testOperatorLexes() {
         listOf(
-            "+" to LexTokenType.OPERATOR,
-            "-" to LexTokenType.OPERATOR,
-            "/-+=!*%&|^?~\\" to LexTokenType.OPERATOR,
+            "+" to LexTokenType.PLUS,
+            "-" to LexTokenType.MINUS,
+            "*" to LexTokenType.MULTIPLY,
+            "/" to LexTokenType.DIVIDE,
+            "!" to LexTokenType.NOT,
+            "<=" to LexTokenType.L_OR_EQUAL,
+            ">=" to LexTokenType.G_OR_EQUAL,
+            "==" to LexTokenType.EQUAL,
+            "!=" to LexTokenType.NOT_EQUAL,
+            "&&" to LexTokenType.AND,
+            "||" to LexTokenType.OR,
         ).forEach { textIsLexedWithType(it.first, it.second) }
     }
 
@@ -322,7 +330,7 @@ class LexTests {
                 SourceFileRange(SourceFileLocation(1, 74), SourceFileLocation(1, 75))
             ),
             LexToken(
-                LexTokenType.OPERATOR,
+                LexTokenType.EQUAL,
                 "==",
                 SourceFileRange(SourceFileLocation(1, 75), SourceFileLocation(1, 77))
             ),

@@ -1,5 +1,6 @@
 package com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes
 
+import com.drjcoding.plow.lexer.LexTokenType
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.BinaryOpASTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
 
@@ -25,4 +26,4 @@ data class BinaryOpCSTNode(
     )
 }
 
-class InvalidBinaryOperatorError(op: String): Exception("Invalid binary operator $op")
+class InvalidBinaryOperatorError(type: LexTokenType): Exception("Invalid binary operator $type")

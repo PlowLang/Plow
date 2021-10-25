@@ -18,7 +18,7 @@ internal fun parseBinaryOp(
     currentExp: ExpressionCSTNode,
     tightestBindingPower: BindingPower
 ): BinaryOpCSTNode {
-    val op = ts.popNSTokenCSTNode().assertType(LexTokenType.OPERATOR)
+    val op = ts.popNSTokenCSTNode()
     val right = parseSubExpression(
         ts,
         tightestBindingPower tightestOf BindingPower.fromOp(op.token)

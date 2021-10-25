@@ -68,7 +68,13 @@ private val PUNCTUATION_TEXT = mapOf(
     ':' to LexTokenType.COLON,
     ';' to LexTokenType.SEMICOLON,
     '?' to LexTokenType.QUESTION,
-    '=' to LexTokenType.ASSIGN
+    '=' to LexTokenType.ASSIGN,
+    //operators
+    '+' to LexTokenType.PLUS,
+    '-' to LexTokenType.MINUS,
+    '*' to LexTokenType.MULTIPLY,
+    '/' to LexTokenType.DIVIDE,
+    '!' to LexTokenType.NOT,
 )
 
 /**
@@ -77,6 +83,13 @@ private val PUNCTUATION_TEXT = mapOf(
 private val LONG_PUNCTUATION_TEXT = mapOf(
     "::" to LexTokenType.DOUBLE_COLON,
     "->" to LexTokenType.ARROW,
+    //operators
+    "<=" to LexTokenType.L_OR_EQUAL,
+    ">=" to LexTokenType.G_OR_EQUAL,
+    "==" to LexTokenType.EQUAL,
+    "!=" to LexTokenType.NOT_EQUAL,
+    "&&" to LexTokenType.AND,
+    "||" to LexTokenType.OR,
 )
 
 private const val commentStart = "//"
@@ -91,12 +104,6 @@ private val Char.isIdentifierStartChar: Boolean
 
 private val Char.isIdentifierChar: Boolean
     get() = this in 'a'..'z' || this in 'A'..'Z' || this in '0'..'9' || this == '_'
-
-private val Char.isOperatorChar: Boolean
-    // testing found the use of ||s to be more than an order of magnitude faster than `in listOf()` or `regex`
-    get() = this == '/' || this == '.' || this == '-' || this == '+' || this == '=' || this == '!' || this == '*' ||
-            this == '<' || this == '%' || this == '>' || this == '&' || this == '|' || this == '^' || this == '?' ||
-            this == '~' || this == '\\'
 
 private val Char.isNumberStartChar: Boolean
     get() = this in '0'..'9'
@@ -135,7 +142,6 @@ private fun getNextToken(cs: CharacterStream) =
         cs.peek().isIdentifierStartChar -> lexIdentifier(cs)
         cs.safePeek(2) in LONG_PUNCTUATION_TEXT.keys -> lexLongPunctuation(cs)
         cs.peek() in PUNCTUATION_TEXT.keys -> lexPunctuation(cs)
-        cs.peek().isOperatorChar -> lexOperator(cs)
         cs.peek().isNumberStartChar -> lexNumber(cs)
         // TODO strings
         else -> invalidCharacter(cs)
@@ -175,14 +181,6 @@ private fun lexNumber(cs: CharacterStream): LexToken {
     }
 
     return LexToken(type, text, cs.rangeToCurrent(loc))
-}
-
-
-private fun lexOperator(cs: CharacterStream): LexToken {
-    val loc = cs.sourceFileLocation
-    var text = cs.pop().toString()
-    while (cs.safePeek()?.isOperatorChar == true) text += cs.pop()
-    return LexToken(LexTokenType.OPERATOR, text, cs.rangeToCurrent(loc))
 }
 
 private fun lexLongPunctuation(cs: CharacterStream): LexToken {

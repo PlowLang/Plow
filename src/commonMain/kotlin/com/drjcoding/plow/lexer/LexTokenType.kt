@@ -64,7 +64,17 @@ enum class LexTokenType {
     QUESTION,
     ASSIGN,
 
-    OPERATOR,
+    PLUS,
+    MINUS,
+    MULTIPLY,
+    DIVIDE,
+    L_OR_EQUAL,
+    G_OR_EQUAL,
+    NOT,
+    EQUAL,
+    NOT_EQUAL,
+    AND,
+    OR,
 
     WHITESPACE,
     NEWLINE,
@@ -78,6 +88,16 @@ enum class LexTokenType {
             WHITESPACE -> true
             NEWLINE -> true
             COMMENT -> true
+            else -> false
+        }
+
+    /**
+     * True if this token type is an operator.
+     */
+    val isOperator: Boolean
+        get() = when (this) {
+            PLUS, MINUS, MULTIPLY, DIVIDE, L_ARROW, R_ARROW, L_OR_EQUAL, G_OR_EQUAL, NOT, EQUAL, NOT_EQUAL, AND, OR
+                -> true
             else -> false
         }
 

@@ -140,12 +140,12 @@ class LexTokenStreamTests {
         val ts = lex("a b").unwrap()
 
         assertFalse(ts.isExhaustedAhead(2))
-        assertEquals(ts.eat(LexTokenType.OPERATOR), null)
+        assertEquals(ts.eat(LexTokenType.INT_LITERAL), null)
         assertFalse(ts.isExhaustedAhead(2)) // ensure eat did not advance the stream
         assertEquals(ts.eat(LexTokenType.IDENTIFIER)?.text, a)
         assertTrue(ts.isExhaustedAhead(2)) // ensure eat did advance the stream
 
-        assertEquals(ts.eatNS(LexTokenType.OPERATOR), null)
+        assertEquals(ts.eatNS(LexTokenType.INT_LITERAL), null)
         assertFalse(ts.isExhaustedAhead(1)) // ensure eat did not advance the stream
         assertEquals(ts.eatNS(LexTokenType.IDENTIFIER)?.text, b)
         assertTrue(ts.isExhausted) // ensure eat did advance the stream
