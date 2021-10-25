@@ -1,7 +1,7 @@
 package com.drjcoding.plow.parser.parse_functions
 
 import com.drjcoding.plow.lexer.LexTokenStream
-import com.drjcoding.plow.parser.cst_nodes.statement_CST_nodes.StatementCSTNode
+import com.drjcoding.plow.parser.cst_nodes.StatementCSTNode
 import com.drjcoding.plow.parser.parse_functions.expression_parse_functions.parseExpression
 import com.drjcoding.plow.parser.parse_functions.parseDecleration.parseDeclaration
 
