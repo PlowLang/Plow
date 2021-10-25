@@ -50,7 +50,7 @@ class UnexpectedlyFoundNullWhileUnwrappingException(val issues: Collection<PlowI
 inline fun <T> runCatchingExceptionsAsPlowResult(run: () -> T): PlowResult<T> =
     try {
         val result = run()
-        PlowResult.Ok(result)
+        result.toPlowResult()
     } catch (pfi: PlowFatalIssue) {
         PlowResult.Error(listOf(pfi))
     } catch (e: Exception) {

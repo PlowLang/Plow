@@ -4,7 +4,6 @@ import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.VariableDeclara
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
 import com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes.ExpressionCSTNode
-import com.drjcoding.plow.parser.cst_nodes.statement_CST_nodes.StatementCSTNode
 
 /**
  * A variable declaration using let or var (ex `let a = 1`)
