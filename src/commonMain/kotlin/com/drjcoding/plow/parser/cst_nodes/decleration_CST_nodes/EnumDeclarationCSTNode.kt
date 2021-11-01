@@ -20,9 +20,12 @@ data class EnumDeclarationCSTNode(
     override fun toAST() = EnumDeclarationASTNode(
         name.token.text,
         cases.map { it.name.token.text },
-        declarations.map { it.toAST() },
+        declarations.filterIsInstance<FunctionDeclarationCSTNode>().map { it.toAST() },
+        declarations.filter { it.type != DeclarationType.FUNCTION }.map { it.toAST() },
         this
     )
+
+    override val type = DeclarationType.OBJECT
 }
 
 /**

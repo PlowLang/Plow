@@ -5,4 +5,12 @@ import com.drjcoding.plow.parser.cst_nodes.StatementCSTNode
 
 interface DeclarationCSTNode: StatementCSTNode {
     override fun toAST(): DeclarationASTNode
+
+    val type: DeclarationType
+}
+
+enum class DeclarationType {
+    VARIABLE,
+    FUNCTION,
+    OBJECT,
 }

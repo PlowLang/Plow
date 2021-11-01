@@ -27,6 +27,8 @@ data class FunctionDeclarationCSTNode(
         body.toAST(),
         this
     )
+
+    override val type = DeclarationType.FUNCTION
 }
 
 /**

@@ -7,6 +7,7 @@ import com.drjcoding.plow.source_abstractions.SourceString
 data class EnumDeclarationASTNode(
     val name: SourceString,
     val cases: List<SourceString>,
+    val memberFunctions: List<FunctionDeclarationASTNode>,
     val declarations: List<DeclarationASTNode>,
     override val underlyingCSTNode: CSTNode
 ) : ASTNode(), DeclarationASTNode

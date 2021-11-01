@@ -11,6 +11,7 @@ import com.drjcoding.plow.source_abstractions.SourceFileRange
  * @member declarations The list of declarations in this file
  */
 data class PlowFileCSTNode(
+    val imports: List<ImportCSTNode>,
     val declarations: List<DeclarationCSTNode>
 ): CSTNode() {
     override val range = if (declarations.isEmpty()) {
@@ -20,6 +21,7 @@ data class PlowFileCSTNode(
     }
 
     fun toAST() = PlowFileASTNode(
+        imports.map { it.toAST() },
         declarations.map { it.toAST() },
         this
     )

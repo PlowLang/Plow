@@ -6,6 +6,8 @@ import com.drjcoding.plow.source_abstractions.SourceString
 
 data class ClassDeclarationASTNode(
     val name: SourceString,
+    val memberVariables: List<VariableDeclarationASTNode>,
+    val memberFunctions: List<FunctionDeclarationASTNode>,
     val declarations: List<DeclarationASTNode>,
     override val underlyingCSTNode: CSTNode,
 ) : ASTNode(), DeclarationASTNode

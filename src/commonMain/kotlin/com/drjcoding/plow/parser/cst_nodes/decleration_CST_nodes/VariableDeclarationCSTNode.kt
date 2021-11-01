@@ -23,5 +23,7 @@ data class VariableDeclarationCSTNode(
         value.toAST(),
         this
     )
+
+    override val type = DeclarationType.VARIABLE
 }
 
