@@ -1,4 +1,4 @@
-package com.drjcoding.plow.parser.parse_functions.parseDecleration
+package com.drjcoding.plow.parser.parse_functions.declaration_parse_functions
 
 import com.drjcoding.plow.lexer.LexTokenStream
 import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.DeclarationCSTNode
