@@ -15,7 +15,7 @@ data class ClassDeclarationCSTNode(
     val lCurly: TokenCSTNode,
     val declarations: List<DeclarationCSTNode>,
     val rCurly: TokenCSTNode,
-) : CSTNode(), DeclarationCSTNode {
+) : DeclarationCSTNode() {
     override val range = classKw.range + rCurly.range
 
     override fun toAST() = ClassDeclarationASTNode(

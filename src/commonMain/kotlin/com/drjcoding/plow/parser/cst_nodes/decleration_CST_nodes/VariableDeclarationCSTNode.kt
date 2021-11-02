@@ -14,7 +14,7 @@ data class VariableDeclarationCSTNode(
     val typeAnnotation: TypeAnnotationCSTNode?,
     val assign: TokenCSTNode,
     val value: ExpressionCSTNode
-) : CSTNode(), DeclarationCSTNode {
+) : DeclarationCSTNode() {
     override val range = letOrVar.range + value.range
 
     override fun toAST() = VariableDeclarationASTNode(

@@ -1,9 +1,6 @@
 package com.drjcoding.plow.parser.cst_nodes
 
-import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.ImportASTNode
-import com.drjcoding.plow.parser.cst_nodes.CSTNode
-import com.drjcoding.plow.parser.cst_nodes.QualifiedIdentifierCSTNode
-import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
+import com.drjcoding.plow.parser.ast_nodes.ImportASTNode
 
 /**
  * An import. [declarationToImport] is the class/function/variable being imported.

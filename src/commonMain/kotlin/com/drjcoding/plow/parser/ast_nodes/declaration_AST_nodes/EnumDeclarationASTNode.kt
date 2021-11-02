@@ -1,13 +1,18 @@
 package com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes
 
-import com.drjcoding.plow.parser.ast_nodes.ASTNode
+import com.drjcoding.plow.ir.types.IRType
+import com.drjcoding.plow.ir.types.ObjectType
+import com.drjcoding.plow.parser.ast_nodes.NamespaceASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.source_abstractions.SourceString
 
-data class EnumDeclarationASTNode(
-    val name: SourceString,
+class EnumDeclarationASTNode(
+    name: SourceString,
+    parentNamespace: NamespaceASTNode,
     val cases: List<SourceString>,
-    val memberFunctions: List<FunctionDeclarationASTNode>,
-    val declarations: List<DeclarationASTNode>,
+    memberFunctions: List<FunctionDeclarationASTNode>,
+    declarations: List<DeclarationASTNode>,
     override val underlyingCSTNode: CSTNode
-) : ASTNode(), DeclarationASTNode
+) : ObjectDeclarationASTNode(name, parentNamespace, memberFunctions, declarations) {
+    override fun thisNamespacesType() = ObjectType(parentNamespace.thisNamespace, name)
+}

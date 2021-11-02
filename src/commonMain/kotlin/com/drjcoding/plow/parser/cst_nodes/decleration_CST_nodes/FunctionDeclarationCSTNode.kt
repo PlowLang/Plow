@@ -17,7 +17,7 @@ data class FunctionDeclarationCSTNode(
     val rParen: TokenCSTNode,
     val returnType: TypeAnnotationCSTNode?,
     val body: CodeBlockCSTNode,
-) : CSTNode(), DeclarationCSTNode {
+) : DeclarationCSTNode() {
     override val range = funcKw.range + body.range
 
     override fun toAST() = FunctionDeclarationASTNode(

@@ -14,7 +14,7 @@ data class EnumDeclarationCSTNode(
     val cases: List<EnumCaseCSTNode>,
     val declarations: List<DeclarationCSTNode>,
     val rCurly: TokenCSTNode
-): CSTNode(), DeclarationCSTNode {
+): DeclarationCSTNode() {
     override val range = enumKw.range + rCurly.range
 
     override fun toAST() = EnumDeclarationASTNode(
