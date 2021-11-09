@@ -27,7 +27,9 @@ fun parseEnumDeclaration(ts: LexTokenStream): EnumDeclarationCSTNode? {
     val declarations = parseDeclarations(ts)
     val rCurly = ts.safePopNSTokenCSTNode().expectType(LexTokenType.R_CURLY)
 
-    return EnumDeclarationCSTNode(enumKw, name, lCurly, cases, declarations, rCurly)
+    return EnumDeclarationCSTNode(enumKw, name, lCurly, cases, declarations, rCurly).also { ed ->
+        ed.declarations.forEach { it.parentNamespace = ed }
+    }
 }
 
 /**

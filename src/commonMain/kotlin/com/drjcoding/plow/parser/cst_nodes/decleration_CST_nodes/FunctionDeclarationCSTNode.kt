@@ -4,6 +4,7 @@ import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.FunctionDeclara
 import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.FunctionDeclarationArgASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.parser.cst_nodes.CodeBlockCSTNode
+import com.drjcoding.plow.parser.cst_nodes.NamespaceCSTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
 
 /**
@@ -18,10 +19,13 @@ data class FunctionDeclarationCSTNode(
     val returnType: TypeAnnotationCSTNode?,
     val body: CodeBlockCSTNode,
 ) : DeclarationCSTNode() {
+    override lateinit var parentNamespace: NamespaceCSTNode
+
     override val range = funcKw.range + body.range
 
     override fun toAST() = FunctionDeclarationASTNode(
         name.token.text,
+        parentNamespace.toNamespaceASTNode(),
         args.map { it.toAST() },
         returnType?.toAST(),
         body.toAST(),

@@ -9,7 +9,7 @@ import com.drjcoding.plow.source_abstractions.SourceString
 
 data class PlowFileASTNode(
     override val name: SourceString,
-    override val parentNamespace: NamespaceASTNode?,
+    override val parentNamespace: FolderASTNode?,
     val imports: List<ImportASTNode>,
     val declarations: List<DeclarationASTNode>,
     override val underlyingCSTNode: CSTNode

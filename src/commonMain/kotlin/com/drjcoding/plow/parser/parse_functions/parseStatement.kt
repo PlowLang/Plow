@@ -9,4 +9,4 @@ import com.drjcoding.plow.parser.parse_functions.declaration_parse_functions.par
  * Parses an expression or returns null if none exists. This does not include any statement separator.
  */
 fun parseStatement(ts: LexTokenStream): StatementCSTNode? =
-    parseExpression(ts) ?: parseDeclaration(ts)
+    parseExpression(ts)

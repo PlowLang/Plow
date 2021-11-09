@@ -2,6 +2,7 @@ package com.drjcoding.plow.parser.parse_functions.declaration_parse_functions
 
 import com.drjcoding.plow.lexer.LexTokenStream
 import com.drjcoding.plow.lexer.LexTokenType
+import com.drjcoding.plow.parser.cst_nodes.NamespaceCSTNode
 import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.ClassDeclarationCSTNode
 import com.drjcoding.plow.parser.parse_functions.errors.assertType
 import com.drjcoding.plow.parser.parse_functions.errors.expectType
@@ -20,5 +21,7 @@ fun parseClassDeclaration(ts: LexTokenStream): ClassDeclarationCSTNode? {
     val declarations = parseDeclarations(ts)
     val rCurly = ts.safePopNSTokenCSTNode().expectType(LexTokenType.R_CURLY)
 
-    return ClassDeclarationCSTNode(classKw, name, lCurly, declarations, rCurly)
+    return ClassDeclarationCSTNode(classKw, name, lCurly, declarations, rCurly).also { cd ->
+        cd.declarations.forEach { it.parentNamespace = cd }
+    }
 }
