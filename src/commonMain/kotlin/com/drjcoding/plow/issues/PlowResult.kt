@@ -31,6 +31,35 @@ sealed class PlowResult<out T> {
             is Error<T> -> throw UnexpectedlyFoundNullWhileUnwrappingException(this.issues)
         }
 
+    /**
+     * If this is [Error] returns this, otherwise returns [Ok] wrapping [Ok.result] applied to [mapper].
+     */
+    fun <U> map(mapper: (T) -> U): PlowResult<U> =
+        when (this) {
+            is Ok -> Ok(mapper(this.result))
+            is Error -> Error(this.issues)
+        }
+
+}
+
+/**
+ * If all the [PlowResult]s in this list are [PlowResult.Ok] then this returns a [PlowResult.Ok] containing a list of
+ * all the results, otherwise it returns a [PlowResult.Error] containing all the errors from all the [PlowResult.Error]s
+ * in the list.
+ */
+fun <T> List<PlowResult<T>>.flatten(): PlowResult<List<T>> {
+    val issues: MutableList<PlowIssue> = mutableListOf()
+    val results: MutableList<T> = mutableListOf()
+    for (res in this) {
+        when (res) {
+            is PlowResult.Ok -> results.add(res.result)
+            is PlowResult.Error -> issues.addAll(res.issues)
+        }
+    }
+    return when {
+        issues.isEmpty() -> PlowResult.Ok(results)
+        else -> PlowResult.Error(issues)
+    }
 }
 
 /**

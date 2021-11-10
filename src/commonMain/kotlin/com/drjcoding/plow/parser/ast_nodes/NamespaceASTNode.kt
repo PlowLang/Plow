@@ -34,4 +34,12 @@ interface NamespaceASTNode {
      * Gets the type that this namespace represents (if there is one).
      */
     fun thisNamespacesType(): IRType?
+
+    /**
+     * Apply mapper to this and all its children.
+     */
+    fun <T> map(mapper: (NamespaceASTNode) -> T) {
+        mapper(this)
+        childNamespaces.forEach { it.map(mapper) }
+    }
 }

@@ -13,7 +13,7 @@ import com.drjcoding.plow.source_abstractions.SourceString
  */
 data class PlowFileCSTNode(
     val name: SourceString,
-    val parent: FolderCSTNode?,
+    val parent: FolderCSTNode,
     val imports: List<ImportCSTNode>,
     val declarations: List<DeclarationCSTNode>
 ): CSTNode(), NamespaceCSTNode {
@@ -25,7 +25,7 @@ data class PlowFileCSTNode(
 
     fun toAST() = PlowFileASTNode(
         name,
-        parent?.toNamespaceASTNode(),
+        parent.toNamespaceASTNode(),
         imports.map { it.toAST() },
         declarations.map { it.toAST() },
         this
