@@ -7,7 +7,7 @@ import com.drjcoding.plow.source_abstractions.SourceString
  * TODO doc comment
  */
 abstract class FolderCSTNode: NamespaceCSTNode {
-    abstract val children: List<NamespaceCSTNode>
+    var children: MutableList<NamespaceCSTNode> = mutableListOf()
 
     abstract override fun toNamespaceASTNode(): FolderASTNode
 

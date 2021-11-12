@@ -12,7 +12,7 @@ interface NamespaceASTNode {
     /**
      * The name of this namespace.
      */
-    val name: SourceString
+    val name: SourceString?
 
     /**
      * The namespace that contains this namespace.
@@ -28,7 +28,11 @@ interface NamespaceASTNode {
      * The full location of this namespace. This includes this namespace in the location.
      */
     val thisNamespace: FullyQualifiedLocation
-        get() = parentNamespace?.thisNamespace?.child(name) ?: FullyQualifiedLocation(listOf(name))
+        get() = when {
+            parentNamespace != null && name != null -> parentNamespace!!.thisNamespace.child(name!!)
+            name != null -> FullyQualifiedLocation(listOf(name!!))
+            else -> FullyQualifiedLocation(listOf())
+        }
 
     /**
      * Gets the type that this namespace represents (if there is one).

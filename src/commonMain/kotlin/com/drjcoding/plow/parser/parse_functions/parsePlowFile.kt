@@ -14,16 +14,20 @@ import com.drjcoding.plow.source_abstractions.SourceString
 /**
  * Parses a Plow file.
  */
-//TODO maybe this should be a separate function
-fun parsePlowFile(ts: LexTokenStream, name: SourceString, parentFolder: FolderCSTNode?): PlowResult<PlowFileCSTNode> {
+fun parsePlowFile(ts: LexTokenStream, name: SourceString, parentFolder: FolderCSTNode): PlowFileCSTNode {
+    val imports = parseImports(ts)
+    val declarations = parseDeclarations(ts)
+    // We use safePeekNs instead of isExhausted because it is okay for their to be whitespace at the end of the file.
+    if (ts.safePeekNS() != null) {
+        throw ExtraContentInFileError(ts.popNS().range)
+    }
+    return PlowFileCSTNode(name, parentFolder, imports, declarations)
+}
+
+//T TODO Terrible name.
+fun tryParsingPlowFile(ts: LexTokenStream, name: SourceString, parentFolder: FolderCSTNode): PlowResult<PlowFileCSTNode> {
     return runCatchingExceptionsAsPlowResult {
-        val imports = parseImports(ts)
-        val declarations = parseDeclarations(ts)
-        // We use safePeekNs instead of isExhausted because it is okay for their to be whitespace at the end of the file.
-        if (ts.safePeekNS() != null) {
-            throw ExtraContentInFileError(ts.popNS().range)
-        }
-        PlowFileCSTNode(name, parentFolder, imports, declarations)
+        parsePlowFile(ts, name, parentFolder)
     }
 }
 

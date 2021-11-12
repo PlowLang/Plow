@@ -1,9 +1,7 @@
 package com.drjcoding.plow.plow_project
 
-import com.drjcoding.plow.parser.ast_nodes.PlowFileASTNode
+import com.drjcoding.plow.parser.ast_nodes.RootFolderASTNode
 
 class ParsedPlowProject(
-    val files: List<PlowFileASTNode>
-) {
-
-}
+    val rootFolder: RootFolderASTNode
+)
