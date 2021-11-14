@@ -10,12 +10,14 @@ import com.drjcoding.plow.plow_project.FullyQualifiedLocation
 import com.drjcoding.plow.source_abstractions.SourceString
 
 data class VariableDeclarationASTNode(
-    override val name: SourceString,
+    val name: SourceString,
     override val parentNamespace: NamespaceASTNode,
     val type: TypeASTNode?,
     val value: ExpressionASTNode,
     override val underlyingCSTNode: CSTNode
 ) : ASTNode(), DeclarationASTNode {
+    override val thisNamespace = parentNamespace.thisNamespace.child(name)
+
     override val childNamespaces = listOf<NamespaceASTNode>()
 
     override fun thisNamespacesType(): IRType? = null

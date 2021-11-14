@@ -7,9 +7,13 @@ import com.drjcoding.plow.source_abstractions.SourceString
  * Represents a folder in a plow project.
  */
 data class SubfolderASTNode(
-    override val name: SourceString,
+    val name: SourceString,
     override val parentNamespace: FolderASTNode,
     override val childNamespaces: List<NamespaceASTNode>
 ): NamespaceASTNode, FolderASTNode() {
+    override val thisNamespace = parentNamespace.thisNamespace.child(name)
+
+    override val importedNamespaces: List<QualifiedIdentifierASTNode> = listOf()
+
     override fun thisNamespacesType(): IRType? = null
 }

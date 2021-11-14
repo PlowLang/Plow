@@ -6,16 +6,19 @@ import com.drjcoding.plow.parser.ast_nodes.CodeBlockASTNode
 import com.drjcoding.plow.parser.ast_nodes.NamespaceASTNode
 import com.drjcoding.plow.parser.ast_nodes.type_AST_nodes.TypeASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
+import com.drjcoding.plow.plow_project.FullyQualifiedLocation
 import com.drjcoding.plow.source_abstractions.SourceString
 
 data class FunctionDeclarationASTNode(
-    override val name: SourceString,
+    val name: SourceString,
     override val parentNamespace: NamespaceASTNode,
     val args: List<FunctionDeclarationArgASTNode>,
     val returnType: TypeASTNode?,
     val body: CodeBlockASTNode,
     override val underlyingCSTNode: CSTNode
 ) : ASTNode(), DeclarationASTNode {
+    override val thisNamespace = parentNamespace.thisNamespace.child(name)
+
     override val childNamespaces = listOf<NamespaceASTNode>()
 
     override fun thisNamespacesType(): IRType? = null
