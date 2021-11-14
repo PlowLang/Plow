@@ -1,12 +1,14 @@
 package com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes
 
 import com.drjcoding.plow.ir.types.IRType
+import com.drjcoding.plow.ir.types.ObjectType
 import com.drjcoding.plow.parser.ast_nodes.ASTNode
 import com.drjcoding.plow.parser.ast_nodes.CodeBlockASTNode
 import com.drjcoding.plow.parser.ast_nodes.NamespaceASTNode
 import com.drjcoding.plow.parser.ast_nodes.type_AST_nodes.TypeASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.plow_project.FullyQualifiedLocation
+import com.drjcoding.plow.plow_project.TypeResolutionHierarchy
 import com.drjcoding.plow.source_abstractions.SourceString
 
 data class FunctionDeclarationASTNode(
@@ -21,7 +23,9 @@ data class FunctionDeclarationASTNode(
 
     override val childNamespaces = listOf<NamespaceASTNode>()
 
-    override fun thisNamespacesType(): IRType? = null
+    override val thisNamespacesType: ObjectType? = null
+
+    override val typeResolutionHierarchy = parentNamespace.typeResolutionHierarchy
 }
 
 data class FunctionDeclarationArgASTNode(

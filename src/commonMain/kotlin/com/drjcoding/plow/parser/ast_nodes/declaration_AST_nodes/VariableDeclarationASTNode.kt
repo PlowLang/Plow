@@ -1,6 +1,7 @@
 package com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes
 
 import com.drjcoding.plow.ir.types.IRType
+import com.drjcoding.plow.ir.types.ObjectType
 import com.drjcoding.plow.parser.ast_nodes.ASTNode
 import com.drjcoding.plow.parser.ast_nodes.NamespaceASTNode
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.ExpressionASTNode
@@ -20,5 +21,8 @@ data class VariableDeclarationASTNode(
 
     override val childNamespaces = listOf<NamespaceASTNode>()
 
-    override fun thisNamespacesType(): IRType? = null
+    override val thisNamespacesType: ObjectType? = null
+
+    override val typeResolutionHierarchy = parentNamespace.typeResolutionHierarchy
+
 }

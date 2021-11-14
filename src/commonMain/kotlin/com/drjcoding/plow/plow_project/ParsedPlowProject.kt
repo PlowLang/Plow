@@ -18,7 +18,7 @@ class ParsedPlowProject(
     private fun collectDeclaredTypes(): GlobalTypesManager  {
         val allTypes: MutableList<ObjectType> = mutableListOf()
         rootFolder.forEach {
-            val possibleIRType = it.thisNamespacesType()
+            val possibleIRType = it.thisNamespacesType
             if (possibleIRType != null) allTypes.add(possibleIRType)
         }
         return GlobalTypesManager(allTypes)

@@ -2,8 +2,10 @@ package com.drjcoding.plow.parser.ast_nodes
 
 import com.drjcoding.plow.ir.types.IRType
 import com.drjcoding.plow.ir.types.ObjectType
+import com.drjcoding.plow.issues.PlowResult
 import com.drjcoding.plow.plow_project.FullyQualifiedLocation
 import com.drjcoding.plow.plow_project.GlobalTypesManager
+import com.drjcoding.plow.plow_project.TypeResolutionHierarchy
 
 /**
  * An [ASTNode] that is a namespace.
@@ -31,9 +33,24 @@ interface NamespaceASTNode {
     val importedNamespaces: List<QualifiedIdentifierASTNode>
 
     /**
+     * The [TypeResolutionHierarchy] used to resolve type names within this namespace.
+     */
+    val typeResolutionHierarchy: TypeResolutionHierarchy
+
+    /**
+     * Adds this and its parents to the trh with decreasing priority as we move up the chain. This decreases the
+     * priority before adding the new namespaces.
+     */
+    fun addParentToTRH(trh: TypeResolutionHierarchy) {
+        trh.decreasePriority()
+        trh.addNamespaces(thisNamespace)
+        parentNamespace.addParentToTRH(trh)
+    }
+
+    /**
      * Gets the type that this namespace represents (if there is one).
      */
-    fun thisNamespacesType(): ObjectType?
+    val thisNamespacesType: ObjectType?
 
     /**
      * Apply [apply] to this namespace and all its children.
@@ -46,7 +63,6 @@ interface NamespaceASTNode {
     /**
      * Gets the type associated with a certain name if one exists.
      */
-    fun getIRTypeForName(name: QualifiedIdentifierASTNode, manager: GlobalTypesManager): IRType? {
-        TODO()
-    }
+    fun getIRTypeForName(name: QualifiedIdentifierASTNode, manager: GlobalTypesManager): PlowResult<IRType> =
+        manager.resolveTypeName(name, typeResolutionHierarchy)
 }

@@ -12,6 +12,4 @@ class EnumDeclarationASTNode(
     memberFunctions: List<FunctionDeclarationASTNode>,
     declarations: List<DeclarationASTNode>,
     override val underlyingCSTNode: CSTNode
-) : ObjectDeclarationASTNode(name, parentNamespace, memberFunctions, declarations) {
-    override fun thisNamespacesType() = ObjectType(parentNamespace.thisNamespace, name)
-}
+) : ObjectDeclarationASTNode(name, parentNamespace, memberFunctions, declarations)

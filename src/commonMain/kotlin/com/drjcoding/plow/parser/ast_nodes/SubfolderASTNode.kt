@@ -1,6 +1,7 @@
 package com.drjcoding.plow.parser.ast_nodes
 
-import com.drjcoding.plow.ir.types.IRType
+import com.drjcoding.plow.ir.types.ObjectType
+import com.drjcoding.plow.plow_project.TypeResolutionHierarchy
 import com.drjcoding.plow.source_abstractions.SourceString
 
 /**
@@ -15,5 +16,8 @@ data class SubfolderASTNode(
 
     override val importedNamespaces: List<QualifiedIdentifierASTNode> = listOf()
 
-    override fun thisNamespacesType(): IRType? = null
+    override val thisNamespacesType: ObjectType? = null
+
+    override val typeResolutionHierarchy = TypeResolutionHierarchy()
+
 }

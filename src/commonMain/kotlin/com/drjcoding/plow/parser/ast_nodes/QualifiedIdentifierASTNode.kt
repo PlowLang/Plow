@@ -10,7 +10,15 @@ data class QualifiedIdentifierASTNode(
     val name: SourceString,
     override val underlyingCSTNode: CSTNode
 ) : ASTNode() {
-    val fullyQualifiedLocation: FullyQualifiedLocation = FullyQualifiedLocation(namespaces)
+    /**
+     * A [FullyQualifiedLocation] made up of [namespaces].
+     */
+    val fullyQualifiedLocation = FullyQualifiedLocation(namespaces)
+
+    /**
+     * A [FullyQualifiedLocation] made up of [namespaces] and [name] at the end.
+     */
+    val fullyQualifiedLocationWithName = FullyQualifiedLocation(namespaces.plus(name))
 
     override fun toString() = namespaces.joinToString(separator = "::") + "::" + name.toUnderlyingString()
 }
