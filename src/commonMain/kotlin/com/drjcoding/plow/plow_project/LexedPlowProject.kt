@@ -7,6 +7,7 @@ import com.drjcoding.plow.parser.cst_nodes.FolderCSTNode
 import com.drjcoding.plow.parser.cst_nodes.PlowFileCSTNode
 import com.drjcoding.plow.parser.cst_nodes.RootFolderCSTNode
 import com.drjcoding.plow.parser.cst_nodes.SubfolderCSTNode
+import com.drjcoding.plow.parser.parse_functions.tryParsingPlowFile
 import com.drjcoding.plow.source_abstractions.SourceString
 
 class LexedPlowProject(
@@ -46,7 +47,7 @@ data class LexedPlowProjectFile(
     val fileName: SourceString,
     val ts: LexTokenStream
 ) {
-    fun toCSTNode(parent: FolderCSTNode): PlowResult<PlowFileCSTNode> {
-        TODO()
-    }
+    fun toCSTNode(parent: FolderCSTNode): PlowResult<PlowFileCSTNode> =
+        tryParsingPlowFile(ts, fileName, parent)
+
 }
