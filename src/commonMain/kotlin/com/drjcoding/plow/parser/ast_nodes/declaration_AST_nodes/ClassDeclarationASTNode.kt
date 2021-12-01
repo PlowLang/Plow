@@ -8,9 +8,8 @@ import com.drjcoding.plow.source_abstractions.SourceString
 
 class ClassDeclarationASTNode(
     name: SourceString,
-    parentNamespace: NamespaceASTNode,
     val memberVariables: List<VariableDeclarationASTNode>,
     memberFunctions: List<FunctionDeclarationASTNode>,
     declarations: List<DeclarationASTNode>,
     override val underlyingCSTNode: CSTNode,
-) : ObjectDeclarationASTNode(name, parentNamespace, memberFunctions, declarations)
+) : ObjectDeclarationASTNode(name, memberFunctions, declarations)

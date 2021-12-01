@@ -9,16 +9,17 @@ import com.drjcoding.plow.source_abstractions.SourceString
 
 abstract class ObjectDeclarationASTNode(
     val name: SourceString,
-    final override val parentNamespace: NamespaceASTNode,
     val memberFunctions: List<FunctionDeclarationASTNode>,
     val declarations: List<DeclarationASTNode>,
-): ASTNode(), DeclarationASTNode {
+) : ASTNode(), DeclarationASTNode {
+    override lateinit var parentNamespace: NamespaceASTNode
     override val childNamespaces = declarations
 
     final override val thisNamespace: FullyQualifiedLocation
         get() = parentNamespace.thisNamespace.child(name)
 
-    override val thisNamespacesType: ObjectType = ObjectType(thisNamespace, name)
+    override val thisNamespacesType: ObjectType
+        get() = ObjectType(thisNamespace, name)
 
     override val typeResolutionHierarchy = TypeResolutionHierarchy().also { trh ->
         addParentToTRH(trh)

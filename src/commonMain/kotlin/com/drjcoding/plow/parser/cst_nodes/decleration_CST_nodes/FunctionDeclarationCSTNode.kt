@@ -25,7 +25,6 @@ data class FunctionDeclarationCSTNode(
 
     override fun toAST() = FunctionDeclarationASTNode(
         name.token.text,
-        parentNamespace.toNamespaceASTNode(),
         args.map { it.toAST() },
         returnType?.toAST(),
         body.toAST(),

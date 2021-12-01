@@ -9,7 +9,7 @@ class RootFolderASTNode: FolderASTNode() {
 
     override val thisNamespace = FullyQualifiedLocation(listOf())
 
-    override val parentNamespace = this
+    override var parentNamespace: NamespaceASTNode = this
 
     override val importedNamespaces: List<QualifiedIdentifierASTNode> = listOf()
 

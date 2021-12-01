@@ -15,7 +15,7 @@ interface NamespaceASTNode {
     /**
      * The namespace that contains this namespace.
      */
-    val parentNamespace: NamespaceASTNode
+    var parentNamespace: NamespaceASTNode
 
     /**
      * The full location of this namespace. This includes this namespace in the location.

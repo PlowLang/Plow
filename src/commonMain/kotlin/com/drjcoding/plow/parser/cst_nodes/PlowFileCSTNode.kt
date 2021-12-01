@@ -23,13 +23,20 @@ data class PlowFileCSTNode(
         declarations.first().range + declarations.last().range
     }
 
-    fun toAST() = PlowFileASTNode(
-        name,
-        parent.toNamespaceASTNode(),
-        imports.map { it.toAST() },
-        declarations.map { it.toAST() },
-        this
-    )
+    fun toAST(): PlowFileASTNode {
+        val decs = declarations.map { it.toAST() }
+
+        val file = PlowFileASTNode(
+            name,
+            imports.map { it.toAST() },
+            decs,
+            this
+        )
+
+        decs.forEach { it.parentNamespace = file }
+
+        return file
+    }
 
     override fun toNamespaceASTNode() = toAST()
 }

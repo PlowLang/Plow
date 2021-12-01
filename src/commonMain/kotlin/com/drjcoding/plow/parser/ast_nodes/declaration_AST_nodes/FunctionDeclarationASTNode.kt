@@ -13,19 +13,22 @@ import com.drjcoding.plow.source_abstractions.SourceString
 
 data class FunctionDeclarationASTNode(
     val name: SourceString,
-    override val parentNamespace: NamespaceASTNode,
     val args: List<FunctionDeclarationArgASTNode>,
     val returnType: TypeASTNode?,
     val body: CodeBlockASTNode,
     override val underlyingCSTNode: CSTNode
 ) : ASTNode(), DeclarationASTNode {
-    override val thisNamespace = parentNamespace.thisNamespace.child(name)
+    override lateinit var parentNamespace: NamespaceASTNode
+
+    override val thisNamespace: FullyQualifiedLocation
+        get() = parentNamespace.thisNamespace.child(name)
 
     override val childNamespaces = listOf<NamespaceASTNode>()
 
     override val thisNamespacesType: ObjectType? = null
 
-    override val typeResolutionHierarchy = parentNamespace.typeResolutionHierarchy
+    override val typeResolutionHierarchy: TypeResolutionHierarchy
+        get() = parentNamespace.typeResolutionHierarchy
 }
 
 data class FunctionDeclarationArgASTNode(

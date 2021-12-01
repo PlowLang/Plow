@@ -21,14 +21,22 @@ data class EnumDeclarationCSTNode(
 
     override val range = enumKw.range + rCurly.range
 
-    override fun toAST() = EnumDeclarationASTNode(
-        name.token.text,
-        parentNamespace.toNamespaceASTNode(),
-        cases.map { it.name.token.text },
-        declarations.filterIsInstance<FunctionDeclarationCSTNode>().map { it.toAST() },
-        declarations.filter { it.type != DeclarationType.FUNCTION }.map { it.toAST() },
-        this
-    )
+    override fun toAST(): EnumDeclarationASTNode {
+        val functions = declarations.filterIsInstance<FunctionDeclarationCSTNode>().map { it.toAST() }
+        val decs = declarations.filter { it.type != DeclarationType.FUNCTION }.map { it.toAST() }
+
+        val enumDeclaration = EnumDeclarationASTNode(
+            name.token.text,
+            cases.map { it.name.token.text },
+            functions,
+            decs,
+            this
+        )
+        functions.forEach { it.parentNamespace = enumDeclaration }
+        decs.forEach { it.parentNamespace = enumDeclaration }
+
+        return enumDeclaration
+    }
 
     override fun toNamespaceASTNode(): NamespaceASTNode = toAST()
 

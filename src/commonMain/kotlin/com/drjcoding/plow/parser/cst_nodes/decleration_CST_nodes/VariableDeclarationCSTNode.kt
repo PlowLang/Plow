@@ -22,7 +22,6 @@ data class VariableDeclarationCSTNode(
 
     override fun toAST() = VariableDeclarationASTNode(
         name.token.text,
-        parentNamespace.toNamespaceASTNode(),
         typeAnnotation?.toAST(),
         value.toAST(),
         this

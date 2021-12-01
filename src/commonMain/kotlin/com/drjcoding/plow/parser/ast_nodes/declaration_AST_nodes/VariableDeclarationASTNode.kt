@@ -8,21 +8,25 @@ import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.ExpressionASTNod
 import com.drjcoding.plow.parser.ast_nodes.type_AST_nodes.TypeASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.plow_project.FullyQualifiedLocation
+import com.drjcoding.plow.plow_project.TypeResolutionHierarchy
 import com.drjcoding.plow.source_abstractions.SourceString
 
 data class VariableDeclarationASTNode(
     val name: SourceString,
-    override val parentNamespace: NamespaceASTNode,
     val type: TypeASTNode?,
     val value: ExpressionASTNode,
     override val underlyingCSTNode: CSTNode
 ) : ASTNode(), DeclarationASTNode {
-    override val thisNamespace = parentNamespace.thisNamespace.child(name)
+    override lateinit var parentNamespace: NamespaceASTNode
+
+    override val thisNamespace: FullyQualifiedLocation
+        get() = parentNamespace.thisNamespace.child(name)
 
     override val childNamespaces = listOf<NamespaceASTNode>()
 
     override val thisNamespacesType: ObjectType? = null
 
-    override val typeResolutionHierarchy = parentNamespace.typeResolutionHierarchy
+    override val typeResolutionHierarchy: TypeResolutionHierarchy
+        get() = parentNamespace.typeResolutionHierarchy
 
 }

@@ -10,6 +10,10 @@ data class SubfolderCSTNode(
     val name: SourceString,
     val parent: FolderCSTNode,
 ): FolderCSTNode() {
-    override fun toNamespaceASTNode(): SubfolderASTNode =
-        SubfolderASTNode(name, parent.toNamespaceASTNode(), children.map { it.toNamespaceASTNode() })
+    override fun toNamespaceASTNode(): SubfolderASTNode {
+        val childrenAST = children.map { it.toNamespaceASTNode() }
+        val folder = SubfolderASTNode(name, childrenAST)
+        childrenAST.forEach { it.parentNamespace = folder }
+        return folder
+    }
 }
