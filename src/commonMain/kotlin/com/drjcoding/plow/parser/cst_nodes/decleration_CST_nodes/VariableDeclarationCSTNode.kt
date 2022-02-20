@@ -1,5 +1,9 @@
 package com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes
 
+import com.drjcoding.plow.issues.PlowResult
+import com.drjcoding.plow.issues.toPlowResult
+import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.BaseVariableASTNode
+import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.MemberDeclarationASTNode
 import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.VariableDeclarationASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
@@ -17,13 +21,19 @@ data class VariableDeclarationCSTNode(
 ) : CSTNode(), DeclarationCSTNode {
     override val range = letOrVar.range + value.range
 
-    override fun toAST() = VariableDeclarationASTNode(
+    private fun toAST() = BaseVariableASTNode(
         name.token.text,
         typeAnnotation?.toAST(),
         value.toAST(),
         this
     )
 
-    override val type = DeclarationType.VARIABLE
+    override fun toASTAsFileChild(): PlowResult<DeclarationCSTNode.FileChildASTNode> =
+        VariableDeclarationASTNode(toAST(), this).toPlowResult()
+
+    override fun toASTAsObjectChild(): PlowResult<DeclarationCSTNode.ObjectChildASTNode> =
+        DeclarationCSTNode.ObjectChildASTNode.Member(
+            MemberDeclarationASTNode(toAST(), this)
+        ).toPlowResult()
 }
 

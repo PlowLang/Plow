@@ -1,7 +1,11 @@
 package com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes
 
+import com.drjcoding.plow.issues.PlowResult
+import com.drjcoding.plow.issues.toPlowResult
+import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.BaseFunctionASTNode
+import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.BaseFunctionArgASTNode
 import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.FunctionDeclarationASTNode
-import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.FunctionDeclarationArgASTNode
+import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.MethodDeclarationASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.parser.cst_nodes.CodeBlockCSTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
@@ -20,7 +24,7 @@ data class FunctionDeclarationCSTNode(
 ) : CSTNode(), DeclarationCSTNode {
     override val range = funcKw.range + body.range
 
-    override fun toAST() = FunctionDeclarationASTNode(
+    private fun toBaseFunctionASTNode() = BaseFunctionASTNode(
         name.token.text,
         args.map { it.toAST() },
         returnType?.toAST(),
@@ -28,7 +32,14 @@ data class FunctionDeclarationCSTNode(
         this
     )
 
-    override val type = DeclarationType.FUNCTION
+    override fun toASTAsFileChild(): PlowResult<DeclarationCSTNode.FileChildASTNode> =
+        FunctionDeclarationASTNode(toBaseFunctionASTNode(), this).toPlowResult()
+
+    override fun toASTAsObjectChild(): PlowResult<DeclarationCSTNode.ObjectChildASTNode> =
+        DeclarationCSTNode.ObjectChildASTNode.Method(
+            MethodDeclarationASTNode(toBaseFunctionASTNode(), this)
+        ).toPlowResult()
+
 }
 
 /**
@@ -41,7 +52,7 @@ data class FunctionDeclarationArgCSTNode(
 ) : CSTNode() {
     override val range = name.range + (comma ?: type).range
 
-    fun toAST() = FunctionDeclarationArgASTNode(
+    fun toAST() = BaseFunctionArgASTNode(
         name.token.text,
         type.toAST(),
         this

@@ -20,6 +20,8 @@ sealed class PlowResult<out T> {
      */
     class Error<out T>(val issues: Collection<PlowIssue>) : PlowResult<T>() {
         constructor(issue: PlowIssue) : this(listOf(issue))
+
+        fun <U> changeType() = Error<U>(issues)
     }
 
     /**
@@ -29,6 +31,15 @@ sealed class PlowResult<out T> {
         when (this) {
             is Ok<T> -> this.result
             is Error<T> -> throw UnexpectedlyFoundNullWhileUnwrappingException(this.issues)
+        }
+
+    /**
+     * If this is [Ok] returns [Ok.result] run through mapper, otherwise returns the [PlowResult.Error]
+     */
+    fun <U> map(mapper: (T) -> U): PlowResult<U> =
+        when(this) {
+            is Ok -> Ok(mapper(this.result), this.issues)
+            is Error -> Error(this.issues)
         }
 
 }
@@ -62,3 +73,17 @@ inline fun <T> runCatchingExceptionsAsPlowResult(run: () -> T): PlowResult<T> =
  * Converts this to a [PlowResult] by wrapping it in [PlowResult.Ok]
  */
 fun <T> T.toPlowResult() = PlowResult.Ok(this)
+
+/**
+ * If the list contains any [PlowResult.Error]s returns a [PlowResult.Error] containing all the issues, otherwise
+ * returns a [PlowResult.Ok] containing the list of items.
+ */
+fun <T> List<PlowResult<T>>.flattenToPlowResult(): PlowResult<List<T>> {
+    val issues = this.map {
+        when(it) {
+            is PlowResult.Ok -> listOf()
+            is PlowResult.Error -> it.issues
+        }
+    }.flatten()
+    return if (issues.isEmpty()) this.map { it.unwrap() }.toPlowResult() else PlowResult.Error(issues)
+}
