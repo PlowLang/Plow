@@ -7,7 +7,6 @@ package com.drjcoding.plow.parser.cst_nodes.expression_CST_nodes
 
 import com.drjcoding.plow.lexer.LexToken
 import com.drjcoding.plow.lexer.LexTokenType
-import com.drjcoding.plow.source_abstractions.toUnderlyingString
 import kotlin.math.min
 
 enum class BindingPower {

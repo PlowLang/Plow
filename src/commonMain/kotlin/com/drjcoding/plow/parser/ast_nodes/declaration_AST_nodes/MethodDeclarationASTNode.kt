@@ -4,6 +4,6 @@ import com.drjcoding.plow.parser.ast_nodes.ASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 
 class MethodDeclarationASTNode(
-    val underlyingFunction: BaseFunctionASTNode,
+    private val underlyingFunction: BaseFunctionASTNode,
     override val underlyingCSTNode: CSTNode
 ) : ASTNode()

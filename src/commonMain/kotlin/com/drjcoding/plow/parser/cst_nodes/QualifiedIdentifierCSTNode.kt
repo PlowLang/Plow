@@ -1,6 +1,7 @@
 package com.drjcoding.plow.parser.cst_nodes
 
 import com.drjcoding.plow.parser.ast_nodes.QualifiedIdentifierASTNode
+import com.drjcoding.plow.project.ast.managers.Scope
 import com.drjcoding.plow.source_abstractions.SourceFileRange
 
 /**
@@ -20,6 +21,8 @@ data class QualifiedIdentifierCSTNode(
         name.token.text,
         this
     )
+
+    fun toScope() = Scope(namespaces.map { it.name.token.text } + name.token.text)
 }
 
 /**

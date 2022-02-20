@@ -2,6 +2,7 @@ package com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes
 
 import com.drjcoding.plow.issues.PlowResult
 import com.drjcoding.plow.issues.toPlowResult
+import com.drjcoding.plow.parser.ast_nodes.FileChildASTNode
 import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.BaseFunctionASTNode
 import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.BaseFunctionArgASTNode
 import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.FunctionDeclarationASTNode
@@ -32,7 +33,7 @@ data class FunctionDeclarationCSTNode(
         this
     )
 
-    override fun toASTAsFileChild(): PlowResult<DeclarationCSTNode.FileChildASTNode> =
+    override fun toASTAsFileChild(): PlowResult<FileChildASTNode> =
         FunctionDeclarationASTNode(toBaseFunctionASTNode(), this).toPlowResult()
 
     override fun toASTAsObjectChild(): PlowResult<DeclarationCSTNode.ObjectChildASTNode> =

@@ -1,3 +1,0 @@
-package com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes
-
-interface TopLevelDeclarationASTNode

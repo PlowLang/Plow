@@ -29,15 +29,31 @@ sealed class PlowResult<out T> {
      */
     fun unwrap(): T =
         when (this) {
-            is Ok<T> -> this.result
-            is Error<T> -> throw UnexpectedlyFoundNullWhileUnwrappingException(this.issues)
+            is Ok -> this.result
+            is Error -> throw UnexpectedlyFoundNullWhileUnwrappingException(this.issues)
+        }
+
+    /**
+     * If this is [Ok] then the result is returned otherwise the singular [PlowFatalIssue] inside the [Error] is thrown.
+     * If the [Error] does not contain a singular [PlowFatalIssue] and [UnexpectedlyFoundNullWhileUnwrappingException]
+     * is thrown.
+     */
+    fun unwrapThrowingErrors(): T =
+        when (this) {
+            is Ok -> this.result
+            is Error -> {
+                if (this.issues.size != 1) throw UnexpectedlyFoundNullWhileUnwrappingException(this.issues)
+                val issue = this.issues.first()
+                if (issue !is PlowFatalIssue) throw UnexpectedlyFoundNullWhileUnwrappingException(this.issues)
+                throw issue
+            }
         }
 
     /**
      * If this is [Ok] returns [Ok.result] run through mapper, otherwise returns the [PlowResult.Error]
      */
     fun <U> map(mapper: (T) -> U): PlowResult<U> =
-        when(this) {
+        when (this) {
             is Ok -> Ok(mapper(this.result), this.issues)
             is Error -> Error(this.issues)
         }

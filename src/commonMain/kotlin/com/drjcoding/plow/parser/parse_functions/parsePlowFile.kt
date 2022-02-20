@@ -3,8 +3,8 @@ package com.drjcoding.plow.parser.parse_functions
 import com.drjcoding.plow.lexer.LexTokenStream
 import com.drjcoding.plow.parser.cst_nodes.ImportCSTNode
 import com.drjcoding.plow.parser.cst_nodes.PlowFileCSTNode
-import com.drjcoding.plow.parser.parse_functions.errors.ExtraContentInFileError
 import com.drjcoding.plow.parser.parse_functions.declaration_parse_functions.parseDeclarations
+import com.drjcoding.plow.parser.parse_functions.errors.ExtraContentInFileError
 
 /**
  * Parses a Plow file.
