@@ -3,6 +3,7 @@ package com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes
 import com.drjcoding.plow.issues.PlowResult
 import com.drjcoding.plow.issues.flattenToPlowResult
 import com.drjcoding.plow.parser.ast_nodes.FileChildASTNode
+import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.EnumCaseASTNode
 import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.EnumDeclarationASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
@@ -23,13 +24,16 @@ data class EnumDeclarationCSTNode(
 
     private fun toAST(): PlowResult<EnumDeclarationASTNode> {
         val childrenResult = declarations.map { it.toASTAsObjectChild() }.flattenToPlowResult()
+        val cases = cases.map { EnumCaseASTNode(it.name.token.text, it) }
         return childrenResult.map { children ->
-            EnumDeclarationASTNode(
+            val enum = EnumDeclarationASTNode(
                 name.token.text,
-                cases.map { it.name.token.text },
+                cases,
                 children.filterIsInstance<DeclarationCSTNode.ObjectChildASTNode.Method>().map { it.methodDeclarationASTNode },
                 this
             )
+            cases.forEach { it.parentEnum = enum }
+            enum
         }
     }
 
