@@ -1,7 +1,6 @@
 package com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes
 
 import com.drjcoding.plow.ir.IRManagers
-import com.drjcoding.plow.ir.globals.IRValueGlobal
 import com.drjcoding.plow.parser.ast_nodes.ASTNode
 import com.drjcoding.plow.parser.ast_nodes.FileChildASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
@@ -18,8 +17,7 @@ class FunctionDeclarationASTNode(
 
     override fun registerIRGlobal(astManagers: ASTManagers, irManagers: IRManagers) {
         val parentScope = astManagers.globals.parentScopeForGlobal(this)
-        val functionType = underlyingFunction.getIRType(astManagers, irManagers, parentScope).unwrapThrowingErrors()
-        val irGlobal = IRValueGlobal(parentScope, underlyingFunction.name, functionType)
+        val irGlobal = underlyingFunction.getIRFunction(astManagers, irManagers, parentScope).unwrapThrowingErrors()
         irManagers.globals.registerASTtoGlobalAssociation(this, irGlobal)
     }
 
