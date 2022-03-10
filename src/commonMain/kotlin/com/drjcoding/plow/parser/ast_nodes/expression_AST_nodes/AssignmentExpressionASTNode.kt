@@ -16,7 +16,7 @@ data class AssignmentExpressionASTNode(
 ) : ExpressionASTNode() {
     override fun toCodeBlockWithResult(astManagers: ASTManagers, irManagers: IRManagers): Pair<IRCodeBlock, SimpleIRValue> {
         val toAssignTo = assignTo.toIRAssignable()
-        val (valueCB, irValue) = value.toCodeBlockWithResult(,)
+        val (valueCB, irValue) = value.toCodeBlockWithResult(astManagers, irManagers)
 
         if (!irValue.type.isSubtypeOf(toAssignTo.type)) {
             throw MismatchedTypesError(toAssignTo.type, irValue.type, value)

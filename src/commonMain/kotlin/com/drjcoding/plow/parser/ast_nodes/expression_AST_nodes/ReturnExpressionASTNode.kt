@@ -18,7 +18,7 @@ data class ReturnExpressionASTNode(
                 IRStatement.Return(UnitIRValue)
             ) to UnitIRValue
         } else {
-            val (valueCB, irValue) = expression.toCodeBlockWithResult(,)
+            val (valueCB, irValue) = expression.toCodeBlockWithResult(astManagers, irManagers)
             val myCb = valueCB + IRCodeBlock(
                 IRStatement.Return(irValue)
             )

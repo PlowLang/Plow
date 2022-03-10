@@ -18,7 +18,7 @@ data class IfExpressionASTNode(
     override val underlyingCSTNode: CSTNode
 ) : ExpressionASTNode() {
     override fun toCodeBlockWithResult(astManagers: ASTManagers, irManagers: IRManagers): Pair<IRCodeBlock, SimpleIRValue> {
-        val (conditionCB, conditionValue) = condition.toCodeBlockWithResult(,)
+        val (conditionCB, conditionValue) = condition.toCodeBlockWithResult(astManagers, irManagers)
         if (conditionValue.type != StandardTypes.BOOLEAN_IR_TYPE) {
             throw MismatchedTypesError(StandardTypes.BOOLEAN_IR_TYPE, conditionValue.type, condition)
         }

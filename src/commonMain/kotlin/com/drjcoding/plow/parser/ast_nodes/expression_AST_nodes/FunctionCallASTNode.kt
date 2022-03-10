@@ -14,8 +14,8 @@ data class FunctionCallASTNode(
     override val underlyingCSTNode: CSTNode
 ) : ExpressionASTNode() {
     override fun toCodeBlockWithResult(astManagers: ASTManagers, irManagers: IRManagers): Pair<IRCodeBlock, SimpleIRValue> {
-        val argsIR = arguments.map { it.toCodeBlockWithResult(,) }
-        val (functionCB, functionIRValue) = function.toCodeBlockWithResult(,)
+        val argsIR = arguments.map { it.toCodeBlockWithResult(astManagers, irManagers) }
+        val (functionCB, functionIRValue) = function.toCodeBlockWithResult(astManagers, irManagers)
 
         if (functionIRValue.type !is FunctionIRType) {
             throw CannotInvokeNonFunctionTypeError(this, functionIRValue.type)
