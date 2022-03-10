@@ -37,7 +37,7 @@ data class EnumDeclarationASTNode(
 }
 
 data class EnumCaseASTNode(
-    val name: SourceString,
+    override val name: SourceString,
     override val underlyingCSTNode: CSTNode
 ) : ASTNode(), GlobalDeclarationASTNode, ScopeChildASTNode {
     lateinit var parentEnum: EnumDeclarationASTNode

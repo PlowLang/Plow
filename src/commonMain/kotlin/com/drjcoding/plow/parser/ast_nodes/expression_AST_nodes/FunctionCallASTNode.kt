@@ -7,15 +7,26 @@ import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.CannotInv
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.MismatchedTypesError
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.project.ast.managers.ASTManagers
+import com.drjcoding.plow.project.ast.managers.Scope
 
 data class FunctionCallASTNode(
     val function: ExpressionASTNode,
     val arguments: List<ExpressionASTNode>,
     override val underlyingCSTNode: CSTNode
 ) : ExpressionASTNode() {
-    override fun toCodeBlockWithResult(astManagers: ASTManagers, irManagers: IRManagers): Pair<IRCodeBlock, SimpleIRValue> {
-        val argsIR = arguments.map { it.toCodeBlockWithResult(astManagers, irManagers) }
-        val (functionCB, functionIRValue) = function.toCodeBlockWithResult(astManagers, irManagers)
+    override fun toCodeBlockWithResult(
+        astManagers: ASTManagers,
+        irManagers: IRManagers,
+        parentScope: Scope,
+        localNameResolver: LocalNameResolver
+    ): Pair<IRCodeBlock, SimpleIRValue> {
+        val argsIR = arguments.map { it.toCodeBlockWithResult(astManagers, irManagers, parentScope, localNameResolver) }
+        val (functionCB, functionIRValue) = function.toCodeBlockWithResult(
+            astManagers,
+            irManagers,
+            parentScope,
+            localNameResolver
+        )
 
         if (functionIRValue.type !is FunctionIRType) {
             throw CannotInvokeNonFunctionTypeError(this, functionIRValue.type)

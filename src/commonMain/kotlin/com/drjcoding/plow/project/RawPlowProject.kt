@@ -6,5 +6,5 @@ import com.drjcoding.plow.lexer.lex
 typealias RawPlowProject = FolderStructure<String>
 
 fun RawPlowProject.toLexedProject(): PlowResult<LexedPlowProject> =
-    this.map { lex(it) }.flattenToPlowResult()
+    this.map { it, _ -> lex(it) }.flattenToPlowResult()
 

@@ -7,11 +7,15 @@ import com.drjcoding.plow.parser.ast_nodes.FileChildASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.project.ast.managers.ASTManagers
 import com.drjcoding.plow.project.ast.managers.Scope
+import com.drjcoding.plow.source_abstractions.SourceString
 
 data class VariableDeclarationASTNode(
     private val underlyingVariable: BaseVariableASTNode,
     override val underlyingCSTNode: CSTNode
 ) : ASTNode(), FileChildASTNode, GlobalDeclarationASTNode {
+    override val name: SourceString
+        get() = underlyingVariable.name
+
     override fun findScopesAndNames(parentScope: Scope, astManagers: ASTManagers) {
         astManagers.globals.insert(parentScope, this)
     }

@@ -10,16 +10,18 @@ class FileParseTests {
     @Test
     fun fileTests() {
         testParse(::parsePlowFile) {
-            "" makes { PlowFileCSTNode(listOf()) }
+            "" makes { PlowFileCSTNode(listOf(), listOf()) }
 
             "let a = b " makes {
                 PlowFileCSTNode(
+                    listOf(),
                     listOf(VariableDeclarationCSTNode(t(0), t(1), null, t(2), v(3)))
                 )
             }
 
             "let a = b \n let c = a \n\n " makes {
                 PlowFileCSTNode(
+                    listOf(),
                     listOf(
                         VariableDeclarationCSTNode(t(0), t(1), null, t(2), v(3)),
                         VariableDeclarationCSTNode(t(4), t(5), null, t(6), v(7)),

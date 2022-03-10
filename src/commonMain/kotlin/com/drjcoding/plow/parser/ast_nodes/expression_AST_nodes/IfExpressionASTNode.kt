@@ -1,15 +1,13 @@
 package com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes
 
 import com.drjcoding.plow.ir.IRManagers
-import com.drjcoding.plow.ir.function.code_block.IRCodeBlock
-import com.drjcoding.plow.ir.function.code_block.IRStatement
-import com.drjcoding.plow.ir.function.code_block.SimpleIRValue
-import com.drjcoding.plow.ir.function.code_block.UnitIRValue
+import com.drjcoding.plow.ir.function.code_block.*
 import com.drjcoding.plow.ir.type.StandardTypes
 import com.drjcoding.plow.parser.ast_nodes.CodeBlockASTNode
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.MismatchedTypesError
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.project.ast.managers.ASTManagers
+import com.drjcoding.plow.project.ast.managers.Scope
 
 data class IfExpressionASTNode(
     val condition: ExpressionASTNode,
@@ -17,15 +15,26 @@ data class IfExpressionASTNode(
     val elseBody: CodeBlockASTNode?,
     override val underlyingCSTNode: CSTNode
 ) : ExpressionASTNode() {
-    override fun toCodeBlockWithResult(astManagers: ASTManagers, irManagers: IRManagers): Pair<IRCodeBlock, SimpleIRValue> {
-        val (conditionCB, conditionValue) = condition.toCodeBlockWithResult(astManagers, irManagers)
+    override fun toCodeBlockWithResult(
+        astManagers: ASTManagers,
+        irManagers: IRManagers,
+        parentScope: Scope,
+        localNameResolver: LocalNameResolver
+    ): Pair<IRCodeBlock, SimpleIRValue> {
+        val (conditionCB, conditionValue) = condition.toCodeBlockWithResult(
+            astManagers,
+            irManagers,
+            parentScope,
+            localNameResolver
+        )
         if (conditionValue.type != StandardTypes.BOOLEAN_IR_TYPE) {
             throw MismatchedTypesError(StandardTypes.BOOLEAN_IR_TYPE, conditionValue.type, condition)
         }
 
         // TODO make if an expression
-        val bodyCB = body.toIRCodeBlock().unwrapThrowingErrors()
-        val elseCB = elseBody?.toIRCodeBlock()?.unwrapThrowingErrors()
+        val bodyCB = body.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver).unwrapThrowingErrors()
+        val elseCB =
+            elseBody?.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver)?.unwrapThrowingErrors()
 
         val elseLabel = IRStatement.Label()
         val endLabel = IRStatement.Label()

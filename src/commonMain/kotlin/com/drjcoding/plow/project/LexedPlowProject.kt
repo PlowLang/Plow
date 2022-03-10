@@ -8,4 +8,7 @@ import com.drjcoding.plow.parser.parse_functions.parsePlowFile
 typealias LexedPlowProject = FolderStructure<LexTokenStream>
 
 fun LexedPlowProject.toCST(): PlowResult<ParsedPlowProject> =
-    this.map { runCatchingExceptionsAsPlowResult { parsePlowFile(it) } }.flattenToPlowResult()
+    this.map { ts, _ ->
+        runCatchingExceptionsAsPlowResult { parsePlowFile(ts) }
+    }.flattenToPlowResult()
+

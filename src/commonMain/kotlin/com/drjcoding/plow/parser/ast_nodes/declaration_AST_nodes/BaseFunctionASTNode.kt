@@ -2,6 +2,10 @@ package com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes
 
 import com.drjcoding.plow.ir.IRManagers
 import com.drjcoding.plow.ir.function.IRFunction
+import com.drjcoding.plow.ir.function.code_block.IRCodeBlock
+import com.drjcoding.plow.ir.function.code_block.IRLocalVariable
+import com.drjcoding.plow.ir.function.code_block.LocalNameResolver
+import com.drjcoding.plow.ir.function.code_block.LocalVariableIRValue
 import com.drjcoding.plow.ir.type.FunctionIRType
 import com.drjcoding.plow.ir.type.IRType
 import com.drjcoding.plow.ir.type.UnitIRType
@@ -37,10 +41,25 @@ data class BaseFunctionASTNode(
         val functionType = getIRType(astManagers, irManagers, parentScope)
         if (functionType is PlowResult.Error) return functionType.changeType()
 
-        val codeBlock = body.toIRCodeBlock()
-        if (codeBlock is PlowResult.Error) return codeBlock.changeType()
+        val localNameResolver = LocalNameResolver()
+        localNameResolver.newScope()
 
-        return IRFunction(parentScope, name, functionType.unwrap(), codeBlock.unwrap()).toPlowResult()
+        var myCB = IRCodeBlock()
+
+        val argLocalVariables: MutableList<IRLocalVariable> = mutableListOf()
+        args.forEach {
+            val localVar = myCB.createNewLocalVariable(it.getIRType(astManagers, irManagers, parentScope).unwrap())
+            argLocalVariables.add(localVar)
+            localNameResolver.addName(it.name, LocalVariableIRValue(localVar), it)
+        }
+
+        val implementationCodeBlock = body.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver)
+        if (implementationCodeBlock is PlowResult.Error) return implementationCodeBlock.changeType()
+        myCB += implementationCodeBlock.unwrap()
+
+        localNameResolver.dropScope()
+
+        return IRFunction(parentScope, name, functionType.unwrap(), argLocalVariables, myCB).toPlowResult()
     }
 }
 
