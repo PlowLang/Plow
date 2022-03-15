@@ -26,6 +26,11 @@ class IRProject private constructor(val astPlowProject: ASTPlowProject) {
         astManagers.globals.forEach { it.registerIRGlobal(astManagers, irManagers) }
     }
 
+    private fun convertToIR() {
+        irManagers.needingIRConversion.functionsNeedingConversionIterator()
+            .forEach { it.registerIRFunction(astManagers, irManagers) }
+    }
+
     companion object {
         fun fromASTProject(astPlowProject: ASTPlowProject): PlowResult<IRProject> = runCatchingExceptionsAsPlowResult {
             IRProject(astPlowProject)
@@ -35,5 +40,6 @@ class IRProject private constructor(val astPlowProject: ASTPlowProject) {
     init {
         findTypesAndGlobals()
         registerIRTypesAndGlobals()
+        convertToIR()
     }
 }

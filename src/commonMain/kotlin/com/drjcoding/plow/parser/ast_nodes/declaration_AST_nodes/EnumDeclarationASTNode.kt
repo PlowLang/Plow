@@ -1,7 +1,7 @@
 package com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes
 
 import com.drjcoding.plow.ir.IRManagers
-import com.drjcoding.plow.ir.globals.IRValueGlobal
+import com.drjcoding.plow.ir.globals.IRGlobal
 import com.drjcoding.plow.ir.type.NamedIRType
 import com.drjcoding.plow.parser.ast_nodes.ASTNode
 import com.drjcoding.plow.parser.ast_nodes.FileChildASTNode
@@ -49,7 +49,7 @@ data class EnumCaseASTNode(
     override fun registerIRGlobal(astManagers: ASTManagers, irManagers: IRManagers) {
         val parentScope = astManagers.globals.parentScopeForGlobal(this)
         val parentEnumType = irManagers.types.getTypeForAstNode(parentEnum)
-        val irGlobal = IRValueGlobal(parentScope, name, parentEnumType)
+        val irGlobal = IRGlobal(parentScope, name, parentEnumType)
         irManagers.globals.registerASTtoGlobalAssociation(this, irGlobal)
     }
 }

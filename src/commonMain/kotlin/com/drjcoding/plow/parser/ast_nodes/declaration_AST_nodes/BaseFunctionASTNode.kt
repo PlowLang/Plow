@@ -1,7 +1,7 @@
 package com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes
 
 import com.drjcoding.plow.ir.IRManagers
-import com.drjcoding.plow.ir.function.IRFunction
+import com.drjcoding.plow.ir.function.IRFunctionImplementation
 import com.drjcoding.plow.ir.function.code_block.IRCodeBlock
 import com.drjcoding.plow.ir.function.code_block.IRLocalVariable
 import com.drjcoding.plow.ir.function.code_block.LocalNameResolver
@@ -27,7 +27,7 @@ data class BaseFunctionASTNode(
     val body: CodeBlockASTNode,
     override val underlyingCSTNode: CSTNode
 ) : ASTNode() {
-    private fun getIRType(astManagers: ASTManagers, irManagers: IRManagers, scope: Scope): PlowResult<IRType> {
+    fun getIRType(astManagers: ASTManagers, irManagers: IRManagers, scope: Scope): PlowResult<IRType> {
         val argTypes = args.map { it.getIRType(astManagers, irManagers, scope) }.flattenToPlowResult()
         val returnType = returnType?.getIRType(astManagers, irManagers, scope) ?: UnitIRType.toPlowResult()
 
@@ -37,7 +37,11 @@ data class BaseFunctionASTNode(
         return FunctionIRType(argTypes.unwrap(), returnType.unwrap()).toPlowResult()
     }
 
-    fun getIRFunction(astManagers: ASTManagers, irManagers: IRManagers, parentScope: Scope): PlowResult<IRFunction> {
+    fun getIRFunction(
+        astManagers: ASTManagers,
+        irManagers: IRManagers,
+        parentScope: Scope
+    ): PlowResult<IRFunctionImplementation> {
         val functionType = getIRType(astManagers, irManagers, parentScope)
         if (functionType is PlowResult.Error) return functionType.changeType()
 
@@ -59,7 +63,13 @@ data class BaseFunctionASTNode(
 
         localNameResolver.dropScope()
 
-        return IRFunction(parentScope, name, functionType.unwrap(), argLocalVariables, myCB).toPlowResult()
+        return IRFunctionImplementation(
+            parentScope,
+            name,
+            functionType.unwrap(),
+            argLocalVariables,
+            myCB
+        ).toPlowResult()
     }
 }
 
