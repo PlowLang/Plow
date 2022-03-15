@@ -42,10 +42,12 @@ sealed class PlowResult<out T> {
         when (this) {
             is Ok -> this.result
             is Error -> {
-                if (this.issues.size != 1) throw UnexpectedlyFoundNullWhileUnwrappingException(this.issues)
-                val issue = this.issues.first()
-                if (issue !is PlowFatalIssue) throw UnexpectedlyFoundNullWhileUnwrappingException(this.issues)
-                throw issue
+                if (!issues.all { it is PlowFatalIssue }) throw UnexpectedlyFoundNullWhileUnwrappingException(this.issues)
+                throw when (issues.size) {
+                    0 -> UnexpectedlyFoundNullWhileUnwrappingException(this.issues)
+                    1 -> this.issues.first() as PlowFatalIssue
+                    else -> CombinedPlowIssues(issues.map { it as PlowFatalIssue })
+                }
             }
         }
 
@@ -59,6 +61,10 @@ sealed class PlowResult<out T> {
         }
 
 }
+
+class CombinedPlowIssues(
+    val issues: List<PlowFatalIssue>
+) : Exception()
 
 /**
  * Thrown when [PlowResult.unwrap] is called on a [PlowResult.Error].
@@ -80,10 +86,13 @@ inline fun <T> runCatchingExceptionsAsPlowResult(run: () -> T): PlowResult<T> =
         result.toPlowResult()
     } catch (pfi: PlowFatalIssue) {
         PlowResult.Error(listOf(pfi))
+    } catch (combined: CombinedPlowIssues) {
+        PlowResult.Error(combined.issues)
     } catch (e: Exception) {
         val ice = InternalCompilerError(e)
         PlowResult.Error(listOf(ice))
     }
+
 
 /**
  * Converts this to a [PlowResult] by wrapping it in [PlowResult.Ok]
