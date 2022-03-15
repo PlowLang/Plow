@@ -29,6 +29,7 @@ data class LocalVariableDeclarationASTNode(
             irManagers,
             parentScope,
             localNameResolver,
+            expectedReturnType
         )
 
         if (type != valueIR.type) {

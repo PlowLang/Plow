@@ -28,15 +28,16 @@ data class IfExpressionASTNode(
             irManagers,
             parentScope,
             localNameResolver,
+            expectedReturnType
         )
-        if (conditionValue.type != StandardTypes.BOOLEAN_IR_TYPE) {
+        if (!conditionValue.type.isSubtypeOf(StandardTypes.BOOLEAN_IR_TYPE)) {
             throw MismatchedTypesError(StandardTypes.BOOLEAN_IR_TYPE, conditionValue.type, condition)
         }
 
         // TODO make if an expression
-        val bodyCB = body.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver).unwrapThrowingErrors()
+        val bodyCB = body.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver, expectedReturnType).unwrapThrowingErrors()
         val elseCB =
-            elseBody?.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver)?.unwrapThrowingErrors()
+            elseBody?.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver, expectedReturnType)?.unwrapThrowingErrors()
 
         val elseLabel = IRStatement.Label()
         val endLabel = IRStatement.Label()

@@ -23,12 +23,21 @@ data class FunctionCallASTNode(
         localNameResolver: LocalNameResolver,
         expectedReturnType: IRType
     ): Pair<IRCodeBlock, SimpleIRValue> {
-        val argsIR = arguments.map { it.toCodeBlockWithResult(astManagers, irManagers, parentScope, localNameResolver,) }
+        val argsIR = arguments.map {
+            it.toCodeBlockWithResult(
+                astManagers,
+                irManagers,
+                parentScope,
+                localNameResolver,
+                expectedReturnType
+            )
+        }
         val (functionCB, functionIRValue) = function.toCodeBlockWithResult(
             astManagers,
             irManagers,
             parentScope,
             localNameResolver,
+            expectedReturnType
         )
 
         val functionType = functionIRValue.type
@@ -47,7 +56,7 @@ data class FunctionCallASTNode(
 
             val expectedType = (functionIRValue.type as FunctionIRType).argumentTypes[index]
             val foundType = argIR.type
-            if (expectedType != foundType) {
+            if (!foundType.isSubtypeOf(expectedType)) {
                 throw MismatchedTypesError(expectedType, foundType, arguments[index])
             }
 
