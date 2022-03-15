@@ -8,6 +8,9 @@ import com.drjcoding.plow.source_abstractions.toPlowIssueTextRange
 class TypeAnnotationRequiredError(
     val variable: CSTNode // FIXME this is a little hacky
 ) : PlowError(
-    "expected a type declaration",
-    PlowIssueInfo(variable.range.toPlowIssueTextRange(), "Expected a type annotation here.")
+    "expected a type annotation",
+    PlowIssueInfo(variable.range.toPlowIssueTextRange(), "Expected a type annotation here."),
+    listOf(
+        PlowIssueInfo(null, "Variable type inference is not yet supported.")
+    )
 )
