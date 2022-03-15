@@ -9,7 +9,7 @@ data class Scope(
     class ScopeIterator(private var currentScope: Scope) : Iterator<Scope> {
         private var done = false
 
-        override fun hasNext(): Boolean = done
+        override fun hasNext(): Boolean = !done
 
         override fun next(): Scope {
             val thisRound = currentScope
