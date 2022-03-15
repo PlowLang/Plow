@@ -4,6 +4,7 @@ import com.drjcoding.plow.ir.IRManagers
 import com.drjcoding.plow.ir.function.code_block.*
 import com.drjcoding.plow.ir.type.FunctionIRType
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.CannotInvokeNonFunctionTypeError
+import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.MismatchedNumberOfArgumentsError
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.MismatchedTypesError
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.project.ast.managers.ASTManagers
@@ -28,8 +29,13 @@ data class FunctionCallASTNode(
             localNameResolver
         )
 
-        if (functionIRValue.type !is FunctionIRType) {
+        val functionType = functionIRValue.type
+        if (functionType !is FunctionIRType) {
             throw CannotInvokeNonFunctionTypeError(this, functionIRValue.type)
+        }
+
+        if (functionType.argumentTypes.size != arguments.size) {
+            throw MismatchedNumberOfArgumentsError(this, functionType)
         }
 
         var myCB = IRCodeBlock()
