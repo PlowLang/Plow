@@ -2,9 +2,9 @@ package com.drjcoding.plow.ir.globals
 
 import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.GlobalDeclarationASTNode
 
-class NoIRTypeForASTTypeException(
+class NoIRGlobalForASTTypeException(
     val ast: GlobalDeclarationASTNode
-) : Exception("No IR type found for ast type $ast.")
+) : Exception("No IR global found for ast global $ast.")
 
 class DuplicateGlobalTypesForASTTypeException(
     val ast: GlobalDeclarationASTNode,
@@ -24,6 +24,6 @@ class IRGlobalsManager {
     }
 
     fun getGlobalForAstNode(type: GlobalDeclarationASTNode): IRGlobal =
-        astToIRGlobal[type] ?: throw NoIRTypeForASTTypeException(type)
+        astToIRGlobal[type] ?: throw NoIRGlobalForASTTypeException(type)
 
 }
