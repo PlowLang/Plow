@@ -2,7 +2,7 @@ package com.drjcoding.plow.ir.globals
 
 import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.GlobalDeclarationASTNode
 
-class NoIRGlobalForASTTypeException(
+class NoIRGlobalForASTGlobalException(
     val ast: GlobalDeclarationASTNode
 ) : Exception("No IR global found for ast global $ast.")
 
@@ -24,6 +24,6 @@ class IRGlobalsManager {
     }
 
     fun getGlobalForAstNode(type: GlobalDeclarationASTNode): IRGlobal =
-        astToIRGlobal[type] ?: throw NoIRGlobalForASTTypeException(type)
+        astToIRGlobal[type] ?: throw NoIRGlobalForASTGlobalException(type)
 
 }
