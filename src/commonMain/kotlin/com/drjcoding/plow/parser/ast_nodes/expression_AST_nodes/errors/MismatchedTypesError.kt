@@ -14,6 +14,6 @@ class MismatchedTypesError(
     "mismatched types",
     PlowIssueInfo(
         expression.underlyingCSTNode.range.toPlowIssueTextRange(),
-        "Expected the type $expectedType but instead found the type $foundType."
+        "Expected the type `$expectedType` but instead found the type `$foundType`."
     )
 )

@@ -5,6 +5,7 @@ import com.drjcoding.plow.ir.function.code_block.IRAssignable
 import com.drjcoding.plow.ir.function.code_block.IRCodeBlock
 import com.drjcoding.plow.ir.function.code_block.LocalNameResolver
 import com.drjcoding.plow.ir.function.code_block.SimpleIRValue
+import com.drjcoding.plow.ir.type.IRType
 import com.drjcoding.plow.parser.ast_nodes.ASTNode
 import com.drjcoding.plow.parser.ast_nodes.StatementASTNode
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.CannotAssignToThisExpression
@@ -23,15 +24,17 @@ abstract class ExpressionASTNode : ASTNode(), StatementASTNode {
         astManagers: ASTManagers,
         irManagers: IRManagers,
         parentScope: Scope,
-        localNameResolver: LocalNameResolver
+        localNameResolver: LocalNameResolver,
+        expectedReturnType: IRType
     ): Pair<IRCodeBlock, SimpleIRValue>
 
     override fun toIRCodeBlock(
         astManagers: ASTManagers,
         irManagers: IRManagers,
         parentScope: Scope,
-        localNameResolver: LocalNameResolver
+        localNameResolver: LocalNameResolver,
+        expectedReturnType: IRType
     ): IRCodeBlock {
-        return toCodeBlockWithResult(astManagers, irManagers, parentScope, localNameResolver).first
+        return toCodeBlockWithResult(astManagers, irManagers, parentScope, localNameResolver, expectedReturnType).first
     }
 }

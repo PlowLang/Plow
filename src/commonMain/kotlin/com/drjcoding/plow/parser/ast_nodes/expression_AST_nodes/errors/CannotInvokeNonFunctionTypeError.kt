@@ -13,6 +13,6 @@ class CannotInvokeNonFunctionTypeError(
     "cannot invoke non function type",
     PlowIssueInfo(
         astNode.underlyingCSTNode.range.toPlowIssueTextRange(),
-        "Attempted to invoke a value with the type $actualType."
+        "Attempted to invoke a value with the type `$actualType`."
     )
 )

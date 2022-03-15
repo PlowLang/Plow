@@ -3,6 +3,7 @@ package com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes
 import com.drjcoding.plow.ir.IRManagers
 import com.drjcoding.plow.ir.function.code_block.*
 import com.drjcoding.plow.ir.type.FunctionIRType
+import com.drjcoding.plow.ir.type.IRType
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.CannotInvokeNonFunctionTypeError
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.MismatchedNumberOfArgumentsError
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.MismatchedTypesError
@@ -19,14 +20,15 @@ data class FunctionCallASTNode(
         astManagers: ASTManagers,
         irManagers: IRManagers,
         parentScope: Scope,
-        localNameResolver: LocalNameResolver
+        localNameResolver: LocalNameResolver,
+        expectedReturnType: IRType
     ): Pair<IRCodeBlock, SimpleIRValue> {
-        val argsIR = arguments.map { it.toCodeBlockWithResult(astManagers, irManagers, parentScope, localNameResolver) }
+        val argsIR = arguments.map { it.toCodeBlockWithResult(astManagers, irManagers, parentScope, localNameResolver,) }
         val (functionCB, functionIRValue) = function.toCodeBlockWithResult(
             astManagers,
             irManagers,
             parentScope,
-            localNameResolver
+            localNameResolver,
         )
 
         val functionType = functionIRValue.type

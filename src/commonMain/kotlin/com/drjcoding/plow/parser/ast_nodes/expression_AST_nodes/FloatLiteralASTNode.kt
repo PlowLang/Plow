@@ -4,6 +4,7 @@ import com.drjcoding.plow.ir.IRManagers
 import com.drjcoding.plow.ir.function.code_block.IRCodeBlock
 import com.drjcoding.plow.ir.function.code_block.LocalNameResolver
 import com.drjcoding.plow.ir.function.code_block.SimpleIRValue
+import com.drjcoding.plow.ir.type.IRType
 import com.drjcoding.plow.issues.PlowUnimplementedFeatureError
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.project.ast.managers.ASTManagers
@@ -18,7 +19,8 @@ data class FloatLiteralASTNode(
         astManagers: ASTManagers,
         irManagers: IRManagers,
         parentScope: Scope,
-        localNameResolver: LocalNameResolver
+        localNameResolver: LocalNameResolver,
+        expectedReturnType: IRType
     ): Pair<IRCodeBlock, SimpleIRValue> {
         throw PlowUnimplementedFeatureError(underlyingCSTNode)
     }

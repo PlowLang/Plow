@@ -5,6 +5,7 @@ import com.drjcoding.plow.ir.function.code_block.IRCodeBlock
 import com.drjcoding.plow.ir.function.code_block.IntLiteralIRValue
 import com.drjcoding.plow.ir.function.code_block.LocalNameResolver
 import com.drjcoding.plow.ir.function.code_block.SimpleIRValue
+import com.drjcoding.plow.ir.type.IRType
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.InvalidIntLiteralError
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.project.ast.managers.ASTManagers
@@ -20,7 +21,8 @@ data class IntLiteralASTNode(
         astManagers: ASTManagers,
         irManagers: IRManagers,
         parentScope: Scope,
-        localNameResolver: LocalNameResolver
+        localNameResolver: LocalNameResolver,
+        expectedReturnType: IRType
     ): Pair<IRCodeBlock, SimpleIRValue> {
         val int = literal.toUnderlyingString().toIntOrNull() ?: throw InvalidIntLiteralError(this)
         return IRCodeBlock() to IntLiteralIRValue(int)

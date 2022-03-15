@@ -3,6 +3,7 @@ package com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes
 import com.drjcoding.plow.ir.IRManagers
 import com.drjcoding.plow.ir.function.code_block.IRCodeBlock
 import com.drjcoding.plow.ir.function.code_block.LocalNameResolver
+import com.drjcoding.plow.ir.type.IRType
 import com.drjcoding.plow.parser.ast_nodes.ASTNode
 import com.drjcoding.plow.parser.ast_nodes.StatementASTNode
 import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.BaseVariableASTNode
@@ -19,14 +20,15 @@ data class LocalVariableDeclarationASTNode(
         astManagers: ASTManagers,
         irManagers: IRManagers,
         parentScope: Scope,
-        localNameResolver: LocalNameResolver
+        localNameResolver: LocalNameResolver,
+        expectedReturnType: IRType
     ): IRCodeBlock {
         val type = underlyingVariable.getIRType(astManagers, irManagers, parentScope).unwrapThrowingErrors()
         val (valueCB, valueIR) = underlyingVariable.value.toCodeBlockWithResult(
             astManagers,
             irManagers,
             parentScope,
-            localNameResolver
+            localNameResolver,
         )
 
         if (type != valueIR.type) {

@@ -2,6 +2,7 @@ package com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes
 
 import com.drjcoding.plow.ir.IRManagers
 import com.drjcoding.plow.ir.function.code_block.*
+import com.drjcoding.plow.ir.type.IRType
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.MismatchedTypesError
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.project.ast.managers.ASTManagers
@@ -16,10 +17,11 @@ data class AssignmentExpressionASTNode(
         astManagers: ASTManagers,
         irManagers: IRManagers,
         parentScope: Scope,
-        localNameResolver: LocalNameResolver
+        localNameResolver: LocalNameResolver,
+        expectedReturnType: IRType
     ): Pair<IRCodeBlock, SimpleIRValue> {
         val toAssignTo = assignTo.toIRAssignable()
-        val (valueCB, irValue) = value.toCodeBlockWithResult(astManagers, irManagers, parentScope, localNameResolver)
+        val (valueCB, irValue) = value.toCodeBlockWithResult(astManagers, irManagers, parentScope, localNameResolver, expectedReturnType)
 
         if (!irValue.type.isSubtypeOf(toAssignTo.type)) {
             throw MismatchedTypesError(toAssignTo.type, irValue.type, value)

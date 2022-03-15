@@ -2,9 +2,13 @@ package com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes
 
 import com.drjcoding.plow.ir.IRManagers
 import com.drjcoding.plow.ir.function.code_block.*
+import com.drjcoding.plow.ir.type.IRType
+import com.drjcoding.plow.ir.type.UnitIRType
+import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.IncorrectReturnTypeError
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.project.ast.managers.ASTManagers
 import com.drjcoding.plow.project.ast.managers.Scope
+import kotlin.math.exp
 
 data class ReturnExpressionASTNode(
     val expression: ExpressionASTNode?,
@@ -14,23 +18,34 @@ data class ReturnExpressionASTNode(
         astManagers: ASTManagers,
         irManagers: IRManagers,
         parentScope: Scope,
-        localNameResolver: LocalNameResolver
-    ): Pair<IRCodeBlock, SimpleIRValue> =
-        if (expression == null) {
+        localNameResolver: LocalNameResolver,
+        expectedReturnType: IRType
+    ): Pair<IRCodeBlock, SimpleIRValue> {
+        val returnType: IRType
+        val returnCodeBlock = if (expression == null) {
+            returnType = UnitIRType
             IRCodeBlock(
                 IRStatement.Return(UnitIRValue)
-            ) to UnitIRValue
+            )
         } else {
             val (valueCB, irValue) = expression.toCodeBlockWithResult(
                 astManagers,
                 irManagers,
                 parentScope,
-                localNameResolver
+                localNameResolver,
+                expectedReturnType
             )
+            returnType = irValue.type
             val myCb = valueCB + IRCodeBlock(
                 IRStatement.Return(irValue)
             )
-            myCb to UnitIRValue
+            myCb
         }
 
+        if (!returnType.isSubtypeOf(expectedReturnType)) {
+            throw IncorrectReturnTypeError(this, expectedReturnType, returnType)
+        }
+
+        return returnCodeBlock to UnitIRValue
+    }
 }

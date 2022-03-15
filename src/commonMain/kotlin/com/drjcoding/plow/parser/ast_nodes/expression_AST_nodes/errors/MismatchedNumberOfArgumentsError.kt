@@ -13,9 +13,9 @@ class MismatchedNumberOfArgumentsError(
     "mismatched number of arguments",
     PlowIssueInfo(
         functionCall.underlyingCSTNode.range.toPlowIssueTextRange(),
-        "Expected ${functionType.argumentTypes.size} argument(s) but ${functionCall.arguments.size} were provided."
+        "Expected `${functionType.argumentTypes.size}` argument(s) but `${functionCall.arguments.size}` were provided."
     ),
     listOf(
-        PlowIssueInfo(null, "The type of the function is $functionType.")
+        PlowIssueInfo(null, "The type of the function is `$functionType`.")
     )
 )

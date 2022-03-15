@@ -2,6 +2,7 @@ package com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes
 
 import com.drjcoding.plow.ir.IRManagers
 import com.drjcoding.plow.ir.function.code_block.*
+import com.drjcoding.plow.ir.type.IRType
 import com.drjcoding.plow.ir.type.StandardTypes
 import com.drjcoding.plow.parser.ast_nodes.CodeBlockASTNode
 import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.MismatchedTypesError
@@ -19,13 +20,14 @@ data class IfExpressionASTNode(
         astManagers: ASTManagers,
         irManagers: IRManagers,
         parentScope: Scope,
-        localNameResolver: LocalNameResolver
+        localNameResolver: LocalNameResolver,
+        expectedReturnType: IRType
     ): Pair<IRCodeBlock, SimpleIRValue> {
         val (conditionCB, conditionValue) = condition.toCodeBlockWithResult(
             astManagers,
             irManagers,
             parentScope,
-            localNameResolver
+            localNameResolver,
         )
         if (conditionValue.type != StandardTypes.BOOLEAN_IR_TYPE) {
             throw MismatchedTypesError(StandardTypes.BOOLEAN_IR_TYPE, conditionValue.type, condition)
