@@ -1,10 +1,12 @@
 package com.drjcoding.plow.ir
 
+import com.drjcoding.plow.issues.PlowResult
+import com.drjcoding.plow.issues.runCatchingExceptionsAsPlowResult
 import com.drjcoding.plow.project.ast.ASTPlowProject
 import com.drjcoding.plow.project.ast.managers.ASTManagers
 import com.drjcoding.plow.project.ast.managers.Scope
 
-class IRProject(val astPlowProject: ASTPlowProject) {
+class IRProject private constructor(val astPlowProject: ASTPlowProject) {
     val astManagers = ASTManagers()
     val irManagers = IRManagers()
 
@@ -22,6 +24,12 @@ class IRProject(val astPlowProject: ASTPlowProject) {
     private fun registerIRTypesAndGlobals() {
         astManagers.types.forEach { it.registerIRType(astManagers, irManagers) }
         astManagers.globals.forEach { it.registerIRGlobal(astManagers, irManagers) }
+    }
+
+    companion object {
+        fun fromASTProject(astPlowProject: ASTPlowProject): PlowResult<IRProject> = runCatchingExceptionsAsPlowResult {
+            IRProject(astPlowProject)
+        }
     }
 
     init {
