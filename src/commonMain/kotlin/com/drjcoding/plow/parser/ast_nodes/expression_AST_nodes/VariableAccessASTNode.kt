@@ -3,8 +3,8 @@ package com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes
 import com.drjcoding.plow.ir.IRManagers
 import com.drjcoding.plow.ir.function.code_block.GlobalIRValue
 import com.drjcoding.plow.ir.function.code_block.IRCodeBlock
+import com.drjcoding.plow.ir.function.code_block.IRValue
 import com.drjcoding.plow.ir.function.code_block.LocalNameResolver
-import com.drjcoding.plow.ir.function.code_block.SimpleIRValue
 import com.drjcoding.plow.ir.type.IRType
 import com.drjcoding.plow.parser.ast_nodes.QualifiedIdentifierASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
@@ -24,7 +24,7 @@ data class VariableAccessASTNode(
         parentScope: Scope,
         localNameResolver: LocalNameResolver,
         expectedReturnType: IRType
-    ): Pair<IRCodeBlock, SimpleIRValue> {
+    ): Pair<IRCodeBlock, IRValue> {
         if (name.namespaces.isEmpty()) {
             val lookupLocal = localNameResolver.resolveName(name.name)
             if (lookupLocal != null) {

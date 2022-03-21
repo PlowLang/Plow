@@ -22,7 +22,7 @@ data class FunctionCallASTNode(
         parentScope: Scope,
         localNameResolver: LocalNameResolver,
         expectedReturnType: IRType
-    ): Pair<IRCodeBlock, SimpleIRValue> {
+    ): Pair<IRCodeBlock, IRValue> {
         val argsIR = arguments.map {
             it.toCodeBlockWithResult(
                 astManagers,
@@ -50,7 +50,7 @@ data class FunctionCallASTNode(
         }
 
         var myCB = IRCodeBlock()
-        val argValues = mutableListOf<SimpleIRValue>()
+        val argValues = mutableListOf<IRValue>()
         for ((index, ir) in argsIR.withIndex()) {
             val (argCB, argIR) = ir
 
@@ -67,9 +67,7 @@ data class FunctionCallASTNode(
         myCB += functionCB
 
         val resultVar = myCB.createNewLocalVariable((functionIRValue.type as FunctionIRType).outputType)
-        val resultValue = FunctionCallIRValue(functionIRValue, argValues)
-
-        myCB += IRCodeBlock(IRStatement.Assignment(IRAssignable.LocalVariable(resultVar), resultValue))
+        myCB += IRStatement.FunctionCall(IRAssignable.LocalVariable(resultVar), functionIRValue, argValues)
 
         return myCB to LocalVariableIRValue(resultVar)
     }

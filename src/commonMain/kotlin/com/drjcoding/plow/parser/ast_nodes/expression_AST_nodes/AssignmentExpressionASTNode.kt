@@ -19,9 +19,15 @@ data class AssignmentExpressionASTNode(
         parentScope: Scope,
         localNameResolver: LocalNameResolver,
         expectedReturnType: IRType
-    ): Pair<IRCodeBlock, SimpleIRValue> {
+    ): Pair<IRCodeBlock, IRValue> {
         val toAssignTo = assignTo.toIRAssignable()
-        val (valueCB, irValue) = value.toCodeBlockWithResult(astManagers, irManagers, parentScope, localNameResolver, expectedReturnType)
+        val (valueCB, irValue) = value.toCodeBlockWithResult(
+            astManagers,
+            irManagers,
+            parentScope,
+            localNameResolver,
+            expectedReturnType
+        )
 
         if (!irValue.type.isSubtypeOf(toAssignTo.type)) {
             throw MismatchedTypesError(toAssignTo.type, irValue.type, value)

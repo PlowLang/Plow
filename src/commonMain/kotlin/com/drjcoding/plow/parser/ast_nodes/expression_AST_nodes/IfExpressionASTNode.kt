@@ -22,7 +22,7 @@ data class IfExpressionASTNode(
         parentScope: Scope,
         localNameResolver: LocalNameResolver,
         expectedReturnType: IRType
-    ): Pair<IRCodeBlock, SimpleIRValue> {
+    ): Pair<IRCodeBlock, IRValue> {
         val (conditionCB, conditionValue) = condition.toCodeBlockWithResult(
             astManagers,
             irManagers,

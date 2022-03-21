@@ -8,7 +8,6 @@ import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.Incorrect
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.project.ast.managers.ASTManagers
 import com.drjcoding.plow.project.ast.managers.Scope
-import kotlin.math.exp
 
 data class ReturnExpressionASTNode(
     val expression: ExpressionASTNode?,
@@ -20,7 +19,7 @@ data class ReturnExpressionASTNode(
         parentScope: Scope,
         localNameResolver: LocalNameResolver,
         expectedReturnType: IRType
-    ): Pair<IRCodeBlock, SimpleIRValue> {
+    ): Pair<IRCodeBlock, IRValue> {
         val returnType: IRType
         val returnCodeBlock = if (expression == null) {
             returnType = UnitIRType
