@@ -19,7 +19,7 @@ class IRFunctionImplementation(
         mangle(scope, name),
         returnType.toLLVM(),
         arguments.map { it.type.toLLVM() },
-        implementation.toLLVMFunctionBody(arguments)
+        implementation.toLLVMFunctionBody(arguments, returnType)
     )
 
 }

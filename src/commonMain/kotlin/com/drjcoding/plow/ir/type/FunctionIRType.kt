@@ -4,14 +4,14 @@ import com.drjcoding.plow.llvm.code_block.value.LLVMFunctionType
 
 data class FunctionIRType(
     val argumentTypes: List<IRType>,
-    val outputType: IRType
+    val returnType: IRType
 ) : IRType {
     override fun isSubtypeOf(other: IRType) = other == this
 
-    override fun toString() = argumentTypes.joinToString(prefix = "(", postfix = ")") + " -> " + outputType
+    override fun toString() = argumentTypes.joinToString(prefix = "(", postfix = ")") + " -> " + returnType
 
     override fun toLLVM() = LLVMFunctionType(
         argumentTypes.map { it.toLLVM() },
-        outputType.toLLVM()
+        returnType.toLLVM()
     )
 }

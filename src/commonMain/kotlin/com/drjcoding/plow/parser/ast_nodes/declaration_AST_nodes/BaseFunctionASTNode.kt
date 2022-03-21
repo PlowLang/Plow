@@ -57,7 +57,8 @@ data class BaseFunctionASTNode(
             localNameResolver.addName(it.name, LocalVariableIRValue(localVar), it)
         }
 
-        val implementationCodeBlock = body.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver)
+        val returnType = (functionType.unwrap() as FunctionIRType).returnType
+        val implementationCodeBlock = body.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver, returnType)
         if (implementationCodeBlock is PlowResult.Error) return implementationCodeBlock.changeType()
         myCB += implementationCodeBlock.unwrap()
 
