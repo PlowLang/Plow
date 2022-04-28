@@ -25,8 +25,6 @@ data class CodeBlockASTNode(
         runCatchingExceptionsAsPlowResult {
             localNameResolver.newScope()
 
-            statements.forEach(::println)
-            println("--------------------------------------------------------------------------------")
             val cb = statements
                 .map { it.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver, expectedReturnType) }
                 .fold(IRCodeBlock(), IRCodeBlock::plus)

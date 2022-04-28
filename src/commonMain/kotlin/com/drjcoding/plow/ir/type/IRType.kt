@@ -15,5 +15,5 @@ object StandardTypes {
 
     // TODO this is hacky
     val INT_IR_TYPE = ExternIRType(STD_SCOPE, "Int".toSourceString(), "i24".toSourceString())
-    val BOOLEAN_IR_TYPE = NamedIRType(STD_SCOPE, "Bool".toSourceString())
+    val BOOLEAN_IR_TYPE = ExternIRType(STD_SCOPE, "Bool".toSourceString(), "i1".toSourceString())
 }

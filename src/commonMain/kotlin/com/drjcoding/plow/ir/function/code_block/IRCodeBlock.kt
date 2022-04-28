@@ -68,7 +68,6 @@ class IRCodeBlock(
 
         // now we can iterate through the statements
         for (statement in statements) {
-            println(statement)
             when (statement) {
                 is IRStatement.Assignment -> {
                     val assignTo = localVarsToID[(statement.to as IRAssignable.LocalVariable).variable]!!
@@ -127,7 +126,6 @@ class IRCodeBlock(
                 }
             }
         }
-        println("------------------------------------------------------------------------")
 
         if (returnType == UnitIRType) currentSectionStatements += LLVMRet(null)
         sections.add(LLVMSection(currentSectionID, currentSectionStatements))
