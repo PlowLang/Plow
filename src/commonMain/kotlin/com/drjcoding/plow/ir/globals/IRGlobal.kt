@@ -7,5 +7,6 @@ import com.drjcoding.plow.source_abstractions.SourceString
 data class IRGlobal(
     val scope: Scope,
     val name: SourceString,
-    val type: IRType
+    val type: IRType,
+    val noMangle: Boolean,
 )

@@ -10,8 +10,10 @@ interface IRType {
 }
 
 object StandardTypes {
-    val STD_SCOPE = Scope(listOf("std".toSourceString()))
+    // TODO change this to std
+    val STD_SCOPE = Scope(listOf("file".toSourceString()))
 
-    val INT_IR_TYPE = NamedIRType(STD_SCOPE, "Int".toSourceString())
+    // TODO this is hacky
+    val INT_IR_TYPE = ExternIRType(STD_SCOPE, "Int".toSourceString(), "i24".toSourceString())
     val BOOLEAN_IR_TYPE = NamedIRType(STD_SCOPE, "Bool".toSourceString())
 }

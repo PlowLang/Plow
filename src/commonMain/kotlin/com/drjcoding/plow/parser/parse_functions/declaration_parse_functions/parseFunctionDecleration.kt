@@ -2,6 +2,7 @@ package com.drjcoding.plow.parser.parse_functions.declaration_parse_functions
 
 import com.drjcoding.plow.lexer.LexTokenStream
 import com.drjcoding.plow.lexer.LexTokenType
+import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.FunctionBodyCSTNode
 import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.FunctionDeclarationArgCSTNode
 import com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes.FunctionDeclarationCSTNode
 import com.drjcoding.plow.parser.parse_functions.errors.ExpectedCodeBlockError
@@ -30,7 +31,12 @@ fun parseFunctionDeclaration(ts: LexTokenStream): FunctionDeclarationCSTNode? {
     val rParen = ts.safePopNSTokenCSTNode().expectType(LexTokenType.R_PAREN)
     val returnType = parseTypeAnnotation(ts)
     val body = if (ts.peekNSIsType(LexTokenType.L_CURLY)) {
-        parseCodeBlock(ts)
+        FunctionBodyCSTNode.BlockBody(parseCodeBlock(ts))
+    } else if (ts.peekNSIsType(LexTokenType.EXTERN)) {
+        val externKw = ts.popNSTokenCSTNode().assertType(LexTokenType.EXTERN)
+        val externName = ts.safePopNSTokenCSTNode().expectType(LexTokenType.STRING_LITERAL)
+
+        FunctionBodyCSTNode.ExternBody(externKw, externName)
     } else {
         throw ExpectedCodeBlockError((returnType ?: rParen).range)
     }

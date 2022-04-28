@@ -5,7 +5,7 @@ import com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes.errors.Duplicate
 import com.drjcoding.plow.source_abstractions.SourceString
 
 class LocalNameResolver {
-    private val localNames: MutableList<MutableMap<SourceString, Pair<IRValue, ASTNode>>> = mutableListOf()
+    private val localNames: MutableList<MutableMap<SourceString, Pair<IRLocalVariable, ASTNode>>> = mutableListOf()
 
     fun newScope() {
         localNames.add(mutableMapOf())
@@ -15,14 +15,14 @@ class LocalNameResolver {
         localNames.removeLast()
     }
 
-    fun addName(name: SourceString, value: IRValue, astNode: ASTNode) {
+    fun addName(name: SourceString, value: IRLocalVariable, astNode: ASTNode) {
         val last = localNames.last()
         if (last.containsKey(name)) throw DuplicateNameInScopeError(last[name]!!.second, astNode)
 
         last[name] = value to astNode
     }
 
-    fun resolveName(name: SourceString): IRValue? {
+    fun resolveName(name: SourceString): IRLocalVariable? {
         for (scope in localNames.reversed()) {
             val (value, _) = scope[name] ?: continue
             return value

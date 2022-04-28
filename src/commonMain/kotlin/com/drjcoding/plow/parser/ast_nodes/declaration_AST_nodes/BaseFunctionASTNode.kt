@@ -1,11 +1,11 @@
 package com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes
 
 import com.drjcoding.plow.ir.IRManagers
+import com.drjcoding.plow.ir.function.IRFunctionBody
 import com.drjcoding.plow.ir.function.IRFunctionImplementation
 import com.drjcoding.plow.ir.function.code_block.IRCodeBlock
 import com.drjcoding.plow.ir.function.code_block.IRLocalVariable
 import com.drjcoding.plow.ir.function.code_block.LocalNameResolver
-import com.drjcoding.plow.ir.function.code_block.LocalVariableIRValue
 import com.drjcoding.plow.ir.type.FunctionIRType
 import com.drjcoding.plow.ir.type.IRType
 import com.drjcoding.plow.ir.type.UnitIRType
@@ -19,14 +19,18 @@ import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.project.ast.managers.ASTManagers
 import com.drjcoding.plow.project.ast.managers.Scope
 import com.drjcoding.plow.source_abstractions.SourceString
+import com.drjcoding.plow.source_abstractions.toUnderlyingString
 
 data class BaseFunctionASTNode(
     val name: SourceString,
     val args: List<BaseFunctionArgASTNode>,
     val returnType: TypeASTNode?,
-    val body: CodeBlockASTNode,
+    val body: BaseFunctionBody,
     override val underlyingCSTNode: CSTNode
 ) : ASTNode() {
+    val noMangle: Boolean
+            = body is BaseFunctionBody.ExternBody || name.toUnderlyingString() == "main" //TODO hacky
+
     fun getIRType(astManagers: ASTManagers, irManagers: IRManagers, scope: Scope): PlowResult<IRType> {
         val argTypes = args.map { it.getIRType(astManagers, irManagers, scope) }.flattenToPlowResult()
         val returnType = returnType?.getIRType(astManagers, irManagers, scope) ?: UnitIRType.toPlowResult()
@@ -52,13 +56,28 @@ data class BaseFunctionASTNode(
 
         val argLocalVariables: MutableList<IRLocalVariable> = mutableListOf()
         args.forEach {
-            val localVar = myCB.createNewLocalVariable(it.getIRType(astManagers, irManagers, parentScope).unwrap())
+            val localVar = myCB.createNewLocalVariable(it.getIRType(astManagers, irManagers, parentScope).unwrap(), true)
             argLocalVariables.add(localVar)
-            localNameResolver.addName(it.name, LocalVariableIRValue(localVar), it)
+            localNameResolver.addName(it.name, localVar, it)
         }
 
         val returnType = (functionType.unwrap() as FunctionIRType).returnType
-        val implementationCodeBlock = body.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver, returnType)
+
+        if (body is BaseFunctionBody.ExternBody) {
+            return IRFunctionImplementation(
+                null,
+                body.llvm,
+                (functionType.unwrap() as FunctionIRType).returnType,
+                argLocalVariables, //TODO sloppy
+                IRFunctionBody.ExternBody,
+                noMangle
+            ).toPlowResult()
+        }
+
+        val body = (body as BaseFunctionBody.BlockBody).body
+
+        val implementationCodeBlock =
+            body.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver, returnType)
         if (implementationCodeBlock is PlowResult.Error) return implementationCodeBlock.changeType()
         myCB += implementationCodeBlock.unwrap()
 
@@ -67,9 +86,10 @@ data class BaseFunctionASTNode(
         return IRFunctionImplementation(
             parentScope,
             name,
-            functionType.unwrap(),
+            (functionType.unwrap() as FunctionIRType).returnType,
             argLocalVariables,
-            myCB
+            IRFunctionBody.BlockBody(myCB),
+            noMangle
         ).toPlowResult()
     }
 }
@@ -81,4 +101,9 @@ data class BaseFunctionArgASTNode(
 ) : ASTNode() {
     fun getIRType(astManagers: ASTManagers, irManagers: IRManagers, scope: Scope): PlowResult<IRType> =
         type.getIRType(astManagers, irManagers, scope)
+}
+
+sealed class BaseFunctionBody {
+    class BlockBody(val body: CodeBlockASTNode) : BaseFunctionBody()
+    class ExternBody(val llvm: SourceString) : BaseFunctionBody()
 }

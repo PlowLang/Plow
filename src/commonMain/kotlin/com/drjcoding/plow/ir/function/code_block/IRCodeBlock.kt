@@ -6,6 +6,7 @@ import com.drjcoding.plow.llvm.code_block.LLVMFunctionBody
 import com.drjcoding.plow.llvm.code_block.LLVMLocalID
 import com.drjcoding.plow.llvm.code_block.LLVMSection
 import com.drjcoding.plow.llvm.code_block.statement.*
+import com.drjcoding.plow.llvm.code_block.value.LLVMStackLocalValue
 
 class IRCodeBlock(
     private val statements: List<IRStatement>
@@ -24,8 +25,8 @@ class IRCodeBlock(
         it.variables = this.variables
     }
 
-    fun createNewLocalVariable(type: IRType): IRLocalVariable {
-        val variable = IRLocalVariable(type)
+    fun createNewLocalVariable(type: IRType, isArg: Boolean): IRLocalVariable {
+        val variable = IRLocalVariable(type, isArg)
         variables.add(variable)
         return variable
     }
@@ -38,7 +39,7 @@ class IRCodeBlock(
 
         val localVarsToID: MutableMap<IRLocalVariable, LLVMLocalID> = mutableMapOf()
         arguments.forEach {
-            // arguments are automatically associated tih %0, %1, etc. They do not need to be initialized
+            // arguments are automatically associated with %0, %1, etc. They do not need to be initialized
             localVarsToID[it] = newID()
         }
 
@@ -67,23 +68,29 @@ class IRCodeBlock(
 
         // now we can iterate through the statements
         for (statement in statements) {
+            println(statement)
             when (statement) {
                 is IRStatement.Assignment -> {
                     val assignTo = localVarsToID[(statement.to as IRAssignable.LocalVariable).variable]!!
+                    val (valueBlock, value) = statement.value.toLLVM(localVarsToID, ::newID)
+                    currentSectionStatements += valueBlock
                     currentSectionStatements += LLVMAssignment(
                         assignTo,
-                        statement.value.toLLVM(localVarsToID)!! // TODO check for void. This can crash
+                        value!! // TODO check for void. This can crash
                     )
                 }
                 is IRStatement.Jump -> {
                     if (statement.condition != null) {
                         val specifiedLabel = labelIDs[statement.label]!!
                         val otherLabel = newID()
-                        val condition =
-                            statement.condition.toLLVM(localVarsToID)!! // we already checked that this is a boolean
+                        val (conditionBlock, condition) = statement.condition.toLLVM(
+                            localVarsToID,
+                            ::newID
+                        ) // we already checked that this is a boolean
                         val ifTrue = if (statement.inverted) otherLabel else specifiedLabel
                         val ifFalse = if (statement.inverted) specifiedLabel else otherLabel
-                        currentSectionStatements += LLVMConditionalJump(condition, ifTrue, ifFalse)
+                        currentSectionStatements += conditionBlock
+                        currentSectionStatements += LLVMConditionalJump(condition!!, ifTrue, ifFalse)
                         newSection(otherLabel)
                     } else {
                         currentSectionStatements += LLVMUnconditionalJump(labelIDs[statement.label]!!)
@@ -93,21 +100,38 @@ class IRCodeBlock(
                     currentSectionStatements += LLVMUnconditionalJump(labelIDs[statement]!!)
                     newSection(statement)
                 }
-                is IRStatement.Return -> currentSectionStatements += LLVMRet(statement.value.toLLVM(localVarsToID))
+                is IRStatement.Return -> {
+                    val (valueBlock, value) = statement.value.toLLVM(localVarsToID, ::newID)
+                    currentSectionStatements += valueBlock
+                    currentSectionStatements += LLVMRet(value!!)
+                }
                 is IRStatement.FunctionCall -> {
-                    val assignTo = localVarsToID[(statement.to as IRAssignable.LocalVariable).variable]!!
+                    val functionCall = localVarsToID[(statement.to as IRAssignable.LocalVariable).variable]!!
+
+                    val (functionBlock, functionValue) = statement.function.toLLVM(localVarsToID, ::newID)
+                    val argValues = statement.arguments.map { it.toLLVM(localVarsToID, ::newID) }
+
+                    val intermediate = newID()
+
+                    currentSectionStatements += functionBlock
+                    argValues.forEach { currentSectionStatements += it.first }
                     currentSectionStatements += LLVMFunctionCall(
-                        assignTo,
-                        statement.function.toLLVM(localVarsToID)!!,
-                        statement.arguments.map { it.toLLVM(localVarsToID)!! }
+                        intermediate,
+                        functionValue!!,
+                        argValues.map { it.second!! }
+                    )
+                    currentSectionStatements += LLVMAssignment(
+                        functionCall,
+                        LLVMStackLocalValue(intermediate, statement.to.type.toLLVM())
                     )
                 }
             }
         }
+        println("------------------------------------------------------------------------")
 
         if (returnType == UnitIRType) currentSectionStatements += LLVMRet(null)
         sections.add(LLVMSection(currentSectionID, currentSectionStatements))
 
-        return LLVMFunctionBody(sections)
+        return LLVMFunctionBody.BlockBody(sections)
     }
 }

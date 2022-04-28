@@ -143,7 +143,7 @@ private fun getNextToken(cs: CharacterStream) =
         cs.safePeek(2) in LONG_PUNCTUATION_TEXT.keys -> lexLongPunctuation(cs)
         cs.peek() in PUNCTUATION_TEXT.keys -> lexPunctuation(cs)
         cs.peek().isNumberStartChar -> lexNumber(cs)
-        // TODO strings
+        cs.peek() == '"' -> lexString(cs)
         else -> invalidCharacter(cs)
     }
 
@@ -239,6 +239,18 @@ private fun lexIdentifier(cs: CharacterStream): LexToken {
 
     val tokenType = KEYWORD_TEXT[text] ?: LexTokenType.IDENTIFIER
     return LexToken(tokenType, text, cs.rangeToCurrent(loc))
+}
+
+private fun lexString(cs: CharacterStream): LexToken {
+    val loc = cs.sourceFileLocation
+    var text = cs.pop().toString()
+    while (!cs.isEOF && cs.peek() != '"') text += cs.pop()
+    if (cs.isEOF) {
+        throw UnterminatedStringError(SourceFileRange(loc, loc))
+    } else {
+        text += cs.pop()
+        return LexToken(LexTokenType.STRING_LITERAL, text, cs.rangeToCurrent(loc))
+    }
 }
 
 private fun lexWhitespace(cs: CharacterStream): LexToken {

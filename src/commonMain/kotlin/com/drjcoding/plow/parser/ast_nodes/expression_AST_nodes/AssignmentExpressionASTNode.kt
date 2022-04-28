@@ -20,7 +20,7 @@ data class AssignmentExpressionASTNode(
         localNameResolver: LocalNameResolver,
         expectedReturnType: IRType
     ): Pair<IRCodeBlock, IRValue> {
-        val toAssignTo = assignTo.toIRAssignable()
+        val toAssignTo = assignTo.toIRAssignable(astManagers, irManagers, localNameResolver)
         val (valueCB, irValue) = value.toCodeBlockWithResult(
             astManagers,
             irManagers,

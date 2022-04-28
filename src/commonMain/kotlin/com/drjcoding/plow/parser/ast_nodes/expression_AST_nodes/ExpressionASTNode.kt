@@ -16,7 +16,11 @@ abstract class ExpressionASTNode : ASTNode(), StatementASTNode {
     open val isAssignableExpression: Boolean
         get() = false
 
-    open fun toIRAssignable(): IRAssignable {
+    open fun toIRAssignable(
+        astManagers: ASTManagers,
+        irManagers: IRManagers,
+        localNameResolver: LocalNameResolver,
+    ): IRAssignable {
         throw CannotAssignToThisExpression(this)
     }
 

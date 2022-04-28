@@ -1,10 +1,7 @@
 package com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes
 
 import com.drjcoding.plow.ir.IRManagers
-import com.drjcoding.plow.ir.function.code_block.GlobalIRValue
-import com.drjcoding.plow.ir.function.code_block.IRCodeBlock
-import com.drjcoding.plow.ir.function.code_block.IRValue
-import com.drjcoding.plow.ir.function.code_block.LocalNameResolver
+import com.drjcoding.plow.ir.function.code_block.*
 import com.drjcoding.plow.ir.type.IRType
 import com.drjcoding.plow.parser.ast_nodes.QualifiedIdentifierASTNode
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
@@ -18,6 +15,23 @@ data class VariableAccessASTNode(
     override val isAssignableExpression: Boolean
         get() = true
 
+    override fun toIRAssignable(
+        astManagers: ASTManagers,
+        irManagers: IRManagers,
+        localNameResolver: LocalNameResolver
+    ): IRAssignable {
+        return if (name.namespaces.isEmpty()) {
+            val local = localNameResolver.resolveName(name.name) ?: return super.toIRAssignable(
+                astManagers,
+                irManagers,
+                localNameResolver
+            )
+            IRAssignable.LocalVariable(local)
+        } else {
+            super.toIRAssignable(astManagers, irManagers, localNameResolver)
+        }
+    }
+
     override fun toCodeBlockWithResult(
         astManagers: ASTManagers,
         irManagers: IRManagers,
@@ -28,7 +42,7 @@ data class VariableAccessASTNode(
         if (name.namespaces.isEmpty()) {
             val lookupLocal = localNameResolver.resolveName(name.name)
             if (lookupLocal != null) {
-                return IRCodeBlock() to lookupLocal
+                return IRCodeBlock() to LocalVariableIRValue(lookupLocal)
             }
         }
 

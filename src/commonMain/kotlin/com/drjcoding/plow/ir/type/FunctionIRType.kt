@@ -1,6 +1,6 @@
 package com.drjcoding.plow.ir.type
 
-import com.drjcoding.plow.llvm.code_block.value.LLVMFunctionType
+import com.drjcoding.plow.llvm.types.LLVMFunctionType
 
 data class FunctionIRType(
     val argumentTypes: List<IRType>,

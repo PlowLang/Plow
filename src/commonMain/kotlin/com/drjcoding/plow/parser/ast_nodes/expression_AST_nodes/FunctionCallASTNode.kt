@@ -66,7 +66,7 @@ data class FunctionCallASTNode(
 
         myCB += functionCB
 
-        val resultVar = myCB.createNewLocalVariable((functionIRValue.type as FunctionIRType).returnType)
+        val resultVar = myCB.createNewLocalVariable((functionIRValue.type as FunctionIRType).returnType, false)
         myCB += IRStatement.FunctionCall(IRAssignable.LocalVariable(resultVar), functionIRValue, argValues)
 
         return myCB to LocalVariableIRValue(resultVar)

@@ -35,12 +35,14 @@ data class IfExpressionASTNode(
         }
 
         // TODO make if an expression
-        val bodyCB = body.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver, expectedReturnType).unwrapThrowingErrors()
+        val bodyCB = body.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver, expectedReturnType)
+            .unwrapThrowingErrors()
         val elseCB =
-            elseBody?.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver, expectedReturnType)?.unwrapThrowingErrors()
+            elseBody?.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver, expectedReturnType)
+                ?.unwrapThrowingErrors()
 
-        val elseLabel = IRStatement.Label()
-        val endLabel = IRStatement.Label()
+        val elseLabel = IRStatement.Label
+        val endLabel = IRStatement.Label
 
         var myCB = conditionCB
         myCB += IRStatement.Jump(endLabel, conditionValue, true)

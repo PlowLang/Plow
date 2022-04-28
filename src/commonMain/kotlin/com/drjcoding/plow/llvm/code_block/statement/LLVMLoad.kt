@@ -1,13 +1,14 @@
 package com.drjcoding.plow.llvm.code_block.statement
 
 import com.drjcoding.plow.llvm.code_block.LLVMLocalID
-import com.drjcoding.plow.llvm.code_block.value.LLVMValue
 import com.drjcoding.plow.llvm.types.LLVMPointer
+import com.drjcoding.plow.llvm.types.LLVMType
 
-data class LLVMAssignment(
+data class LLVMLoad(
     val to: LLVMLocalID,
-    val value: LLVMValue
+    val from: LLVMLocalID,
+    val type: LLVMType
 ) : LLVMStatement {
     override fun toIRCode() =
-        "store ${value.type.toIRCode()} ${value.toIRCode()}, ${LLVMPointer(value.type).toIRCode()} %${to.toIRCode()}"
+        "%${to.toIRCode()} = load ${type.toIRCode()}, ${LLVMPointer(type).toIRCode()} %${from.toIRCode()}"
 }

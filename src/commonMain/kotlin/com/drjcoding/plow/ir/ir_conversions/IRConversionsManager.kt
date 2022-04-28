@@ -12,6 +12,8 @@ class DuplicateIRFunctionImplementation(
 class IRConversionsManager {
     private val functions: MutableMap<IRGlobal, IRFunctionImplementation> = mutableMapOf()
 
+    fun functionsIterator() = functions.values.iterator() as Iterator<IRFunctionImplementation>
+
     fun addIRFunction(irGlobal: IRGlobal, function: IRFunctionImplementation) {
         if (functions.containsKey(irGlobal)) throw DuplicateIRFunctionImplementation(
             irGlobal,

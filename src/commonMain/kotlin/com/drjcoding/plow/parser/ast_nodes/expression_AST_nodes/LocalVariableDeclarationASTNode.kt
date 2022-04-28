@@ -1,7 +1,9 @@
 package com.drjcoding.plow.parser.ast_nodes.expression_AST_nodes
 
 import com.drjcoding.plow.ir.IRManagers
+import com.drjcoding.plow.ir.function.code_block.IRAssignable
 import com.drjcoding.plow.ir.function.code_block.IRCodeBlock
+import com.drjcoding.plow.ir.function.code_block.IRStatement
 import com.drjcoding.plow.ir.function.code_block.LocalNameResolver
 import com.drjcoding.plow.ir.type.IRType
 import com.drjcoding.plow.parser.ast_nodes.ASTNode
@@ -36,8 +38,14 @@ data class LocalVariableDeclarationASTNode(
             throw MismatchedTypesError(type, valueIR.type, underlyingVariable.value)
         }
 
-        localNameResolver.addName(underlyingVariable.name, valueIR, this)
+        var myCb = IRCodeBlock()
+        val localVar = myCb.createNewLocalVariable(type, false)
+        val assignable = IRAssignable.LocalVariable(localVar)
+        myCb += valueCB
+        myCb += IRStatement.Assignment(assignable, valueIR)
 
-        return valueCB
+        localNameResolver.addName(underlyingVariable.name, localVar, this)
+
+        return myCb
     }
 }

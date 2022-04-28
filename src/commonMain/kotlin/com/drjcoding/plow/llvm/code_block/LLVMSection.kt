@@ -6,6 +6,8 @@ class LLVMSection(
     val id: LLVMLocalID,
     val statements: List<LLVMStatement>
 ) {
-    fun toIRCode(): String =
-        "${id.toIRCode()}:\n" + statements.joinToString(separator = "\n") { it.toIRCode() }
+    fun toIRCode(): String {
+        statements.forEach(::println)
+        return "${id.toIRCode()}:\n" + statements.joinToString(separator = "\n") { it.toIRCode() }
+    }
 }

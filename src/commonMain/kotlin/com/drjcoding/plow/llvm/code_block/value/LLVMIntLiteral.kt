@@ -2,7 +2,7 @@ package com.drjcoding.plow.llvm.code_block.value
 
 import com.drjcoding.plow.llvm.types.LLVMType
 
-class LLVMIntLiteral(
+data class LLVMIntLiteral(
     val int: Int,
     override val type: LLVMType
 ) : LLVMValue {

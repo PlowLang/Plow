@@ -85,13 +85,17 @@ class DeclarationTests {
             "class Foo {".failsWith<UnexpectedTokenError>()
 
             "class Foo { }" makes {
-                ClassDeclarationCSTNode(t(0), t(1), t(2), listOf(), t(3))
+                UserClassDeclarationCSTNode(t(0), t(1), t(2), listOf(), t(3))
             }
 
             "class Foo { let a = b }" makes {
-                ClassDeclarationCSTNode(t(0), t(1), t(2), listOf(
+                UserClassDeclarationCSTNode(t(0), t(1), t(2), listOf(
                     VariableDeclarationCSTNode(t(3), t(4), null, t(5), v(6))
                 ), t(7))
+            }
+
+            "class Int extern \"i24\"" makes {
+                ExternClassDeclarationCSTNode(t(0), t(1), t(2), t(3))
             }
         }
     }

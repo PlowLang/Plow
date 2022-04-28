@@ -1,7 +1,9 @@
 package com.drjcoding.plow.ir
 
+import com.drjcoding.plow.ir.function.IRFunctionImplementation
 import com.drjcoding.plow.issues.PlowResult
 import com.drjcoding.plow.issues.runCatchingExceptionsAsPlowResult
+import com.drjcoding.plow.llvm.LLVMProject
 import com.drjcoding.plow.project.ast.ASTPlowProject
 import com.drjcoding.plow.project.ast.managers.ASTManagers
 import com.drjcoding.plow.project.ast.managers.Scope
@@ -41,5 +43,17 @@ class IRProject private constructor(val astPlowProject: ASTPlowProject) {
         findTypesAndGlobals()
         registerIRTypesAndGlobals()
         convertToIR()
+    }
+
+    fun toLLVM(): LLVMProject {
+        val llvmFunctions =
+            irManagers
+                .conversions
+                .functionsIterator()
+                .asSequence()
+                .map(IRFunctionImplementation::toLLVM)
+                .toList()
+
+        return LLVMProject(llvmFunctions)
     }
 }

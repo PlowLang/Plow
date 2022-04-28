@@ -12,12 +12,9 @@ class LLVMFunction(
     val codeBlock: LLVMFunctionBody
 ) {
     fun toIRCode(): String {
-        val argumentsIR = argumentTypes.joinToString(separator = ", ") { it.toIRCode().toUnderlyingString() }
-        val codeIR = codeBlock.toIRCode().replace("^".toRegex(), "    ")
-        return """
-            define @${returnType.toIRCode()} $name($argumentsIR) nounwind {
-            $codeIR
-            }
-        """.trimIndent()
+        val argumentsIR = argumentTypes.joinToString(separator = ", ", transform = LLVMType::toIRCode)
+        var (preCodeIR, postCodeIR) = codeBlock.toIRCode()
+        postCodeIR = postCodeIR.replace("(?m)^(?!\\s*[{}])".toRegex(), "    ")
+        return "$preCodeIR ${returnType.toIRCode()} @${name.toUnderlyingString()}($argumentsIR) nounwind $postCodeIR"
     }
 }

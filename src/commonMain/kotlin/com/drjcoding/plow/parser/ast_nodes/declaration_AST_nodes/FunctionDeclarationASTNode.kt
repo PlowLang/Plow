@@ -24,7 +24,7 @@ class FunctionDeclarationASTNode(
     override fun registerIRGlobal(astManagers: ASTManagers, irManagers: IRManagers) {
         val parentScope = astManagers.globals.parentScopeForGlobal(this)
         val type = underlyingFunction.getIRType(astManagers, irManagers, parentScope).unwrapThrowingErrors()
-        val irGlobal = IRGlobal(parentScope, underlyingFunction.name, type)
+        val irGlobal = IRGlobal(parentScope, underlyingFunction.name, type, underlyingFunction.noMangle)
         irManagers.globals.registerASTtoGlobalAssociation(this, irGlobal)
         irManagers.needingIRConversion.registerFunctionNeedingConversion(this)
     }

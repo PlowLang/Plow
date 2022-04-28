@@ -3,13 +3,12 @@ package com.drjcoding.plow.parser.cst_nodes.decleration_CST_nodes
 import com.drjcoding.plow.issues.PlowResult
 import com.drjcoding.plow.issues.toPlowResult
 import com.drjcoding.plow.parser.ast_nodes.FileChildASTNode
-import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.BaseFunctionASTNode
-import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.BaseFunctionArgASTNode
-import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.FunctionDeclarationASTNode
-import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.MethodDeclarationASTNode
+import com.drjcoding.plow.parser.ast_nodes.declaration_AST_nodes.*
 import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.parser.cst_nodes.CodeBlockCSTNode
 import com.drjcoding.plow.parser.cst_nodes.TokenCSTNode
+import com.drjcoding.plow.source_abstractions.toSourceString
+import com.drjcoding.plow.source_abstractions.toUnderlyingString
 
 /**
  * A function declaration. (ex `func foo(a: Int): Int { return a * 2 }`)
@@ -21,7 +20,7 @@ data class FunctionDeclarationCSTNode(
     val args: List<FunctionDeclarationArgCSTNode>,
     val rParen: TokenCSTNode,
     val returnType: TypeAnnotationCSTNode?,
-    val body: CodeBlockCSTNode,
+    val body: FunctionBodyCSTNode,
 ) : CSTNode(), DeclarationCSTNode {
     override val range = funcKw.range + body.range
 
@@ -58,4 +57,25 @@ data class FunctionDeclarationArgCSTNode(
         type.toAST(),
         this
     )
+}
+
+sealed class FunctionBodyCSTNode : CSTNode() {
+    abstract fun toAST(): BaseFunctionBody
+
+    class BlockBody(val body: CodeBlockCSTNode) : FunctionBodyCSTNode() {
+        override val range = body.range
+
+        override fun toAST(): BaseFunctionBody =
+            BaseFunctionBody.BlockBody(body.toAST())
+
+    }
+
+    class ExternBody(val externKw: TokenCSTNode, val externName: TokenCSTNode) : FunctionBodyCSTNode() {
+        override val range = externKw.range + externName.range
+
+        override fun toAST(): BaseFunctionBody =
+            BaseFunctionBody.ExternBody(externName.token.text.toUnderlyingString().let {
+                it.substring(1 until it.lastIndex)
+            }.toSourceString())
+    }
 }

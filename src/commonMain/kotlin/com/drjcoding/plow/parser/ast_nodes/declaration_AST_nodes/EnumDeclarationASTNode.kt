@@ -49,7 +49,7 @@ data class EnumCaseASTNode(
     override fun registerIRGlobal(astManagers: ASTManagers, irManagers: IRManagers) {
         val parentScope = astManagers.globals.parentScopeForGlobal(this)
         val parentEnumType = irManagers.types.getTypeForAstNode(parentEnum)
-        val irGlobal = IRGlobal(parentScope, name, parentEnumType)
+        val irGlobal = IRGlobal(parentScope, name, parentEnumType, false)
         irManagers.globals.registerASTtoGlobalAssociation(this, irGlobal)
     }
 }

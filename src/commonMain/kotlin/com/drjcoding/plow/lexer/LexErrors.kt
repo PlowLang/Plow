@@ -31,6 +31,13 @@ class UnterminatedBlockCommentError(
     },
 )
 
+class UnterminatedStringError(
+    unmatchedQuoteRange: SourceFileRange,
+) : PlowError(
+    "unterminated string",
+    PlowIssueInfo(unmatchedQuoteRange.toPlowIssueTextRange(), "This string was not closed."),
+)
+
 /**
  * [InvalidCharacterInNumberLiteralError] is used when an identifier character is appended without separation to the end
  * of a number literal.

@@ -23,7 +23,7 @@ data class VariableDeclarationASTNode(
     override fun registerIRGlobal(astManagers: ASTManagers, irManagers: IRManagers) {
         val parentScope = astManagers.globals.parentScopeForGlobal(this)
         val varType = underlyingVariable.getIRType(astManagers, irManagers, parentScope).unwrapThrowingErrors()
-        val irGlobal = IRGlobal(parentScope, underlyingVariable.name, varType)
+        val irGlobal = IRGlobal(parentScope, underlyingVariable.name, varType, false)
         irManagers.globals.registerASTtoGlobalAssociation(this, irGlobal)
     }
 }
