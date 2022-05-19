@@ -26,6 +26,7 @@ internal fun parseExpressionAtom(ts: LexTokenStream): ExpressionCSTNode? {
         LexTokenType.FLOAT_LITERAL -> parseFloatLiteral(ts)
         LexTokenType.RETURN -> parseReturnExpression(ts)
         LexTokenType.IF -> parseIfExpression(ts)
+        LexTokenType.WHILE -> parseWhileExpression(ts)
         else -> null
     }
 }

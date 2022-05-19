@@ -7,6 +7,10 @@ class LLVMSection(
     val statements: List<LLVMStatement>
 ) {
     fun toIRCode(): String {
-        return "${id.toIRCode()}:\n" + statements.joinToString(separator = "\n") { it.toIRCode() }
+        return if (statements.isEmpty()) {
+            ""
+        } else {
+            "${id.toIRCode()}:\n" + statements.joinToString(separator = "\n") { it.toIRCode() }
+        }
     }
 }

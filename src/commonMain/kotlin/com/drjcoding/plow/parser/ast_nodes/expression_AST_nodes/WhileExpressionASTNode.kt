@@ -10,10 +10,9 @@ import com.drjcoding.plow.parser.cst_nodes.CSTNode
 import com.drjcoding.plow.project.ast.managers.ASTManagers
 import com.drjcoding.plow.project.ast.managers.Scope
 
-data class IfExpressionASTNode(
+data class WhileExpressionASTNode(
     val condition: ExpressionASTNode,
     val body: CodeBlockASTNode,
-    val elseBody: CodeBlockASTNode?,
     override val underlyingCSTNode: CSTNode
 ) : ExpressionASTNode() {
     override fun toCodeBlockWithResult(
@@ -34,27 +33,19 @@ data class IfExpressionASTNode(
             throw MismatchedTypesError(StandardTypes.BOOLEAN_IR_TYPE, conditionValue.type, condition)
         }
 
-        // TODO make if an expression
         val bodyCB = body.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver, expectedReturnType)
             .unwrapThrowingErrors()
-        val elseCB =
-            elseBody?.toIRCodeBlock(astManagers, irManagers, parentScope, localNameResolver, expectedReturnType)
-                ?.unwrapThrowingErrors()
 
-        val elseLabel = IRStatement.Label()
+        val preConditionLabel = IRStatement.Label()
         val endLabel = IRStatement.Label()
 
-        var myCB = conditionCB
-        myCB += IRStatement.Jump(elseLabel, conditionValue, true)
+        var myCB = IRCodeBlock()
+        myCB += preConditionLabel
+        myCB += conditionCB
+        myCB += IRStatement.Jump(endLabel, conditionValue, true)
         myCB += bodyCB
-        myCB += IRStatement.Jump(endLabel, null, false)
-        myCB += elseLabel
-        if (elseCB != null) {
-            myCB += elseCB
-        }
+        myCB += IRStatement.Jump(preConditionLabel, null, false)
         myCB += endLabel
-
         return myCB to UnitIRValue
     }
-
 }

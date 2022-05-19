@@ -1,7 +1,7 @@
 package com.drjcoding.plow.ir.function.code_block
 
 sealed class IRStatement {
-    object Label : IRStatement()
+    class Label : IRStatement()
 
     data class Jump(val label: Label, val condition: IRValue?, val inverted: Boolean) : IRStatement()
 
