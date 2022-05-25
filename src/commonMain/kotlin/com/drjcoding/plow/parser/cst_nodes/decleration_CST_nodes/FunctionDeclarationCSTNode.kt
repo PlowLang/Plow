@@ -78,4 +78,18 @@ sealed class FunctionBodyCSTNode : CSTNode() {
                 it.substring(1 until it.lastIndex)
             }.toSourceString())
     }
+
+    class ExternCodeBody(
+        val externKw: TokenCSTNode,
+        val lCurly: TokenCSTNode,
+        val llvmCode: TokenCSTNode,
+        val rCurly: TokenCSTNode
+    ) : FunctionBodyCSTNode() {
+        override val range = externKw.range + rCurly.range
+
+        override fun toAST(): BaseFunctionBody =
+            BaseFunctionBody.ExternCodeBody(llvmCode.token.text.toUnderlyingString().let {
+                it.substring(1 until it.lastIndex)
+            }.toSourceString())
+    }
 }

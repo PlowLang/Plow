@@ -33,6 +33,11 @@ sealed class IRFunctionBody {
             body.toLLVMFunctionBody(arguments, returnType)
     }
 
+    class ExternCodeBody(val llvmCode: SourceString) : IRFunctionBody() {
+        override fun toLLVMFunctionBody(arguments: List<IRLocalVariable>, returnType: IRType): LLVMFunctionBody =
+            LLVMFunctionBody.ExternCode(llvmCode)
+    }
+
     object ExternBody : IRFunctionBody() {
         override fun toLLVMFunctionBody(arguments: List<IRLocalVariable>, returnType: IRType): LLVMFunctionBody =
             LLVMFunctionBody.Extern

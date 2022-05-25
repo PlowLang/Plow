@@ -28,8 +28,7 @@ data class BaseFunctionASTNode(
     val body: BaseFunctionBody,
     override val underlyingCSTNode: CSTNode
 ) : ASTNode() {
-    val noMangle: Boolean
-            = body is BaseFunctionBody.ExternBody || name.toUnderlyingString() == "main" //TODO hacky
+    val noMangle: Boolean = body is BaseFunctionBody.ExternBody || name.toUnderlyingString() == "main" //TODO hacky
 
     fun getIRType(astManagers: ASTManagers, irManagers: IRManagers, scope: Scope): PlowResult<IRType> {
         val argTypes = args.map { it.getIRType(astManagers, irManagers, scope) }.flattenToPlowResult()
@@ -72,6 +71,15 @@ data class BaseFunctionASTNode(
                 IRFunctionBody.ExternBody,
                 noMangle
             ).toPlowResult()
+        } else if (body is BaseFunctionBody.ExternCodeBody) {
+            return IRFunctionImplementation(
+                parentScope,
+                name,
+                (functionType.unwrap() as FunctionIRType).returnType,
+                argLocalVariables, //TODO sloppy
+                IRFunctionBody.ExternCodeBody(body.llvmCode),
+                noMangle,
+            ).toPlowResult()
         }
 
         val body = (body as BaseFunctionBody.BlockBody).body
@@ -106,4 +114,5 @@ data class BaseFunctionArgASTNode(
 sealed class BaseFunctionBody {
     class BlockBody(val body: CodeBlockASTNode) : BaseFunctionBody()
     class ExternBody(val llvm: SourceString) : BaseFunctionBody()
+    class ExternCodeBody(val llvmCode: SourceString) : BaseFunctionBody()
 }

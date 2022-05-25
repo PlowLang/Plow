@@ -34,9 +34,17 @@ fun parseFunctionDeclaration(ts: LexTokenStream): FunctionDeclarationCSTNode? {
         FunctionBodyCSTNode.BlockBody(parseCodeBlock(ts))
     } else if (ts.peekNSIsType(LexTokenType.EXTERN)) {
         val externKw = ts.popNSTokenCSTNode().assertType(LexTokenType.EXTERN)
-        val externName = ts.safePopNSTokenCSTNode().expectType(LexTokenType.STRING_LITERAL)
 
-        FunctionBodyCSTNode.ExternBody(externKw, externName)
+        if (ts.peekNSIsType(LexTokenType.STRING_LITERAL)) {
+            val externName = ts.popNSTokenCSTNode().expectType(LexTokenType.STRING_LITERAL)
+            FunctionBodyCSTNode.ExternBody(externKw, externName)
+        } else {
+            val lCurly = ts.safePopNSTokenCSTNode().expectType(LexTokenType.L_CURLY)
+            val code = ts.safePopNSTokenCSTNode().expectType(LexTokenType.STRING_LITERAL)
+            val rCurly = ts.safePopNSTokenCSTNode().expectType(LexTokenType.R_CURLY)
+            FunctionBodyCSTNode.ExternCodeBody(externKw, lCurly, code, rCurly)
+        }
+
     } else {
         throw ExpectedCodeBlockError((returnType ?: rParen).range)
     }
