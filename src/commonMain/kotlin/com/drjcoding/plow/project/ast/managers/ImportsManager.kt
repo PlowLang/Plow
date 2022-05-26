@@ -16,4 +16,6 @@ class ImportsManager {
         ensureScopeHasSet(scope)
         imports[scope]!!.addAll(importsToAdd)
     }
+
+    fun getImportedScopes(scope: Scope) = imports[scope] ?: setOf()
 }

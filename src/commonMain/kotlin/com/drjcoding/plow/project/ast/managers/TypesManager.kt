@@ -17,7 +17,10 @@ class TypesManager : Iterable<TypeDeclarationASTNode> {
 
     fun parentScopeForType(type: TypeDeclarationASTNode) = typesToScope[type]!!
 
-    fun getTypesInScope(scope: Scope) = scopesToTypes[scope]?.toSet() ?: setOf()
+    private fun simpleGetTypesInScope(scope: Scope) = scopesToTypes[scope]?.toSet() ?: setOf()
+
+    fun getTypesInScope(scope: Scope, importsManager: ImportsManager): Set<TypeDeclarationASTNode> =
+        simpleGetTypesInScope(scope) + importsManager.getImportedScopes(scope).map { simpleGetTypesInScope(it) }.flatten()
 
     override fun iterator(): Iterator<TypeDeclarationASTNode> = allTypes.iterator()
 

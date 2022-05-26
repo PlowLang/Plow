@@ -22,7 +22,7 @@ class ASTManagers {
     fun resolveTypeName(typeQI: QualifiedIdentifierASTNode, inScope: Scope): PlowResult<TypeDeclarationASTNode> {
         for (scope in inScope.iterateOverThisAndParents()) {
             val absoluteScope = combineScopeAndQI(scope, typeQI)
-            val typesInThisScope = types.getTypesInScope(absoluteScope)
+            val typesInThisScope = types.getTypesInScope(absoluteScope, imports)
             val possibleResolutions = typesInThisScope.filter { it.name == typeQI.name }
             return when (possibleResolutions.size) {
                 0 -> continue
@@ -37,7 +37,7 @@ class ASTManagers {
     fun resolveGlobalName(nameQI: QualifiedIdentifierASTNode, inScope: Scope): PlowResult<GlobalDeclarationASTNode> {
         for (scope in inScope.iterateOverThisAndParents()) {
             val absoluteScope = combineScopeAndQI(scope, nameQI)
-            val globalsInScope = globals.getGlobalsInScope(absoluteScope)
+            val globalsInScope = globals.getGlobalsInScope(absoluteScope, imports)
             val possibleResolutions = globalsInScope.filter { it.name == nameQI.name }
             return when (possibleResolutions.size) {
                 0 -> continue

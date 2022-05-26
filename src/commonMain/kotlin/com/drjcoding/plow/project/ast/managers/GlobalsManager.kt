@@ -17,7 +17,10 @@ class GlobalsManager : Iterable<GlobalDeclarationASTNode> {
 
     fun parentScopeForGlobal(global: GlobalDeclarationASTNode) = globalsToScope[global]!!
 
-    fun getGlobalsInScope(scope: Scope) = scopesToGlobals[scope]?.toSet() ?: setOf()
+    private fun simpleGetGlobalsInScope(scope: Scope) = scopesToGlobals[scope]?.toSet() ?: setOf()
+
+    fun getGlobalsInScope(scope: Scope, importsManager: ImportsManager): Set<GlobalDeclarationASTNode> =
+        simpleGetGlobalsInScope(scope) + importsManager.getImportedScopes(scope).map { simpleGetGlobalsInScope(it) }.flatten()
 
     override fun iterator(): Iterator<GlobalDeclarationASTNode> = allGlobals.iterator()
 }

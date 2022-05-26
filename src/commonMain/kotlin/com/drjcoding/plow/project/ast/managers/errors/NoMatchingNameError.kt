@@ -11,6 +11,6 @@ class NoMatchingNameError(
     "no matching name",
     PlowIssueInfo(
         givenQI.underlyingCSTNode.range.toPlowIssueTextRange(),
-        "Could not find a matching name in this scope."
+        "Could not find the name `${givenQI.prettyPrint()}` in this scope."
     )
 )

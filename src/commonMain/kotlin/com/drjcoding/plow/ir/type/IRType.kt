@@ -10,8 +10,7 @@ interface IRType {
 }
 
 object StandardTypes {
-    // TODO change this to std
-    val STD_SCOPE = Scope(listOf("file".toSourceString()))
+    val STD_SCOPE = Scope(listOf("src".toSourceString(), "std".toSourceString()))
 
     // TODO this is hacky
     val INT_IR_TYPE = ExternIRType(STD_SCOPE, "Int".toSourceString(), "i24".toSourceString())
